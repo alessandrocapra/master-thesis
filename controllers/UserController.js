@@ -1,4 +1,4 @@
-module.exports = {
+exports = {
   async createUser(req, res) {
     /*try {
       const player = await Player.create(req.body)
