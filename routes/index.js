@@ -31,7 +31,7 @@ router.get('/api', (req, res) => {
  *    POST: create a new user
  */
 
-router.get('/api/users', userController.getUsers);
+router.get('/api/users', userController.getUsers());
 // router.post('/api/users', userController.createUser);
 
 /*  "/api/users/:id"
