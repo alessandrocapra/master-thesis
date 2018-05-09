@@ -6,9 +6,9 @@ const userController = require('../controllers/UserController');
 
 
 /* GET home page. */
-router.get('/api', (req, res) => {
-  res.render('index', { title: 'Express' });
-});
+// router.get('/api', (req, res) => {
+//   res.render('index', { title: 'Express' });
+// });
 
 
 /*
