@@ -31,8 +31,8 @@ router.get('/api', (req, res) => {
  *    POST: create a new user
  */
 
-router.get('/api/users', userController.getUsers());
-// router.post('/api/users', userController.createUser);
+router.get('/api/users', userController.getUsers);
+router.post('/api/users', userController.createUser);
 
 /*  "/api/users/:id"
  *    GET: find user by id
@@ -40,9 +40,9 @@ router.get('/api/users', userController.getUsers());
  *    DELETE: deletes user by id
  */
 
-// router.get("/api/users/:id", userController.getUser);
-// router.put("/api/users/:id", userController.updateUser);
-// router.delete("/api/users/:id", userController.deleteUser);
+router.get("/api/users/:id", userController.getUser);
+router.put("/api/users/:id", userController.updateUser);
+router.delete("/api/users/:id", userController.deleteUser);
 
 
 module.exports = router;
