@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 // Importing the controllers containing the desired functions to communicate with the DB
-const userController = require('controllers/UserController');
+const userController = require('../controllers/UserController');
 
 
 /* GET home page. */
