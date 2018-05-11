@@ -38,6 +38,8 @@ module.exports = {
         error: 'Couldn\'t get the players!'
       })
     }*/
+
+    res.render('index', { title: 'Express' });
   },
   async getUser(req,res) {
     /*try {

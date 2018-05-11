@@ -3,6 +3,7 @@ const router = express.Router();
 
 // Importing the controllers containing the desired functions to communicate with the DB
 const userController = require('../controllers/UserController');
+const sensorController = require('../controllers/SensorController');
 
 
 /* GET home page. */
@@ -44,5 +45,10 @@ router.get("/api/users/:id", userController.getUser);
 router.put("/api/users/:id", userController.updateUser);
 router.delete("/api/users/:id", userController.deleteUser);
 
+/*  "/api/sensor"
+ *    GET: get list of all existing users
+ *    POST: create a new user
+ */
+router.post('/api/sensor', sensorController.receiveSensorData);
 
 module.exports = router;
