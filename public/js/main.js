@@ -140,13 +140,13 @@ function update ()
     return;
   }
 
-  if (cursors.left.isDown)
+  if (cursors.left.isDown || sensorValue == "left")
   {
     player.setVelocityX(-160);
 
     player.anims.play('left', true);
   }
-  else if (cursors.right.isDown)
+  else if (cursors.right.isDown || sensorValue == "right")
   {
     player.setVelocityX(160);
 
@@ -159,7 +159,7 @@ function update ()
     player.anims.play('turn');
   }
 
-  if (cursors.up.isDown || sensorValue == "bella" && player.body.touching.down)
+  if (cursors.up.isDown || sensorValue == "up" && player.body.touching.down)
   {
     player.setVelocityY(-330);
     sensorValue = "";
