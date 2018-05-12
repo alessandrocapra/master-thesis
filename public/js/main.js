@@ -1,6 +1,7 @@
 var socket; // define a global variable called socket
 socket = io.connect('http://localhost:5001'); // send a connection request to the server
 
+let sensorValue;
 
 //listen to the “connect” message from the server. The server
 //automatically emit a “connect” message when the cleint connets.When
@@ -9,6 +10,7 @@ socket.on("connect", onsocketConnected);
 
 socket.on('value', function(data){
   console.log('data: ' + data.message);
+  sensorValue = data.message;
 });
 
 var canvasWidth = window.innerWidth * window.devicePixelRatio;
@@ -157,9 +159,10 @@ function update ()
     player.anims.play('turn');
   }
 
-  if (cursors.up.isDown && player.body.touching.down)
+  if (cursors.up.isDown || sensorValue == "bella" && player.body.touching.down)
   {
     player.setVelocityY(-330);
+    sensorValue = "";
   }
 }
 
