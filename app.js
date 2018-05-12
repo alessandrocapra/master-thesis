@@ -81,9 +81,17 @@ exports.io = io;
 // listen for a connection request from any client
 io.on('connection', function(socket){
   console.log('a user connected');
-  socket.emit('news', { hello: 'world' });
   //output a unique socket.id
   // console.log(socket.id);
+
+  socket.on('disconnect', function(){
+    console.log('user disconnected');
+  });
+
+  socket.on('sensor', function(value){
+    console.log("value received from sensor is " + value.message);
+    io.emit('value', value);
+  });
 });
 
 

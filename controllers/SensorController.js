@@ -5,10 +5,12 @@ module.exports = {
     // res.render('index', { title: 'Express', value: req.body.title });
 
     // send data to client through socketIO
-    let data = req.body.title;
+    let data = req.body.value;
+
+    console.log("req'body is " + data);
 
     // send data with socketIO
-    Server.io.emit('title', data);
+    Server.io.emit('value', data);
     res.send(data);
 
     /*try {

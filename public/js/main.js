@@ -7,8 +7,8 @@ socket = io.connect('http://localhost:5001'); // send a connection request to th
 //the client connects, call onsocketConnected.
 socket.on("connect", onsocketConnected);
 
-socket.on('title', function(data){
-  console.log('data: ' + data);
+socket.on('value', function(data){
+  console.log('data: ' + data.message);
 });
 
 var canvasWidth = window.innerWidth * window.devicePixelRatio;
@@ -165,8 +165,8 @@ function update ()
 
 // this function is fired when we connect
 function onsocketConnected () {
-  console.log("connected to server");
-  socket.on('news', function (data) {
+  console.log("client (game) connected to server");
+  socket.on('sensor', function (data) {
     console.log(data);
   });
 }
