@@ -5,12 +5,11 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const exphbs  = require('express-handlebars');
+const app = express();
 
 const routes = require('./routes/index');
 const users = require('./routes/user');
 const sensor = require('./routes/sensor');
-
-const app = express();
 
 const env = process.env.NODE_ENV || 'development';
 app.locals.ENV = env;
@@ -70,5 +69,21 @@ app.use((err, req, res, next) => {
         title: 'error'
     });
 });
+
+var server = app.listen(5001);
+
+// socketIO integration
+var io = require('socket.io').listen(server);
+
+exports.server = server;
+exports.io = io;
+
+// listen for a connection request from any client
+io.sockets.on('connection', function(socket){
+  console.log("socket connected");
+  //output a unique socket.id
+  // console.log(socket.id);
+});
+
 
 module.exports = app;

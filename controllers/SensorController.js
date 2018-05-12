@@ -1,6 +1,16 @@
+var Server = require('../app');
+
 module.exports = {
   receiveSensorData(req, res) {
-    res.render('index', { title: 'Express', value: req.body.title });
+    // res.render('index', { title: 'Express', value: req.body.title });
+
+    // send data to client through socketIO
+    let data = req.body.title;
+
+    // send data with socketIO
+    Server.io.emit('title', data);
+    res.send(data);
+
     /*try {
       const player = await Player.create(req.body)
       res.send(player.toJSON())
