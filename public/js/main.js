@@ -2,6 +2,15 @@ var socket; // define a global variable called socket
 socket = io.connect('http://localhost:5001'); // send a connection request to the server
 
 
+//listen to the “connect” message from the server. The server
+//automatically emit a “connect” message when the cleint connets.When
+//the client connects, call onsocketConnected.
+socket.on("connect", onsocketConnected);
+
+socket.on('title', function(data){
+  console.log('data: ' + data);
+});
+
 var canvasWidth = window.innerWidth * window.devicePixelRatio;
 var canvasHeight = window.innerHeight * window.devicePixelRatio;
 
@@ -46,12 +55,6 @@ function preload ()
 
 function create ()
 {
-  console.log("client started");
-  //listen to the “connect” message from the server. The server
-  //automatically emit a “connect” message when the cleint connets.When
-  //the client connects, call onsocketConnected.
-  socket.on("connect", onsocketConnected);
-
   //  A simple background for our game
   this.add.image(400, 300, 'sky');
 
@@ -163,6 +166,9 @@ function update ()
 // this function is fired when we connect
 function onsocketConnected () {
   console.log("connected to server");
+  socket.on('news', function (data) {
+    console.log(data);
+  });
 }
 
 function collectStar (player, star)

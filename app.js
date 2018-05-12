@@ -79,8 +79,9 @@ exports.server = server;
 exports.io = io;
 
 // listen for a connection request from any client
-io.sockets.on('connection', function(socket){
-  console.log("socket connected");
+io.on('connection', function(socket){
+  console.log('a user connected');
+  socket.emit('news', { hello: 'world' });
   //output a unique socket.id
   // console.log(socket.id);
 });
