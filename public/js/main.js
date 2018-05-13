@@ -3,7 +3,7 @@ var socket; // define a global variable called socket
 // socket = io.connect('https://morning-lowlands-15038.herokuapp.com'); // send a connection request to the server
 
 // socket = io.connect(window.location.hostname);
-socket = io.connect();
+socket = io.connect(window.location.hostname, { secure: true, reconnect: true, rejectUnauthorized : false } );
 
 let sensorValue;
 
