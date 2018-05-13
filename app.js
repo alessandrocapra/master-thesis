@@ -70,7 +70,7 @@ app.use((err, req, res, next) => {
     });
 });
 
-var server = app.listen(5001);
+var server = app.listen(app.get('port'));
 
 // socketIO integration
 var io = require('socket.io').listen(server);
