@@ -73,7 +73,7 @@ app.use((err, req, res, next) => {
 app.set('port', process.env.PORT || 3000);
 
 // choose port to start the server
-var server = app.listen(app.get('port'));
+var server = app.listen(5001);
 
 // socketIO integration
 var io = require('socket.io').listen(server);
