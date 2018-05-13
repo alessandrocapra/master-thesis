@@ -1,3 +1,5 @@
+var app = require('../../app');
+
 var socket; // define a global variable called socket
 // socket = io.connect('http://localhost:5001'); // send a connection request to the server
 socket = io.connect('https://morning-lowlands-15038.herokuapp.com:' + app.get('port')); // send a connection request to the server

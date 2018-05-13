@@ -70,6 +70,9 @@ app.use((err, req, res, next) => {
     });
 });
 
+app.set('port', process.env.PORT || 3000);
+
+// choose port to start the server
 var server = app.listen(app.get('port'));
 
 // socketIO integration
