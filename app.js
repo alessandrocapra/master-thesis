@@ -70,7 +70,8 @@ app.use((err, req, res, next) => {
     });
 });
 
-app.set('port', process.env.PORT || 3000);
+// app.set('port', process.env.PORT || 3000);
+app.set('port', 34492);
 
 // choose port to start the server
 var server = app.listen(5001);
