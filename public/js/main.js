@@ -17,6 +17,10 @@ socket.on('value', function(data){
   sensorValue = data.message;
 });
 
+socket.on('pressure', function(data){
+  pressureText.setText('Pressure: ' + data.pressure + 'Pa');
+});
+
 var canvasWidth = window.innerWidth * window.devicePixelRatio;
 var canvasHeight = window.innerHeight * window.devicePixelRatio;
 
@@ -47,6 +51,7 @@ var cursors;
 var score = 0;
 var gameOver = false;
 var scoreText;
+var pressureText;
 
 var game = new Phaser.Game(config);
 
@@ -125,6 +130,9 @@ function create ()
 
   //  The score
   scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
+
+  // text displaying pressure from arduino
+  pressureText = this.add.text(300, 16, 'pressure: 0Pa', { fontSize: '32px', fill: '#000' });
 
   //  Collide the player and the stars with the platforms
   this.physics.add.collider(player, platforms);

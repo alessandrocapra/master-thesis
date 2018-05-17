@@ -96,6 +96,11 @@ io.on('connection', function(socket){
     console.log("value received from sensor is " + value.message);
     io.emit('value', value);
   });
+
+  socket.on('pressure', function(value){
+    console.log("value received from sensor is " + value.pressure);
+    io.emit('pressure', value);
+  });
 });
 
 
