@@ -156,25 +156,24 @@ function update ()
   {
     player.setVelocityX(-160);
     player.anims.play('left', true);
-    sensorValue = "";
+    // sensorValue = "";
   }
   else if (cursors.right.isDown || sensorValue == "right")
   {
     player.setVelocityX(160);
     player.anims.play('right', true);
-    sensorValue = "";
+    // sensorValue = "";
   }
-  else
+  else if(sensorValue == "turn")
   {
     player.setVelocityX(0);
-
     player.anims.play('turn');
   }
 
   if (cursors.up.isDown || sensorValue == "up" && player.body.touching.down)
   {
     player.setVelocityY(-330);
-    sensorValue = "";
+    // sensorValue = "";
   }
 }
 
