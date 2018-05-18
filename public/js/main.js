@@ -17,10 +17,6 @@ socket.on('value', function(data){
   sensorValue = data.message;
 });
 
-socket.on('pressure', function(data){
-  pressureText.setText('Pressure: ' + data.pressure + 'Pa');
-});
-
 var canvasWidth = window.innerWidth * window.devicePixelRatio;
 var canvasHeight = window.innerHeight * window.devicePixelRatio;
 
@@ -175,6 +171,10 @@ function update ()
     player.setVelocityY(-330);
     // sensorValue = "";
   }
+
+  socket.on('pressure', function(data){
+    pressureText.setText('Pressure: ' + data.pressure + 'Pa');
+  });
 }
 
 // this function is fired when we connect
