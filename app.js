@@ -87,7 +87,7 @@ io.on('connection', function(socket){
   console.log('a user connected');
   //output a unique socket.id
   // console.log(socket.id);
-
+
   socket.on('disconnect', function(){
     console.log('user disconnected');
   });
@@ -100,6 +100,10 @@ io.on('connection', function(socket){
   socket.on('pressure', function(value){
     console.log("value received from sensor is " + value.pressure);
     io.emit('pressure', value);
+  });
+
+  socket.on('renewSocketConnection', function(value){
+    console.log("value received from sensor is " + value.pressure);
   });
 });
 
