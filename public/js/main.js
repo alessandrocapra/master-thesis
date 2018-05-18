@@ -155,14 +155,14 @@ function update ()
   if (cursors.left.isDown || sensorValue == "left")
   {
     player.setVelocityX(-160);
-
     player.anims.play('left', true);
+    sensorValue = "";
   }
   else if (cursors.right.isDown || sensorValue == "right")
   {
     player.setVelocityX(160);
-
     player.anims.play('right', true);
+    sensorValue = "";
   }
   else
   {
