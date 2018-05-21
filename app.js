@@ -76,14 +76,16 @@ app.set('port', process.env.PORT || 3000);
 
 
 var server;
+var io;
+
 db.sequelize.sync().then(function() {
   server = app.listen(app.get('port'), function() {
     console.log('Express server listening on port ' + server.address().port);
   });
-});
 
-// socketIO integration
-var io = require('socket.io').listen(server);
+  // socketIO integration
+  io = require('socket.io').listen(server);
+});
 
 exports.server = server;
 exports.io = io;
