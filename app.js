@@ -11,6 +11,8 @@ const routes = require('./routes/index');
 const users = require('./routes/user');
 const sensor = require('./routes/sensor');
 
+const db = require('./models');
+
 const env = process.env.NODE_ENV || 'development';
 app.locals.ENV = env;
 app.locals.ENV_DEVELOPMENT = env == 'development';
@@ -72,8 +74,12 @@ app.use((err, req, res, next) => {
 
 app.set('port', process.env.PORT || 3000);
 
-var server = app.listen(app.get('port'), function() {
-  console.log('Express server listening on port ' + server.address().port);
+
+var server;
+db.sequelize.sync().then(function() {
+  server = app.listen(app.get('port'), function() {
+    console.log('Express server listening on port ' + server.address().port);
+  });
 });
 
 // socketIO integration

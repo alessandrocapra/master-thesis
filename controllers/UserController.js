@@ -1,5 +1,14 @@
+const User = require('../models').User;
+
 module.exports = {
   async createUser(req, res) {
+    return User
+      .create({
+        name:req.body.name,
+        high_score:req.body.high_score,
+      })
+      .then(user => res.status(201).send(user))
+      .catch(error => res.status(400).send(error));
     /*try {
       const player = await Player.create(req.body)
       res.send(player.toJSON())
