@@ -85,35 +85,35 @@ db.sequelize.sync().then(function() {
 
   // socketIO integration
   io = require('socket.io').listen(server);
+
+  // listen for a connection request from any client
+  io.on('connection', function(socket){
+    console.log('a user connected');
+    //output a unique socket.id
+    // console.log(socket.id);
+
+    socket.on('disconnect', function(){
+      console.log('user disconnected');
+    });
+
+    socket.on('sensor', function(value){
+      console.log("value received from sensor is " + value.message);
+      io.emit('value', value);
+    });
+
+    socket.on('pressure', function(value){
+      console.log("value received from sensor is " + value.pressure);
+      io.emit('pressure', value);
+    });
+
+    socket.on('renewSocketConnection', function(value){
+      console.log("value received from sensor is " + value.pressure);
+    });
+  });
+
 });
 
 exports.server = server;
 exports.io = io;
-
-// listen for a connection request from any client
-io.on('connection', function(socket){
-  console.log('a user connected');
-  //output a unique socket.id
-  // console.log(socket.id);
-
-  socket.on('disconnect', function(){
-    console.log('user disconnected');
-  });
-
-  socket.on('sensor', function(value){
-    console.log("value received from sensor is " + value.message);
-    io.emit('value', value);
-  });
-
-  socket.on('pressure', function(value){
-    console.log("value received from sensor is " + value.pressure);
-    io.emit('pressure', value);
-  });
-
-  socket.on('renewSocketConnection', function(value){
-    console.log("value received from sensor is " + value.pressure);
-  });
-});
-
 
 module.exports = app;
