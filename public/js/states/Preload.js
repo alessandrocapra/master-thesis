@@ -6,11 +6,11 @@ MrHop.PreloadState = {
     this.preloadBar = this.add.sprite(this.game.world.centerX, this.game.world.centerY + 128, 'preloadbar');
 	this.preloadBar.anchor.setTo(0.5);
 	this.load.setPreloadSprite(this.preloadBar);
-        
+
     this.logo = this.add.sprite(this.game.world.centerX, this.game.world.centerY, 'logo');
     this.logo.anchor.setTo(0.5);
 
-    //load game assets    
+    //load game assets
     this.load.image('floor', 'assets/images/floor.png');
 	this.load.image('floor1', 'assets/images/floor1.png');
 	this.load.image('hurt', 'assets/images/p2_hurt.png');
@@ -31,7 +31,7 @@ MrHop.PreloadState = {
 	this.load.spritesheet('button', 'assets/images/button.png', 267,52);
 	this.load.audio('coinsound', ['assets/audio/Collect_Point_01.mp3', 'assets/audio/Collect_Point_01.ogg']);
     this.load.audio('musicsound', ['assets/audio/greenhill.mp3', 'assets/audio/greenhill.ogg']);
-    this.load.audio('jumpsound', ['assets/audio/jump.mp3', 'assets/audio/jump.ogg']);
+    this.load.audio('jumpsound', ['assets/audio/jumpsound.mp3', 'assets/audio/jumpsound.ogg']);
     this.load.audio('losesound', ['assets/audio/Jingle_Lose_00.mp3', 'assets/audio/Jingle_Lose_00.ogg']);
 	this.load.audio('hitsound', ['assets/audio/Hit_03.mp3', 'assets/audio/Hit_03.ogg']);
 	this.load.audio('hitenemysound', ['assets/audio/Hit_01.mp3', 'assets/audio/Hit_01.ogg']);
