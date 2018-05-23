@@ -1,8 +1,8 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   var Calibration = sequelize.define('Calibration', {
-    max_inhale: DataTypes.INTEGER,
-    max_exhale: DataTypes.INTEGER
+    max_inhale: DataTypes.FLOAT,
+    max_exhale: DataTypes.FLOAT
   }, {});
   Calibration.associate = function(models) {
     // associations can be defined here

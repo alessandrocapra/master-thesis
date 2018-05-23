@@ -4,9 +4,9 @@ module.exports = {
   async createCalibration(req, res) {
     return Calibration
       .create({
-        userId: req.body.userId,
-        max_inhale: req.body.max_inhale,
-        max_exhale: req.body.max_exhale
+        userId: parseInt(req.body.userId),
+        max_inhale: parseFloat(req.body.max_inhale),
+        max_exhale: parseFloat(req.body.max_exhale)
       })
       .then(user => res.status(201).send(user))
       .catch(error => res.status(400).send(error));
