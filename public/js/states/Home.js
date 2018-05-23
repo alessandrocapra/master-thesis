@@ -1,7 +1,9 @@
 var MrHop = MrHop || {};
 
 // try to get users on DB
-var xhr = new XMLHttpRequest();
+var xhr = new XMLHttpRequest(),
+    users = [];
+
 xhr.open('GET', "https://duchennegame.herokuapp.com/api/users", true);
 xhr.send();
 
@@ -10,7 +12,8 @@ xhr.addEventListener("readystatechange", processRequest, false);
 function processRequest(e) {
   if (xhr.readyState == 4 && xhr.status == 200) {
     var response = JSON.parse(xhr.responseText);
-    response.forEach(function(obj) { console.log(obj.name); });
+    response.forEach(function(obj) { users.push(obj); });
+    console.log("users from db: " + users);
   }
 }
 
@@ -35,6 +38,12 @@ MrHop.HomeState = {
     this.startGameTween = this.add.tween(this.startGame);
     this.startGameTween.to({angle: -this.startGame.angle},2000+Math.random()*2000,Phaser.Easing.Linear.None,true,0,1500,true);
     this.startGame.inputEnabled = true;
+
+    // try displaying the users from db
+    var self = this;
+    users.forEach(function (i, user) {
+      self.add.text(self.game.world.width/2 -300, this.game.height/2 + i * 70, user.name, style);
+    });
 
     this.startGame.events.onInputDown.add(function(){
       this.playSound.play();
