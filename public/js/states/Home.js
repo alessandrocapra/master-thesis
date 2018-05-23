@@ -13,7 +13,7 @@ function processRequest(e) {
   if (xhr.readyState == 4 && xhr.status == 200) {
     var response = JSON.parse(xhr.responseText);
     response.forEach(function(obj) { users.push(obj); });
-    console.log("users from db: " + users);
+    console.log("users from db: ", users);
   }
 }
 
@@ -41,7 +41,7 @@ MrHop.HomeState = {
 
     // try displaying the users from db
     var self = this;
-    users.forEach(function (i, user) {
+    users.forEach(function (user, i) {
       self.add.text(self.game.world.width/2 -300, self.game.height/2 + i * 70, user.name, style);
     });
 
