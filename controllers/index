@@ -1,5 +1,7 @@
 const users = require('./UserController');
+const calibrations = require('./CalibrationController');
 
 module.exports = {
   users,
+  calibrations
 };

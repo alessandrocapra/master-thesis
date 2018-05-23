@@ -4,6 +4,7 @@ const router = express.Router();
 // Importing the controllers containing the desired functions to communicate with the DB
 const userController = require('../controllers/UserController');
 const sensorController = require('../controllers/SensorController');
+const calibrationController = require('../controllers/CalibrationController');
 
 
 /* GET home page. */
@@ -22,8 +23,8 @@ const sensorController = require('../controllers/SensorController');
     - saving game data to the user profile
     - retrieve such data
 
-  * SENSING DATA
-    - get the pressure sensor data received by Arduino and send it to PhaserIO to control the game
+  * CALIBRATION
+    - create calibration records to store on the db
 
  */
 
@@ -50,5 +51,10 @@ router.delete("/api/users/:id", userController.deleteUser);
  *    POST: create a new user
  */
 router.post('/api/sensor', sensorController.receiveSensorData);
+
+/*  "/api/calibrations"
+ *    POST: create a new calibration record
+ */
+router.post('/api/calibrations', calibrationController.createCalibration);
 
 module.exports = router;
