@@ -51,6 +51,10 @@ module.exports = {
     res.render('index', { title: 'Express' });
   },
   async getUser(req,res) {
+    return User
+      .all()
+      .then(users => res.status(200).send(users))
+      .catch(error => res.status(400).send(error));
     /*try {
       const player = await Player.findOne({ where: {id: req.params.id} })
       res.send(player)
