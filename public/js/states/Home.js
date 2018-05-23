@@ -1,5 +1,19 @@
 var MrHop = MrHop || {};
 
+// try to get users on DB
+var xhr = new XMLHttpRequest();
+xhr.open('GET', "https://duchennegame.herokuapp.com", true);
+xhr.send();
+
+xhr.addEventListener("readystatechange", processRequest, false);
+
+function processRequest(e) {
+  if (xhr.readyState == 4 && xhr.status == 201) {
+    var response = JSON.parse(xhr.responseText);
+    response.forEach(function(obj) { console.log(obj.name); });
+  }
+}
+
 MrHop.HomeState = {
   create: function() {
 
