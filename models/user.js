@@ -5,14 +5,19 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
-    max_inhale: DataTypes.INTEGER,
-    max_exhale: DataTypes.INTEGER,
-    high_score: DataTypes.INTEGER
+    high_score: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0
+    }
   }, {
     timestamps: false
   });
   User.associate = function(models) {
     // associations can be defined here
+    User.hasMany(models.Calibration, {
+      foreignKey: 'userId',
+      as: 'calibrations',
+    });
   };
   return User;
 };

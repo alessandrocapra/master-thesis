@@ -11,14 +11,9 @@ module.exports = {
       name: {
         type: Sequelize.STRING
       },
-      max_inhale: {
-        type: Sequelize.INTEGER
-      },
-      max_exhale: {
-        type: Sequelize.INTEGER
-      },
       high_score: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        defaultValue: 0
       }
     });
   },
