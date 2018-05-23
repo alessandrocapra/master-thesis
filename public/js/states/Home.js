@@ -42,7 +42,7 @@ MrHop.HomeState = {
     // try displaying the users from db
     var self = this;
     users.forEach(function (i, user) {
-      self.add.text(self.game.world.width/2 -300, this.game.height/2 + i * 70, user.name, style);
+      self.add.text(self.game.world.width/2 -300, self.game.height/2 + i * 70, user.name, style);
     });
 
     this.startGame.events.onInputDown.add(function(){
