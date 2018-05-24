@@ -43,8 +43,8 @@ router.post('/api/users', userController.createUser);
  */
 
 router.get("/api/users/:userId", userController.getUser);
-router.put("/api/users/:id", userController.updateUser);
-router.delete("/api/users/:id", userController.deleteUser);
+router.put("/api/users/:userId", userController.updateUser);
+router.delete("/api/users/:userId", userController.deleteUser);
 
 /*  "/api/sensor"
  *    GET: get list of all existing users
