@@ -1,27 +1,26 @@
 var socket; // define a global variable called socket
 // socket = io.connect(); // send a connection request to the server
-// socket = io.connect('https://morning-lowlands-15038.herokuapp.com'); // send a connection request to the server
-
-// socket = io.connect(window.location.hostname);
 socket = io.connect(window.location.hostname, { secure: true, reconnect: true, rejectUnauthorized : false } );
 
+// this variable will hold the updated value that comes from the Feather Huzzah (up, down, left, right for instance)
 let sensorValue;
 
-//listen to the “connect” message from the server. The server
-//automatically emit a “connect” message when the cleint connets.When
-//the client connects, call onsocketConnected.
+//  Listen to the “connect” message from the server.
+//   The server automatically emit a “connect” message when the client connects.
+//  When the client connects, call onsocketConnected.
 socket.on("connect", onsocketConnected);
-
-socket.on('value', function(data){
-  console.log('data: ' + data.message);
-  sensorValue = data.message;
-});
 
 // this function is fired when we connect
 function onsocketConnected () {
   console.log("client (game) connected to server");
+
   socket.on('sensor', function (data) {
     console.log(data);
+    sensorValue = data.message;
+  });
+
+  socket.on('pressure', function(data){
+    sensorValue = data.pressure;
   });
 }
 
