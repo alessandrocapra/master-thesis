@@ -94,7 +94,7 @@ db.sequelize.sync().then(function() {
 
     socket.on('sensor', function(value){
       console.log("value received from sensor is " + value.message);
-      io.emit('value', value);
+      io.emit('sensor', value);
     });
 
     socket.on('pressure', function(value){
