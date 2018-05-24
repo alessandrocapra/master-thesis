@@ -10,45 +10,32 @@ module.exports = {
       })
       .then(user => res.status(201).send(user))
       .catch(error => res.status(400).send(error));
-    /*try {
-      const player = await Player.create(req.body)
-      res.send(player.toJSON())
-    } catch(err) {
-      res.status(400).send({
-        error: 'Name already in use!'
-      })
-      // user already existing?
-    }*/
   },
   async updateUser(req, res) {
-    /*try {
-      await Player.update({
-        skipTopics: req.body.skipTopics,
-        skipQuestions: req.body.skipQuestions
-      }, {
-        where: {id: req.body.id}
-      }).then(result => res.send(result))
-    } catch(err) {
-      res.status(400).send({
-        error: err.message
+    return User
+      .findById(req.params.userId, {
+        include: [{
+          model: Calibration,
+          as: 'calibrations',
+        }],
       })
-      // user already existing?
-    }*/
+      .then(user => {
+        if (!user) {
+          return res.status(404).send({
+            message: 'User Not Found',
+          });
+        }
+        return user
+          .update({
+            name: req.body.name || user.name,
+            high_score: req.body.high_score || user.high_score,
+          })
+          .then(() => res.status(200).send(user))  // Send back the updated user.
+          .catch((error) => res.status(400).send(error));
+      })
+      .catch((error) => res.status(400).send(error));
   },
   async getUsers(req,res) {
-    /*try {
-      const players = await Player.findAll({
-        order: [
-          ['name', 'ASC'],
-          ['lastname', 'ASC'],
-        ],})
-      res.send(players)
-    } catch(err) {
-      res.status(400).send({
-        error: 'Couldn\'t get the players!'
-      })
-    }*/
-
     return User
       .all()
       .then(users => res.status(200).send(users))
@@ -75,14 +62,6 @@ module.exports = {
       })
       .catch(error => res.status(400).send(error));
   },
-  /*try {
-		const player = await Player.findOne({ where: {id: req.params.id} })
-		res.send(player)
-	} catch(err) {
-		res.status(400).send({
-			error: 'Couldn\'t get the player details!'
-		})
-	}*/
 
   async deleteUser(req,res) {
 
