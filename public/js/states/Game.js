@@ -17,10 +17,11 @@ function onsocketConnected () {
   socket.on('sensor', function (data) {
     console.log(data);
     sensorValue = data.message;
+    console.log("sensorValue is now " + sensorValue);
   });
 
   socket.on('pressure', function(data){
-    sensorValue = data.pressure;
+    // code here to display pressure for debug purposes
   });
 }
 
