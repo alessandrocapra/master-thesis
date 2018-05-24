@@ -1,4 +1,5 @@
 const User = require('../models').User;
+const Calibration = require('../models').Calibration;
 
 module.exports = {
   async createUser(req, res) {
@@ -54,16 +55,32 @@ module.exports = {
       .catch(error => res.status(400).send(error));
   },
   async getUser(req,res) {
-
-    /*try {
-      const player = await Player.findOne({ where: {id: req.params.id} })
-      res.send(player)
-    } catch(err) {
-      res.status(400).send({
-        error: 'Couldn\'t get the player details!'
+    return User
+      .findById(req.params.userId, {
+        include: [{
+          model: Calibration,
+          as: 'calibrations',
+        }],
       })
-    }*/
+      .then(user => {
+        if (!user) {
+          return res.status(404).send({
+            message: 'User Not Found',
+          });
+        }
+        return res.status(200).send(user);
+      })
+      .catch(error => res.status(400).send(error));
   },
+  /*try {
+		const player = await Player.findOne({ where: {id: req.params.id} })
+		res.send(player)
+	} catch(err) {
+		res.status(400).send({
+			error: 'Couldn\'t get the player details!'
+		})
+	}*/
+
   async deleteUser(req,res) {
 
   }

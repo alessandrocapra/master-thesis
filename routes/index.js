@@ -42,7 +42,7 @@ router.post('/api/users', userController.createUser);
  *    DELETE: deletes user by id
  */
 
-router.get("/api/users/:id", userController.getUser);
+router.get("/api/users/:userId", userController.getUser);
 router.put("/api/users/:id", userController.updateUser);
 router.delete("/api/users/:id", userController.deleteUser);
 
