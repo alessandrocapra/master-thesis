@@ -60,7 +60,9 @@ module.exports = {
         include: [{
           model: Calibration,
           as: 'calibrations',
-        }],
+        },
+        "createdAt",
+        "desc"],
       })
       .then(user => {
         if (!user) {
