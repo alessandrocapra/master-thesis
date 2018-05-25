@@ -118,13 +118,13 @@ function create ()
 
 function update ()
 {
-  if (cursors.left.isDown || sensorValue == "left")
+  if (this.cursors.left.isDown || sensorValue == "left")
   {
     this.player.setVelocityX(-160);
 
     this.player.anims.play('left', true);
   }
-  else if (cursors.right.isDown || sensorValue == "right")
+  else if (this.cursors.right.isDown || sensorValue == "right")
   {
     this.player.setVelocityX(160);
 
@@ -141,7 +141,7 @@ function update ()
     this.player.anims.play('turn');
   }
 
-  if (cursors.up.isDown || sensorValue == "up" && player.body.touching.down)
+  if (this.cursors.up.isDown || sensorValue == "up" && this.player.body.touching.down)
   {
     this.player.setVelocityY(-330);
   }
