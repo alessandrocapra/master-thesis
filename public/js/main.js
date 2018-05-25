@@ -3,6 +3,7 @@ var socket; // define a global variable called socket
 socket = io.connect(window.location.hostname, { secure: true, reconnect: true, rejectUnauthorized : false } );
 
 let sensorValue;
+let pressureText;
 
 //listen to the “connect” message from the server. The server
 //automatically emit a “connect” message when the cleint connets.When
@@ -39,7 +40,6 @@ var cursors;
 var score = 0;
 var gameOver = false;
 var scoreText;
-var pressureText;
 
 var game = new Phaser.Game(config);
 
