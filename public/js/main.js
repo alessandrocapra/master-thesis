@@ -5,6 +5,8 @@ socket = io.connect(window.location.hostname, { secure: true, reconnect: true, r
 let sensorValue;
 let pressureText = 0;
 
+socket.on("connect", onsocketConnected);
+
 var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
 
 function preload() {
@@ -25,8 +27,6 @@ var score = 0;
 var scoreText;
 
 function create() {
-
-  socket.on("connect", onsocketConnected);
 
   //  We're going to be using physics, so enable the Arcade Physics system
   game.physics.startSystem(Phaser.Physics.ARCADE);
