@@ -61,7 +61,22 @@ function create ()
 
   // socket = io.connect(); // send a connection request to the server
   this.socket = io.connect(window.location.hostname, { secure: true, reconnect: true, rejectUnauthorized : false } );
-  this.socket.on("connect", onsocketConnected);
+  this.socket.on("connect", function(){
+    console.log("client (game) connected to server");
+
+    // send to the server a "new_player" message so that the server knows
+    // a new player object has been created
+    this.socket.emit('new_player', {x: 100, y: 0});
+
+    this.socket.on('sensor', function(data){
+      console.log('data: ' + data.message);
+      sensorValue = data.message;
+    });
+
+    this.socket.on('pressure', function(data){
+      pressureText.setText('Pressure: ' + data.pressure + 'Pa');
+    });
+  });
 
   this.socket.on('currentPlayers', function (players) {
     Object.keys(players).forEach(function (id) {
@@ -116,30 +131,30 @@ function update ()
 
   if (cursors.left.isDown || sensorValue == "left")
   {
-    player.setVelocityX(-160);
+    this.player.setVelocityX(-160);
 
-    player.anims.play('left', true);
+    this.player.anims.play('left', true);
   }
   else if (cursors.right.isDown || sensorValue == "right")
   {
-    player.setVelocityX(160);
+    this.player.setVelocityX(160);
 
-    player.anims.play('right', true);
+    this.player.anims.play('right', true);
   }
   else if(sensorValue == "turn")
   {
-    player.setVelocityX(0);
+    this.player.setVelocityX(0);
 
-    player.anims.play('turn');
+    this.player.anims.play('turn');
   } else {
-    player.setVelocityX(0);
+    this.player.setVelocityX(0);
 
-    player.anims.play('turn');
+    this.player.anims.play('turn');
   }
 
   if (cursors.up.isDown || sensorValue == "up" && player.body.touching.down)
   {
-    player.setVelocityY(-330);
+    this.player.setVelocityY(-330);
   }
 }
 
@@ -180,23 +195,6 @@ function hitBomb (player, bomb)
   player.anims.play('turn');
 
   gameOver = true;
-}
-
-function onsocketConnected () {
-  console.log("client (game) connected to server");
-
-  // send to the server a "new_player" message so that the server knows
-  // a new player object has been created
-  socket.emit('new_player', {x: 100, y: 0});
-
-  socket.on('sensor', function(data){
-    console.log('data: ' + data.message);
-    sensorValue = data.message;
-  });
-
-  socket.on('pressure', function(data){
-    pressureText.setText('Pressure: ' + data.pressure + 'Pa');
-  });
 }
 
 function addPlayer(self, playerInfo) {
