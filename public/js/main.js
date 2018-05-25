@@ -29,12 +29,25 @@ function preload ()
 function create ()
 {
   var self = this;
+  this.otherPlayers = this.physics.add.group();
 
   this.socket = io();
   this.socket.on('currentPlayers', function (players) {
     Object.keys(players).forEach(function (id) {
       if (players[id].playerId === self.socket.id) {
         addPlayer(self, players[id]);
+      }
+    });
+  });
+
+  this.socket.on('newPlayer', function (playerInfo) {
+    addOtherPlayers(self, playerInfo);
+  });
+
+  this.socket.on('disconnect', function (playerId) {
+    self.otherPlayers.getChildren().forEach(function (otherPlayer) {
+      if (playerId === otherPlayer.playerId) {
+        otherPlayer.destroy();
       }
     });
   });
@@ -72,4 +85,10 @@ function addPlayer(self, playerInfo) {
     frameRate: 10,
     repeat: -1
   });
+}
+
+function addOtherPlayers(self, playerInfo) {
+  const otherPlayer = self.add.sprite(playerInfo.x, playerInfo.y, 'dude');
+  otherPlayer.playerId = playerInfo.playerId;
+  self.otherPlayers.add(otherPlayer);
 }
