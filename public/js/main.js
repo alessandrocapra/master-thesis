@@ -151,7 +151,7 @@ function createPlayer(){
   console.log("createPlayer()");
 
   // The player and its settings
-  player = game.physics.add.sprite(100, 450, 'dude');
+  player = this.physics.add.sprite(100, 450, 'dude');
 
   //  Player physics properties. Give the little guy a slight bounce.
   player.setBounce(0.2);
