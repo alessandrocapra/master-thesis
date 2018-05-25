@@ -104,10 +104,8 @@ function create ()
   });
 
   stars.children.iterate(function (child) {
-
     //  Give each star a slightly different bounce
     child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
-
   });
 
   bombs = this.physics.add.group();
@@ -149,8 +147,10 @@ function onsocketConnected () {
 }
 
 function createPlayer(){
+  console.log("createPlayer()");
+
   // The player and its settings
-  player = this.physics.add.sprite(100, 450, 'dude');
+  player = game.physics.add.sprite(100, 450, 'dude');
 
   //  Player physics properties. Give the little guy a slight bounce.
   player.setBounce(0.2);
