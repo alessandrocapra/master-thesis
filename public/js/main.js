@@ -20,6 +20,8 @@ var config = {
 };
 game = new Phaser.Game(config);
 
+var player;
+
 function preload ()
 {
   this.load.image('sky', 'assets/sky.png');
@@ -71,8 +73,8 @@ function create ()
   this.platforms.create(750, 220, 'ground');
 
   //  Player physics properties. Give the little guy a slight bounce.
-  self.player.setBounce(0.2);
-  self.player.setCollideWorldBounds(true);
+  player.setBounce(0.2);
+  player.setCollideWorldBounds(true);
 
   //  Our player animations, turning, walking left and walking right.
   this.anims.create({
@@ -124,34 +126,34 @@ function update ()
 {
   if (this.cursors.left.isDown || sensorValue == "left")
   {
-    this.player.setVelocityX(-160);
-    this.player.anims.play('left', true);
+    player.setVelocityX(-160);
+    player.anims.play('left', true);
   }
   else if (this.cursors.right.isDown || sensorValue == "right")
   {
-    this.player.setVelocityX(160);
-    this.player.anims.play('right', true);
+    player.setVelocityX(160);
+    player.anims.play('right', true);
   }
   else if(sensorValue == "turn")
   {
-    this.player.setVelocityX(0);
-    this.player.anims.play('turn');
+    player.setVelocityX(0);
+    player.anims.play('turn');
   }
   else
   {
-    this.player.setVelocityX(0);
-    this.player.anims.play('turn');
+    player.setVelocityX(0);
+    player.anims.play('turn');
   }
 
   if (this.cursors.up.isDown || sensorValue == "up" && this.player.body.touching.down)
   {
-    this.player.setVelocityY(-330);
+    player.setVelocityY(-330);
   }
 
 }
 
 function addPlayer(self, playerInfo) {
-  self.player = self.physics.add.sprite(playerInfo.x, playerInfo.y, 'dude');
+  player = self.physics.add.sprite(playerInfo.x, playerInfo.y, 'dude');
 }
 
 function addOtherPlayers(self, playerInfo) {
