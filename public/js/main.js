@@ -7,159 +7,199 @@ let pressureText = 0;
 
 socket.on("connect", onsocketConnected);
 
-var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
-
-function preload() {
-
-  game.load.image('sky', 'assets/sky.png');
-  game.load.image('ground', 'assets/platform.png');
-  game.load.image('star', 'assets/star.png');
-  game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
-
-}
+var config = {
+  type: Phaser.AUTO,
+  width: 800,
+  height: 600,
+  physics: {
+    default: 'arcade',
+    arcade: {
+      gravity: { y: 300 },
+      debug: false
+    }
+  },
+  scene: {
+    preload: preload,
+    create: create,
+    update: update
+  }
+};
 
 var player;
+var stars;
+var bombs;
 var platforms;
 var cursors;
-
-var stars;
 var score = 0;
+var gameOver = false;
 var scoreText;
 
-function create() {
+var game = new Phaser.Game(config);
 
-  //  We're going to be using physics, so enable the Arcade Physics system
-  game.physics.startSystem(Phaser.Physics.ARCADE);
+function preload ()
+{
+  this.load.image('sky', 'src/games/firstgame/assets/sky.png');
+  this.load.image('ground', 'src/games/firstgame/assets/platform.png');
+  this.load.image('star', 'src/games/firstgame/assets/star.png');
+  this.load.image('bomb', 'src/games/firstgame/assets/bomb.png');
+  this.load.spritesheet('dude', 'src/games/firstgame/assets/dude.png', { frameWidth: 32, frameHeight: 48 });
+}
 
+function create ()
+{
   //  A simple background for our game
-  game.add.sprite(0, 0, 'sky');
+  this.add.image(400, 300, 'sky');
 
   //  The platforms group contains the ground and the 2 ledges we can jump on
-  platforms = game.add.group();
+  platforms = this.physics.add.staticGroup();
 
-  //  We will enable physics for any object that is created in this group
-  platforms.enableBody = true;
-
-  // Here we create the ground.
-  var ground = platforms.create(0, game.world.height - 64, 'ground');
-
+  //  Here we create the ground.
   //  Scale it to fit the width of the game (the original sprite is 400x32 in size)
-  ground.scale.setTo(2, 2);
+  platforms.create(400, 568, 'ground').setScale(2).refreshBody();
 
-  //  This stops it from falling away when you jump on it
-  ground.body.immovable = true;
-
-  //  Now let's create two ledges
-  var ledge = platforms.create(400, 400, 'ground');
-  ledge.body.immovable = true;
-
-  ledge = platforms.create(-150, 250, 'ground');
-  ledge.body.immovable = true;
+  //  Now let's create some ledges
+  platforms.create(600, 400, 'ground');
+  platforms.create(50, 250, 'ground');
+  platforms.create(750, 220, 'ground');
 
   // The player and its settings
-  player = game.add.sprite(32, game.world.height - 150, 'dude');
-
-  //  We need to enable physics on the player
-  game.physics.arcade.enable(player);
+  player = this.physics.add.sprite(100, 450, 'dude');
 
   //  Player physics properties. Give the little guy a slight bounce.
-  player.body.bounce.y = 0.2;
-  player.body.gravity.y = 300;
-  player.body.collideWorldBounds = true;
+  player.setBounce(0.2);
+  player.setCollideWorldBounds(true);
 
-  //  Our two animations, walking left and right.
-  player.animations.add('left', [0, 1, 2, 3], 10, true);
-  player.animations.add('right', [5, 6, 7, 8], 10, true);
+  //  Our player animations, turning, walking left and walking right.
+  this.anims.create({
+    key: 'left',
+    frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
+    frameRate: 10,
+    repeat: -1
+  });
 
-  //  Finally some stars to collect
-  stars = game.add.group();
+  this.anims.create({
+    key: 'turn',
+    frames: [ { key: 'dude', frame: 4 } ],
+    frameRate: 20
+  });
 
-  //  We will enable physics for any star that is created in this group
-  stars.enableBody = true;
+  this.anims.create({
+    key: 'right',
+    frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
+    frameRate: 10,
+    repeat: -1
+  });
 
-  //  Here we'll create 12 of them evenly spaced apart
-  for (var i = 0; i < 12; i++)
-  {
-    //  Create a star inside of the 'stars' group
-    var star = stars.create(i * 70, 0, 'star');
+  //  Input Events
+  cursors = this.input.keyboard.createCursorKeys();
 
-    //  Let gravity do its thing
-    star.body.gravity.y = 300;
+  //  Some stars to collect, 12 in total, evenly spaced 70 pixels apart along the x axis
+  stars = this.physics.add.group({
+    key: 'star',
+    repeat: 11,
+    setXY: { x: 12, y: 0, stepX: 70 }
+  });
 
-    //  This just gives each star a slightly random bounce value
-    star.body.bounce.y = 0.7 + Math.random() * 0.2;
-  }
+  stars.children.iterate(function (child) {
+
+    //  Give each star a slightly different bounce
+    child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+
+  });
+
+  bombs = this.physics.add.group();
 
   //  The score
-  scoreText = game.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
+  scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
 
   // text displaying pressure from arduino
   pressureText = this.add.text(300, 16, 'pressure: 0Pa', { fontSize: '32px', fill: '#000' });
 
-  //  Our controls.
-  cursors = game.input.keyboard.createCursorKeys();
-
-}
-
-function update() {
-
   //  Collide the player and the stars with the platforms
-  var hitPlatform = game.physics.arcade.collide(player, platforms);
-  game.physics.arcade.collide(stars, platforms);
+  this.physics.add.collider(player, platforms);
+  this.physics.add.collider(stars, platforms);
+  this.physics.add.collider(bombs, platforms);
 
   //  Checks to see if the player overlaps with any of the stars, if he does call the collectStar function
-  game.physics.arcade.overlap(player, stars, collectStar, null, this);
+  this.physics.add.overlap(player, stars, collectStar, null, this);
 
-  //  Reset the players velocity (movement)
-  player.body.velocity.x = 0;
+  this.physics.add.collider(player, bombs, hitBomb, null, this);
+}
+
+function update ()
+{
+  if (gameOver)
+  {
+    return;
+  }
 
   if (cursors.left.isDown || sensorValue == "left")
   {
-    //  Move to the left
-    player.body.velocity.x = -150;
+    player.setVelocityX(-160);
 
-    player.animations.play('left');
+    player.anims.play('left', true);
   }
   else if (cursors.right.isDown || sensorValue == "right")
   {
-    //  Move to the right
-    player.body.velocity.x = 150;
+    player.setVelocityX(160);
 
-    player.animations.play('right');
+    player.anims.play('right', true);
   }
-  else if (sensorValue == "turn") {
-    //  Stand still
-    player.animations.stop();
-
-    player.frame = 4;
-  }
-  else
+  else if(sensorValue == "turn")
   {
-    //  Stand still
-    player.animations.stop();
+    player.setVelocityX(0);
 
-    player.frame = 4;
+    player.anims.play('turn');
+  } else {
+    player.setVelocityX(0);
+
+    player.anims.play('turn');
   }
 
-  //  Allow the player to jump if they are touching the ground.
-  if (cursors.up.isDown || sensorValue == "up" && player.body.touching.down && hitPlatform)
+  if (cursors.up.isDown || sensorValue == "up" && player.body.touching.down)
   {
-    player.body.velocity.y = -350;
+    player.setVelocityY(-330);
   }
-
 }
 
-function collectStar (player, star) {
-
-  // Removes the star from the screen
-  star.kill();
+function collectStar (player, star)
+{
+  star.disableBody(true, true);
 
   //  Add and update the score
   score += 10;
-  scoreText.text = 'Score: ' + score;
+  scoreText.setText('Score: ' + score);
 
+  if (stars.countActive(true) === 0)
+  {
+    //  A new batch of stars to collect
+    stars.children.iterate(function (child) {
+
+      child.enableBody(true, child.x, 0, true, true);
+
+    });
+
+    var x = (player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
+
+    var bomb = bombs.create(x, 16, 'bomb');
+    bomb.setBounce(1);
+    bomb.setCollideWorldBounds(true);
+    bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
+    bomb.allowGravity = false;
+
+  }
 }
 
+function hitBomb (player, bomb)
+{
+  this.physics.pause();
+
+  player.setTint(0xff0000);
+
+  player.anims.play('turn');
+
+  gameOver = true;
+}
 
 function onsocketConnected () {
   console.log("client (game) connected to server");
