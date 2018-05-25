@@ -135,10 +135,6 @@ function update ()
     this.player.setVelocityX(0);
 
     this.player.anims.play('turn');
-  } else {
-    this.player.setVelocityX(0);
-
-    this.player.anims.play('turn');
   }
 
   if (this.cursors.up.isDown || sensorValue == "up" && this.player.body.touching.down)
