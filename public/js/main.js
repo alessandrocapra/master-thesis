@@ -1,3 +1,4 @@
+var socket;
 let sensorValue;
 let pressureText = 0;
 
@@ -58,9 +59,8 @@ function create ()
 
 
   var self = this;
-
-  // socket = io.connect(); // send a connection request to the server
-  var socket = io.connect(window.location.hostname, { secure: true, reconnect: true, rejectUnauthorized : false } );
+  socket = io.connect(); // send a connection request to the server
+  // var socket = io.connect(window.location.hostname, { secure: true, reconnect: true, rejectUnauthorized : false } );
   socket.on("connect", function(){
     console.log("client (game) connected to server");
 
