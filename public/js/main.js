@@ -28,7 +28,17 @@ function preload ()
 
 function create ()
 {
+  var self = this;
+
   this.socket = io();
+  this.socket.on('currentPlayers', function (players) {
+    Object.keys(players).forEach(function (id) {
+      if (players[id].playerId === self.socket.id) {
+        addPlayer(self, players[id]);
+      }
+    });
+  });
+
 }
 
 function update ()
@@ -36,3 +46,8 @@ function update ()
 
 }
 
+function addPlayer(self, playerInfo) {
+  self.player = self.physics.add.sprite(playerInfo.x, playerInfo.y, 'dude');
+  //  Player physics properties. Give the little guy a slight bounce.
+
+}
