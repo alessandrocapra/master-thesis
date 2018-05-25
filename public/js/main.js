@@ -3,12 +3,7 @@ var socket; // define a global variable called socket
 socket = io.connect(window.location.hostname, { secure: true, reconnect: true, rejectUnauthorized : false } );
 
 let sensorValue;
-let pressureText;
-
-//listen to the “connect” message from the server. The server
-//automatically emit a “connect” message when the cleint connets.When
-//the client connects, call onsocketConnected.
-socket.on("connect", onsocketConnected);
+let pressureText = 0;
 
 var canvasWidth = window.innerWidth * window.devicePixelRatio;
 var canvasHeight = window.innerHeight * window.devicePixelRatio;
@@ -16,8 +11,8 @@ var canvasHeight = window.innerHeight * window.devicePixelRatio;
 var config = {
   type: Phaser.AUTO,
   // width and height should match the device's screen size
-  width: 800,
-  height: 600,
+  width: canvasWidth,
+  height: canvasHeight,
   physics: {
     default: 'arcade',
     arcade: {
@@ -54,6 +49,14 @@ function preload ()
 
 function create ()
 {
+
+  //listen to the “connect” message from the server. The server
+  //automatically emit a “connect” message when the cleint connets.When
+  //the client connects, call onsocketConnected.
+  socket.on("connect", onsocketConnected);
+
+  let pressureText;
+
   //  A simple background for our game
   this.add.image(400, 300, 'sky');
 
@@ -133,6 +136,20 @@ function create ()
   this.physics.add.collider(player, bombs, hitBomb, null, this);
 }
 
+// this function is fired when we connect
+function onsocketConnected () {
+  console.log("client (game) connected to server");
+
+  socket.on('sensor', function(data){
+    console.log('data: ' + data.message);
+    sensorValue = data.message;
+  });
+
+  socket.on('pressure', function(data){
+    pressureText.setText('Pressure: ' + data.pressure + 'Pa');
+  });
+}
+
 function update ()
 {
   if (gameOver)
@@ -163,20 +180,6 @@ function update ()
     player.setVelocityY(-330);
     // sensorValue = "";
   }
-}
-
-// this function is fired when we connect
-function onsocketConnected () {
-  console.log("client (game) connected to server");
-
-  socket.on('sensor', function(data){
-    console.log('data: ' + data.message);
-    sensorValue = data.message;
-  });
-
-  socket.on('pressure', function(data){
-    pressureText.setText('Pressure: ' + data.pressure + 'Pa');
-  });
 }
 
 function collectStar (player, star)
