@@ -62,13 +62,6 @@ function create ()
   platforms.create(50, 250, 'ground');
   platforms.create(750, 220, 'ground');
 
-  // The player and its settings
-  player = this.physics.add.sprite(100, 450, 'dude');
-
-  //  Player physics properties. Give the little guy a slight bounce.
-  player.setBounce(0.2);
-  player.setCollideWorldBounds(true);
-
   //  Our player animations, turning, walking left and walking right.
   this.anims.create({
     key: 'left',
@@ -204,6 +197,8 @@ function hitBomb (player, bomb)
 function onsocketConnected () {
   console.log("client (game) connected to server");
 
+  createPlayer();
+
   // send to the server a "new_player" message so that the server knows
   // a new player object has been created
   socket.emit('new_player', {x: 100, y: 0});
@@ -216,5 +211,14 @@ function onsocketConnected () {
   socket.on('pressure', function(data){
     pressureText.setText('Pressure: ' + data.pressure + 'Pa');
   });
+}
+
+function createPlayer(){
+  // The player and its settings
+  player = this.physics.add.sprite(100, 450, 'dude');
+
+  //  Player physics properties. Give the little guy a slight bounce.
+  player.setBounce(0.2);
+  player.setCollideWorldBounds(true);
 }
 

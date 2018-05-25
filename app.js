@@ -85,12 +85,13 @@ var Player = function (startX, startY) {
 };
 
 //onNewplayer function is called whenever a server gets a message “new_player” from the client
-function onNewPlayer (data) {
+function onNewPlayer (data, socketId) {
   //form a new player object
   var newPlayer = new Player(data.x, data.y);
-  console.log("created new player with id " + this.id);
-  player_lst.push(newPlayer);
+  console.log("created new player with id " + socketId);
 
+  player_lst.push(newPlayer);
+  console.log("Updated list of players: ", player_lst);
 }
 
 db.sequelize.sync().then(function() {
@@ -105,7 +106,7 @@ db.sequelize.sync().then(function() {
   io.on('connection', function(socket){
     console.log('a user connected');
     //output a unique socket.id
-    // console.log(socket.id);
+    console.log("Unique socket id: " + socket.id);
 
     socket.on('disconnect', function(){
       console.log('user disconnected');
@@ -124,7 +125,7 @@ db.sequelize.sync().then(function() {
     //Listen to the message “new_player’ from the client
     socket.on("new_player", function(data){
       console.log("new_player message received");
-      onNewPlayer(data);
+      onNewPlayer(data, socket.id);
     });
 
     socket.on('renewSocketConnection', function(value){
