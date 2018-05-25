@@ -122,12 +122,6 @@ db.sequelize.sync().then(function() {
       io.emit('pressure', value);
     });
 
-    //Listen to the message “new_player’ from the client
-    socket.on("new_player", function(data){
-      console.log("new_player message received");
-      onNewPlayer(data, socket.id);
-    });
-
     socket.on('renewSocketConnection', function(value){
       console.log("value received from sensor is " + value.pressure);
     });
