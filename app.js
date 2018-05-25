@@ -113,6 +113,14 @@ db.sequelize.sync().then(function() {
 
     });
 
+    // when a player moves, update the player data
+    socket.on('playerMovement', function (movementData) {
+      players[socket.id].x = movementData.x;
+      players[socket.id].y = movementData.y;
+      // emit a message to all players about the player that moved
+      socket.broadcast.emit('playerMoved', players[socket.id]);
+    });
+
     socket.on('sensor', function(value){
       console.log("value received from sensor is " + value.message);
       io.emit('sensor', value);

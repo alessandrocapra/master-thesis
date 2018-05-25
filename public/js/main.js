@@ -55,6 +55,14 @@ function create ()
     });
   });
 
+  this.socket.on('playerMoved', function (playerInfo) {
+    self.otherPlayers.getChildren().forEach(function (otherPlayer) {
+      if (playerInfo.playerId === otherPlayer.playerId) {
+        otherPlayer.setPosition(playerInfo.x, playerInfo.y);
+      }
+    });
+  });
+
   //  A simple background for our game
   this.add.image(400, 300, 'sky');
 
@@ -144,6 +152,20 @@ function update ()
     {
       this.player.setVelocityY(-330);
     }
+
+    // emit player movement
+    var x = this.player.x;
+    var y = this.player.y;
+
+    if (this.player.oldPosition && (x !== this.player.oldPosition.x || y !== this.player.oldPosition.y)) {
+      this.socket.emit('playerMovement', { x: this.player.x, y: this.player.y});
+    }
+
+    // save old position data
+    this.player.oldPosition = {
+      x: this.player.x,
+      y: this.player.y,
+    };
   }
 
 }
