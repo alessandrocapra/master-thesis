@@ -49,5 +49,27 @@ function update ()
 function addPlayer(self, playerInfo) {
   self.player = self.physics.add.sprite(playerInfo.x, playerInfo.y, 'dude');
   //  Player physics properties. Give the little guy a slight bounce.
+  self.player.setBounce(0.2);
+  self.player.setCollideWorldBounds(true);
 
+  //  Our player animations, turning, walking left and walking right.
+  self.anims.create({
+    key: 'left',
+    frames: self.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
+    frameRate: 10,
+    repeat: -1
+  });
+
+  self.anims.create({
+    key: 'turn',
+    frames: [ { key: 'dude', frame: 4 } ],
+    frameRate: 20
+  });
+
+  self.anims.create({
+    key: 'right',
+    frames: self.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
+    frameRate: 10,
+    repeat: -1
+  });
 }
