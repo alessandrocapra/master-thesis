@@ -1,3 +1,6 @@
+let sensorValue;
+let pressureText;
+
 var config = {
   type: Phaser.AUTO,
   width: 800,
@@ -52,10 +55,96 @@ function create ()
     });
   });
 
+  //  A simple background for our game
+  this.add.image(400, 300, 'sky');
+
+  //  The platforms group contains the ground and the 2 ledges we can jump on
+  this.platforms = this.physics.add.staticGroup();
+
+  //  Here we create the ground.
+  //  Scale it to fit the width of the game (the original sprite is 400x32 in size)
+  this.platforms.create(400, 568, 'ground').setScale(2).refreshBody();
+
+  //  Now let's create some ledges
+  this.platforms.create(600, 400, 'ground');
+  this.platforms.create(50, 250, 'ground');
+  this.platforms.create(750, 220, 'ground');
+
+  //  Our player animations, turning, walking left and walking right.
+  this.anims.create({
+    key: 'left',
+    frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
+    frameRate: 10,
+    repeat: -1
+  });
+
+  this.anims.create({
+    key: 'turn',
+    frames: [ { key: 'dude', frame: 4 } ],
+    frameRate: 20
+  });
+
+  this.anims.create({
+    key: 'right',
+    frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
+    frameRate: 10,
+    repeat: -1
+  });
+
+  //  Input Events
+  this.cursors = this.input.keyboard.createCursorKeys();
+
+  //  Some stars to collect, 12 in total, evenly spaced 70 pixels apart along the x axis
+  this.stars = this.physics.add.group({
+    key: 'star',
+    repeat: 11,
+    setXY: { x: 12, y: 0, stepX: 70 }
+  });
+
+  this.stars.children.iterate(function (child) {
+
+    //  Give each star a slightly different bounce
+    child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+
+  });
+
+  this.bombs = this.physics.add.group();
+
+  //  Collide the player and the stars with the platforms
+  this.physics.add.collider(this.player, this.platforms);
+  this.physics.add.collider(this.stars, this.platforms);
+  this.physics.add.collider(this.bombs, this.platforms);
 }
 
 function update ()
 {
+  if (cursors.left.isDown || sensorValue == "left")
+  {
+    this.player.setVelocityX(-160);
+
+    this.player.anims.play('left', true);
+  }
+  else if (cursors.right.isDown || sensorValue == "right")
+  {
+    this.player.setVelocityX(160);
+
+    this.player.anims.play('right', true);
+  }
+  else if(sensorValue == "turn")
+  {
+    this.player.setVelocityX(0);
+
+    this.player.anims.play('turn');
+  } else {
+    this.player.setVelocityX(0);
+
+    this.player.anims.play('turn');
+  }
+
+  if (cursors.up.isDown || sensorValue == "up" && player.body.touching.down)
+  {
+    this.player.setVelocityY(-330);
+  }
 
 }
 
@@ -64,27 +153,6 @@ function addPlayer(self, playerInfo) {
   //  Player physics properties. Give the little guy a slight bounce.
   self.player.setBounce(0.2);
   self.player.setCollideWorldBounds(true);
-
-  //  Our player animations, turning, walking left and walking right.
-  self.anims.create({
-    key: 'left',
-    frames: self.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
-    frameRate: 10,
-    repeat: -1
-  });
-
-  self.anims.create({
-    key: 'turn',
-    frames: [ { key: 'dude', frame: 4 } ],
-    frameRate: 20
-  });
-
-  self.anims.create({
-    key: 'right',
-    frames: self.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
-    frameRate: 10,
-    repeat: -1
-  });
 }
 
 function addOtherPlayers(self, playerInfo) {
