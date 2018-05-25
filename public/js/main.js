@@ -71,8 +71,8 @@ function create ()
   this.platforms.create(750, 220, 'ground');
 
   //  Player physics properties. Give the little guy a slight bounce.
-  this.player.setBounce(0.2);
-  this.player.setCollideWorldBounds(true);
+  self.player.setBounce(0.2);
+  self.player.setCollideWorldBounds(true);
 
   //  Our player animations, turning, walking left and walking right.
   this.anims.create({
