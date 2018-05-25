@@ -60,25 +60,25 @@ function create ()
   var self = this;
 
   // socket = io.connect(); // send a connection request to the server
-  this.socket = io.connect(window.location.hostname, { secure: true, reconnect: true, rejectUnauthorized : false } );
-  this.socket.on("connect", function(){
+  var socket = io.connect(window.location.hostname, { secure: true, reconnect: true, rejectUnauthorized : false } );
+  socket.on("connect", function(){
     console.log("client (game) connected to server");
 
     // send to the server a "new_player" message so that the server knows
     // a new player object has been created
-    this.socket.emit('new_player', {x: 100, y: 0});
+    socket.emit('new_player', {x: 100, y: 0});
 
-    this.socket.on('sensor', function(data){
+    socket.on('sensor', function(data){
       console.log('data: ' + data.message);
       sensorValue = data.message;
     });
 
-    this.socket.on('pressure', function(data){
+    socket.on('pressure', function(data){
       pressureText.setText('Pressure: ' + data.pressure + 'Pa');
     });
   });
 
-  this.socket.on('currentPlayers', function (players) {
+  socket.on('currentPlayers', function (players) {
     Object.keys(players).forEach(function (id) {
       if (players[id].playerId === self.socket.id) {
         addPlayer(self, players[id]);
