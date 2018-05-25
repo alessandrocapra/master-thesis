@@ -97,6 +97,7 @@ db.sequelize.sync().then(function() {
     };
     // send the players object to the new player
     socket.emit('currentPlayers', players);
+
     // update all other players of the new player
     socket.broadcast.emit('newPlayer', players[socket.id]);
 

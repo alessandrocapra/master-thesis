@@ -39,6 +39,8 @@ function create ()
     Object.keys(players).forEach(function (id) {
       if (players[id].playerId === self.socket.id) {
         addPlayer(self, players[id]);
+      } else {
+        addOtherPlayers(self, players[id]);
       }
     });
   });
