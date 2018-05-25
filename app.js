@@ -41,9 +41,9 @@ app.use('/sensor', sensor);
 
 /// catch 404 and forward to error handler
 app.use((req, res, next) => {
-    const err = new Error('Not Found');
-    err.status = 404;
-    next(err);
+  const err = new Error('Not Found');
+  err.status = 404;
+  next(err);
 });
 
 /// error handlers
@@ -51,48 +51,28 @@ app.use((req, res, next) => {
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
-    app.use((err, req, res, next) => {
-        res.status(err.status || 500);
-        res.render('error', {
-            message: err.message,
-            error: err,
-            title: 'error'
-        });
+  app.use((err, req, res, next) => {
+    res.status(err.status || 500);
+    res.render('error', {
+      message: err.message,
+      error: err,
+      title: 'error'
     });
+  });
 }
 
 // production error handler
 // no stacktraces leaked to user
 app.use((err, req, res, next) => {
-    res.status(err.status || 500);
-    res.render('error', {
-        message: err.message,
-        error: {},
-        title: 'error'
-    });
+  res.status(err.status || 500);
+  res.render('error', {
+    message: err.message,
+    error: {},
+    title: 'error'
+  });
 });
 
 app.set('port', process.env.PORT || 3000);
-
-//this is where we will store all the players in the client,
-// which is connected to the server
-var player_lst = [];
-
-// A player “class”, which will be stored inside player list
-var Player = function (startX, startY) {
-  var x = startX;
-  var y = startY;
-};
-
-//onNewplayer function is called whenever a server gets a message “new_player” from the client
-function onNewPlayer (data, socketId) {
-  //form a new player object
-  var newPlayer = new Player(data.x, data.y);
-  console.log("created new player with id " + socketId);
-
-  player_lst.push(newPlayer);
-  console.log("Updated list of players: ", player_lst);
-}
 
 db.sequelize.sync().then(function() {
   var server = app.listen(app.get('port'), function() {
@@ -102,14 +82,34 @@ db.sequelize.sync().then(function() {
   // socketIO integration
   var io = require('socket.io').listen(server);
 
+  var players = {};
+
   // listen for a connection request from any client
   io.on('connection', function(socket){
     console.log('a user connected');
+
+    // create a new player and add it to our players object
+    players[socket.id] = {
+      x: Math.floor(Math.random() * 700) + 50,
+      y: Math.floor(Math.random() * 500) + 50,
+      playerId: socket.id,
+    };
+
+    // send the players object to the new player
+    socket.emit('currentPlayers', players);
+    // update all other players of the new player
+    socket.broadcast.emit('newPlayer', players[socket.id]);
+
     //output a unique socket.id
     console.log("Unique socket id: " + socket.id);
 
     socket.on('disconnect', function(){
       console.log('user disconnected');
+
+      // remove this player from our players object
+      delete players[socket.id];
+      // emit a message to all players to remove this player
+      io.emit('disconnect', socket.id);
     });
 
     socket.on('sensor', function(value){

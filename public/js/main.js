@@ -1,11 +1,5 @@
-var socket; // define a global variable called socket
-// socket = io.connect(); // send a connection request to the server
-socket = io.connect(window.location.hostname, { secure: true, reconnect: true, rejectUnauthorized : false } );
-
 let sensorValue;
 let pressureText = 0;
-
-socket.on("connect", onsocketConnected);
 
 var config = {
   type: Phaser.AUTO,
@@ -34,7 +28,7 @@ var score = 0;
 var gameOver = false;
 var scoreText;
 
-var game = new Phaser.Game(config);
+game = new Phaser.Game(config);
 
 function preload ()
 {
@@ -62,25 +56,19 @@ function create ()
   platforms.create(50, 250, 'ground');
   platforms.create(750, 220, 'ground');
 
-  //  Our player animations, turning, walking left and walking right.
-  this.anims.create({
-    key: 'left',
-    frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
-    frameRate: 10,
-    repeat: -1
-  });
 
-  this.anims.create({
-    key: 'turn',
-    frames: [ { key: 'dude', frame: 4 } ],
-    frameRate: 20
-  });
+  var self = this;
 
-  this.anims.create({
-    key: 'right',
-    frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
-    frameRate: 10,
-    repeat: -1
+  // socket = io.connect(); // send a connection request to the server
+  this.socket = io.connect(window.location.hostname, { secure: true, reconnect: true, rejectUnauthorized : false } );
+  this.socket.on("connect", onsocketConnected);
+
+  this.socket.on('currentPlayers', function (players) {
+    Object.keys(players).forEach(function (id) {
+      if (players[id].playerId === self.socket.id) {
+        addPlayer(self, players[id]);
+      }
+    });
   });
 
   //  Input Events
@@ -197,8 +185,6 @@ function hitBomb (player, bomb)
 function onsocketConnected () {
   console.log("client (game) connected to server");
 
-  createPlayer();
-
   // send to the server a "new_player" message so that the server knows
   // a new player object has been created
   socket.emit('new_player', {x: 100, y: 0});
@@ -213,12 +199,33 @@ function onsocketConnected () {
   });
 }
 
-function createPlayer(){
+function addPlayer(self, playerInfo) {
   // The player and its settings
-  player = this.physics.add.sprite(100, 450, 'dude');
+  self.player = this.physics.add.sprite(playerInfo.x, playerInfo.y, 'dude');
 
   //  Player physics properties. Give the little guy a slight bounce.
-  player.setBounce(0.2);
-  player.setCollideWorldBounds(true);
+  self.player.setBounce(0.2);
+  self.player.setCollideWorldBounds(true);
+
+  //  Our player animations, turning, walking left and walking right.
+  self.anims.create({
+    key: 'left',
+    frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
+    frameRate: 10,
+    repeat: -1
+  });
+
+  self.anims.create({
+    key: 'turn',
+    frames: [ { key: 'dude', frame: 4 } ],
+    frameRate: 20
+  });
+
+  self.anims.create({
+    key: 'right',
+    frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
+    frameRate: 10,
+    repeat: -1
+  });
 }
 
