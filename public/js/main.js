@@ -11,8 +11,8 @@ var canvasHeight = window.innerHeight * window.devicePixelRatio;
 var config = {
   type: Phaser.AUTO,
   // width and height should match the device's screen size
-  width: canvasWidth,
-  height: canvasHeight,
+  width: 800,
+  height: 600,
   physics: {
     default: 'arcade',
     arcade: {
@@ -72,13 +72,6 @@ function create ()
   platforms.create(50, 250, 'ground');
   platforms.create(750, 220, 'ground');
 
-  // The player and its settings
-  player = this.physics.add.sprite(100, 450, 'dude');
-
-  //  Player physics properties. Give the little guy a slight bounce.
-  player.setBounce(0.2);
-  player.setCollideWorldBounds(true);
-
   //  Our player animations, turning, walking left and walking right.
   this.anims.create({
     key: 'left',
@@ -136,9 +129,14 @@ function create ()
   this.physics.add.collider(player, bombs, hitBomb, null, this);
 }
 
-// this function is fired when we connect
 function onsocketConnected () {
   console.log("client (game) connected to server");
+
+  createPlayer();
+
+  // send to the server a "new_player" message so that the server knows
+  // a new player object has been created
+  socket.emit('new_player', {x: 100, y: 0});
 
   socket.on('sensor', function(data){
     console.log('data: ' + data.message);
@@ -148,6 +146,15 @@ function onsocketConnected () {
   socket.on('pressure', function(data){
     pressureText.setText('Pressure: ' + data.pressure + 'Pa');
   });
+}
+
+function createPlayer(){
+  // The player and its settings
+  player = this.physics.add.sprite(100, 450, 'dude');
+
+  //  Player physics properties. Give the little guy a slight bounce.
+  player.setBounce(0.2);
+  player.setCollideWorldBounds(true);
 }
 
 function update ()

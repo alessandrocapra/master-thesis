@@ -74,6 +74,25 @@ app.use((err, req, res, next) => {
 
 app.set('port', process.env.PORT || 3000);
 
+//this is where we will store all the players in the client,
+// which is connected to the server
+var player_lst = [];
+
+// A player “class”, which will be stored inside player list
+var Player = function (startX, startY) {
+  var x = startX;
+  var y = startY;
+};
+
+//onNewplayer function is called whenever a server gets a message “new_player” from the client
+function onNewPlayer (data) {
+  //form a new player object
+  var newPlayer = new Player(data.x, data.y);
+  console.log("created new player with id " + this.id);
+  player_lst.push(newPlayer);
+
+}
+
 db.sequelize.sync().then(function() {
   var server = app.listen(app.get('port'), function() {
     console.log('Express server listening on port ' + server.address().port);
@@ -101,6 +120,9 @@ db.sequelize.sync().then(function() {
       console.log("value received from sensor is " + value.pressure);
       io.emit('pressure', value);
     });
+
+    //Listen to the message “new_player’ from the client
+    socket.on("new_player", onNewPlayer);
 
     socket.on('renewSocketConnection', function(value){
       console.log("value received from sensor is " + value.pressure);
