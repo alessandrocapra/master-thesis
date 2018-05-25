@@ -120,7 +120,7 @@ function create ()
 
 function update ()
 {
-  if (this.cursors.left.isDown || sensorValue == "left")
+  if (true)
   {
     player.setVelocityX(-160);
     player.anims.play('left', true);
@@ -135,6 +135,7 @@ function update ()
     player.setVelocityX(0);
     player.anims.play('turn');
   }
+
 
 
   if (this.cursors.up.isDown || sensorValue == "up" && this.player.body.touching.down)
