@@ -70,6 +70,10 @@ function create ()
   this.platforms.create(50, 250, 'ground');
   this.platforms.create(750, 220, 'ground');
 
+  //  Player physics properties. Give the little guy a slight bounce.
+  this.player.setBounce(0.2);
+  this.player.setCollideWorldBounds(true);
+
   //  Our player animations, turning, walking left and walking right.
   this.anims.create({
     key: 'left',
@@ -121,19 +125,21 @@ function update ()
   if (this.cursors.left.isDown || sensorValue == "left")
   {
     this.player.setVelocityX(-160);
-
     this.player.anims.play('left', true);
   }
   else if (this.cursors.right.isDown || sensorValue == "right")
   {
     this.player.setVelocityX(160);
-
     this.player.anims.play('right', true);
   }
   else if(sensorValue == "turn")
   {
     this.player.setVelocityX(0);
-
+    this.player.anims.play('turn');
+  }
+  else
+  {
+    this.player.setVelocityX(0);
     this.player.anims.play('turn');
   }
 
@@ -146,9 +152,6 @@ function update ()
 
 function addPlayer(self, playerInfo) {
   self.player = self.physics.add.sprite(playerInfo.x, playerInfo.y, 'dude');
-  //  Player physics properties. Give the little guy a slight bounce.
-  self.player.setBounce(0.2);
-  self.player.setCollideWorldBounds(true);
 }
 
 function addOtherPlayers(self, playerInfo) {
