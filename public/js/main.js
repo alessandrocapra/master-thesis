@@ -135,11 +135,7 @@ function update ()
     player.setVelocityX(0);
     player.anims.play('turn');
   }
-  else
-  {
-    player.setVelocityX(-160);
-    player.anims.play('left', true);
-  }
+
 
   if (this.cursors.up.isDown || sensorValue == "up" && this.player.body.touching.down)
   {
