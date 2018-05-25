@@ -5,6 +5,8 @@ socket = io.connect(window.location.hostname, { secure: true, reconnect: true, r
 let sensorValue;
 let pressureText = 0;
 
+socket.on("connect", onsocketConnected);
+
 var canvasWidth = window.innerWidth * window.devicePixelRatio;
 var canvasHeight = window.innerHeight * window.devicePixelRatio;
 
@@ -53,7 +55,6 @@ function create ()
   //listen to the “connect” message from the server. The server
   //automatically emit a “connect” message when the cleint connets.When
   //the client connects, call onsocketConnected.
-  socket.on("connect", onsocketConnected);
 
   let pressureText;
 
