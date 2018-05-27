@@ -169,8 +169,9 @@ function update ()
 
     if (this.player.oldPosition && (x !== this.player.oldPosition.x || y !== this.player.oldPosition.y)) {
       this.socket.emit('playerMovement', { x: this.player.x, y: this.player.y});
-      console.log("Inside playerMovement -- player.x:" + x + " - player.y: " + y);
-      console.log("player.oldPosition.x:" + this.player.oldPosition.x + " - player.oldPosition.y:" + this.player.oldPosition.y);
+      console.log("Inside playerMovement!");
+      console.log("--> p.x:" + x + " - p.y: " + y);
+      console.log("--> oP.x:" + this.player.oldPosition.x + " - oP.y:" + this.player.oldPosition.y);
     }
 
     // save old position data
