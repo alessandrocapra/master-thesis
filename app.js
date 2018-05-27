@@ -116,6 +116,9 @@ db.sequelize.sync().then(function() {
 
     // when a player moves, update the player data
     socket.on('playerMovement', function (movementData) {
+      /*
+      * TODO: sometimes when refreshing players[socket.id] is undefined
+      * */
       players[socket.id].x = movementData.x;
       players[socket.id].y = movementData.y;
       // emit a message to all players about the player that moved

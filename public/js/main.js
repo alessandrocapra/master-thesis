@@ -63,6 +63,8 @@ function create ()
         otherPlayer.setPosition(playerInfo.x, playerInfo.y);
       }
     });
+
+    console.log("Inside playerMoved -- player.x:" + playerInfo.x + " - player.y: " + playerInfo.y);
   });
 
   //  A simple background for our game
@@ -159,8 +161,15 @@ function update ()
     var x = this.player.x;
     var y = this.player.y;
 
+    /*
+    * TODO: add a parameter to set the animation to play? Other players look like they are always turning left
+    * TODO: fix lag on Y axis when other player moves
+    *
+    * */
+
     if (this.player.oldPosition && (x !== this.player.oldPosition.x || y !== this.player.oldPosition.y)) {
       this.socket.emit('playerMovement', { x: this.player.x, y: this.player.y});
+      console.log("Inside playerMovement -- player.x:" + x + " - player.y: " + y);
     }
 
     // save old position data
@@ -168,6 +177,8 @@ function update ()
       x: this.player.x,
       y: this.player.y,
     };
+
+    console.log("player.oldPosition.x:" + this.player.oldPosition.x + " - player.oldPosition.y:" + this.player.oldPosition.y);
   }
 
 }
