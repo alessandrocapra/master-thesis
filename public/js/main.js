@@ -61,10 +61,11 @@ function create ()
     self.otherPlayers.getChildren().forEach(function (otherPlayer) {
       if (playerInfo.playerId === otherPlayer.playerId) {
         otherPlayer.setPosition(playerInfo.x, playerInfo.y);
+
+        console.log("playerMoved (received from server)");
+        console.log("p.x:" + playerInfo.x + " - p.y: " + playerInfo.y);
       }
     });
-
-    console.log("Inside playerMoved -- player.x:" + playerInfo.x + " - player.y: " + playerInfo.y);
   });
 
   //  A simple background for our game
@@ -169,9 +170,9 @@ function update ()
 
     if (this.player.oldPosition && (x !== this.player.oldPosition.x || y !== this.player.oldPosition.y)) {
       this.socket.emit('playerMovement', { x: this.player.x, y: this.player.y});
-      console.log("Inside playerMovement!");
+      console.log("playerMovement (on the client)");
       console.log("--> p.x:" + x + " - p.y: " + y);
-      console.log("--> oP.x:" + this.player.oldPosition.x + " - oP.y:" + this.player.oldPosition.y);
+      // console.log("--> oP.x:" + this.player.oldPosition.x + " - oP.y:" + this.player.oldPosition.y);
     }
 
     // save old position data
