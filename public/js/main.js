@@ -32,7 +32,10 @@ function preload ()
 function create ()
 {
   var self = this;
-  this.otherPlayers = this.physics.add.group();
+  this.otherPlayers = this.physics.add.group({
+    bounceY: 0.2,
+    collideWorldBounds: true
+  });
 
   this.socket = io();
   this.socket.on('currentPlayers', function (players) {
@@ -230,7 +233,8 @@ function addOtherPlayers(self, playerInfo) {
   console.log("-------------------------------------");
   console.log("Added new opponent on the client side");
   console.log("-------------------------------------");
-  const otherPlayer = self.add.image(playerInfo.x, playerInfo.y, 'bomb');
+
+  const otherPlayer = self.add.sprite(playerInfo.x, playerInfo.y, 'dude');
   otherPlayer.playerId = playerInfo.playerId;
   self.otherPlayers.add(otherPlayer);
 

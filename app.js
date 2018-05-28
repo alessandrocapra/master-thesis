@@ -99,13 +99,6 @@ db.sequelize.sync().then(function() {
     // send the players object to the new player
     socket.emit('currentPlayers', players);
 
-    console.log("All players on server:");
-    console.log("----------------------");
-    for(var i = 0; i < players.length; i++){
-      console.log("ID: " + players[i].playerId + "x: " + players[i].x + ", y: " + players[i].y);
-    }
-    console.log("----------------------");
-
     // update all other players of the new player
     socket.broadcast.emit('newPlayer', players[socket.id]);
 
