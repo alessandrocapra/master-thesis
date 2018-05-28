@@ -49,12 +49,7 @@ function create ()
       }
     });
 
-    console.log("All players on client:");
-    console.log("----------------------");
-    self.otherPlayers.getChildren().forEach(function (player) {
-      console.log("ID: " + player.playerId + "x: " + player.x + ", y: " + player.y);
-    });
-    console.log("----------------------");
+    displayConnectedUsers(self);
   });
 
   this.socket.on('newPlayer', function (playerInfo) {
@@ -64,6 +59,8 @@ function create ()
     console.log("---------------------------------------------------");
 
     addOtherPlayers(self, playerInfo);
+
+    displayConnectedUsers(self);
   });
 
   this.socket.on('disconnect', function (playerId) {
@@ -236,4 +233,15 @@ function addOtherPlayers(self, playerInfo) {
   const otherPlayer = self.add.image(playerInfo.x, playerInfo.y, 'bomb');
   otherPlayer.playerId = playerInfo.playerId;
   self.otherPlayers.add(otherPlayer);
+
+  displayConnectedUsers(self);
+}
+
+function displayConnectedUsers(self){
+  console.log("All players on client:");
+  console.log("----------------------");
+  self.otherPlayers.getChildren().forEach(function (player) {
+    console.log("ID: " + player.playerId + "x: " + player.x + ", y: " + player.y);
+  });
+  console.log("----------------------");
 }
