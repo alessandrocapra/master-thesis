@@ -124,7 +124,6 @@ function create ()
   this.bombs = this.physics.add.group();
 
   //  Collide the player and the stars with the platforms
-  this.physics.add.collider(this.player, this.platforms);
   this.physics.add.collider(this.stars, this.platforms);
   this.physics.add.collider(this.bombs, this.platforms);
 }
@@ -190,6 +189,7 @@ function addPlayer(self, playerInfo) {
   //  Player physics properties. Give the little guy a slight bounce.
   self.player.setBounce(0.2);
   self.player.setCollideWorldBounds(true);
+  self.physics.add.collider(this.player, this.platforms);
 }
 
 function addOtherPlayers(self, playerInfo) {
