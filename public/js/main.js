@@ -62,7 +62,7 @@ function create ()
       if (playerInfo.playerId === otherPlayer.playerId) {
         otherPlayer.setPosition(playerInfo.x, playerInfo.y);
 
-        console.log("playerMoved (received from server)");
+        console.log("player with id " + playerInfo.playerId + " (received from server)");
         console.log("p.x:" + playerInfo.x + " - p.y: " + playerInfo.y);
       }
     });
@@ -82,27 +82,6 @@ function create ()
   this.platforms.create(600, 400, 'ground');
   this.platforms.create(50, 250, 'ground');
   this.platforms.create(750, 220, 'ground');
-
-  //  Our player animations, turning, walking left and walking right.
-  this.anims.create({
-    key: 'left',
-    frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
-    frameRate: 10,
-    repeat: -1
-  });
-
-  this.anims.create({
-    key: 'turn',
-    frames: [ { key: 'dude', frame: 4 } ],
-    frameRate: 20
-  });
-
-  this.anims.create({
-    key: 'right',
-    frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
-    frameRate: 10,
-    repeat: -1
-  });
 
   //  Input Events
   this.cursors = this.input.keyboard.createCursorKeys();
@@ -190,6 +169,27 @@ function addPlayer(self, playerInfo) {
   self.player.setBounce(0.2);
   self.player.setCollideWorldBounds(true);
   self.physics.add.collider(self.player, self.platforms);
+
+  //  Our player animations, turning, walking left and walking right.
+  self.anims.create({
+    key: 'left',
+    frames: self.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
+    frameRate: 10,
+    repeat: -1
+  });
+
+  self.anims.create({
+    key: 'turn',
+    frames: [ { key: 'dude', frame: 4 } ],
+    frameRate: 20
+  });
+
+  self.anims.create({
+    key: 'right',
+    frames: self.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
+    frameRate: 10,
+    repeat: -1
+  });
 }
 
 function addOtherPlayers(self, playerInfo) {

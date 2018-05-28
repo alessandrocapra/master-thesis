@@ -119,8 +119,10 @@ db.sequelize.sync().then(function() {
       /*
       * TODO: sometimes when refreshing players[socket.id] is undefined
       * */
+
       players[socket.id].x = movementData.x;
       players[socket.id].y = movementData.y;
+
       // emit a message to all players about the player that moved
       socket.broadcast.emit('playerMoved', players[socket.id]);
     });
