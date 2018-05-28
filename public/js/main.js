@@ -60,7 +60,19 @@ function create ()
   this.socket.on('playerMoved', function (playerInfo) {
     self.otherPlayers.getChildren().forEach(function (otherPlayer) {
       if (playerInfo.playerId === otherPlayer.playerId) {
-        otherPlayer.setPosition(playerInfo.x, playerInfo.y);
+
+        // check which animation to play for the movement
+        if(playerInfo.x < otherPlayer.x) {
+          otherPlayer.setVelocityX(-160);
+          otherPlayer.anims.play('left', true);
+        } else if (playerInfo.x > otherPlayer.x) {
+          otherPlayer.setVelocityX(160);
+          otherPlayer.anims.play('right', true);
+        } else {
+          otherPlayer.setVelocityX(0);
+          otherPlayer.anims.play('turn');
+        }
+        // otherPlayer.setPosition(playerInfo.x, playerInfo.y);
 
         console.log("player with id " + playerInfo.playerId + " (received from server)");
         console.log("p.x:" + playerInfo.x + " - p.y: " + playerInfo.y);
