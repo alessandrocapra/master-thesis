@@ -95,6 +95,7 @@ db.sequelize.sync().then(function() {
       y: Math.floor(Math.random() * 500) + 50,
       playerId: socket.id
     };
+
     // send the players object to the new player
     socket.emit('currentPlayers', players);
 

@@ -36,6 +36,11 @@ function create ()
 
   this.socket = io();
   this.socket.on('currentPlayers', function (players) {
+
+    console.log("--------------------------------------------------------------------");
+    console.log("Received currentPlayers on the client, receiving list of all players");
+    console.log("--------------------------------------------------------------------");
+
     Object.keys(players).forEach(function (id) {
       if (players[id].playerId === self.socket.id) {
         addPlayer(self, players[id]);
@@ -53,6 +58,11 @@ function create ()
   });
 
   this.socket.on('newPlayer', function (playerInfo) {
+
+    console.log("---------------------------------------------------");
+    console.log("Received info about the new player joining the game");
+    console.log("---------------------------------------------------");
+
     addOtherPlayers(self, playerInfo);
   });
 
@@ -65,6 +75,10 @@ function create ()
   });
 
   this.socket.on('playerMoved', function (playerInfo) {
+    console.log("-----------------------------------------");
+    console.log("Receive playerMoved message on the client");
+    console.log("-----------------------------------------");
+
     self.otherPlayers.getChildren().forEach(function (otherPlayer) {
       if (playerInfo.playerId === otherPlayer.playerId) {
 
@@ -167,8 +181,8 @@ function update ()
 
     if (this.player.oldPosition && (x !== this.player.oldPosition.x || y !== this.player.oldPosition.y)) {
       this.socket.emit('playerMovement', { x: this.player.x, y: this.player.y});
-      console.log("playerMovement (on the client)");
-      console.log("--> p.x:" + x + " - p.y: " + y);
+      // console.log("playerMovement (on the client)");
+      // console.log("--> p.x:" + x + " - p.y: " + y);
       // console.log("--> oP.x:" + this.player.oldPosition.x + " - oP.y:" + this.player.oldPosition.y);
     }
 
@@ -182,6 +196,10 @@ function update ()
 }
 
 function addPlayer(self, playerInfo) {
+  console.log("----------------------------------");
+  console.log("Added player playing in the client");
+  console.log("----------------------------------");
+
   self.player = self.physics.add.sprite(playerInfo.x, playerInfo.y, 'dude');
 
   //  Player physics properties. Give the little guy a slight bounce.
@@ -212,6 +230,9 @@ function addPlayer(self, playerInfo) {
 }
 
 function addOtherPlayers(self, playerInfo) {
+  console.log("-------------------------------------");
+  console.log("Added new opponent on the client side");
+  console.log("-------------------------------------");
   const otherPlayer = self.add.image(playerInfo.x, playerInfo.y, 'bomb');
   otherPlayer.playerId = playerInfo.playerId;
   self.otherPlayers.add(otherPlayer);
