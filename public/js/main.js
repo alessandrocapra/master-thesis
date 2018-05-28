@@ -43,6 +43,13 @@ function create ()
         addOtherPlayers(self, players[id]);
       }
     });
+
+    console.log("All players on client:");
+    console.log("----------------------");
+    self.otherPlayers.getChildren().forEach(function (player) {
+      console.log("ID: " + player.playerId + "x: " + player.x + ", y: " + player.y);
+    });
+    console.log("----------------------");
   });
 
   this.socket.on('newPlayer', function (playerInfo) {
