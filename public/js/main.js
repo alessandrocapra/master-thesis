@@ -189,7 +189,7 @@ function addPlayer(self, playerInfo) {
   //  Player physics properties. Give the little guy a slight bounce.
   self.player.setBounce(0.2);
   self.player.setCollideWorldBounds(true);
-  self.physics.add.collider(this.player, this.platforms);
+  self.physics.add.collider(self.player, self.platforms);
 }
 
 function addOtherPlayers(self, playerInfo) {
