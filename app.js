@@ -89,6 +89,12 @@ db.sequelize.sync().then(function() {
     x: Math.floor(Math.random() * 700) + 50,
     y: Math.floor(Math.random() * 500) + 50
   };
+
+  var bomb = {
+    x: Math.floor(Math.random() * 700) + 50,
+    y: Math.floor(Math.random() * 400) + 50
+  };
+
   var scores = {
     blue: 0,
     red: 0
@@ -102,7 +108,7 @@ db.sequelize.sync().then(function() {
     players[socket.id] = {
       rotation: 0,
       x: Math.floor(Math.random() * 700) + 50,
-      y: Math.floor(Math.random() * 500) + 50,
+      y: Math.floor(Math.random() * 400) + 50,
       playerId: socket.id,
       team: (Math.floor(Math.random() * 2) == 0) ? 'red' : 'blue'
     };
@@ -139,7 +145,6 @@ db.sequelize.sync().then(function() {
         direction = "turn";
       }
 
-
       players[socket.id].x = movementData.x;
       players[socket.id].y = movementData.y;
       players[socket.id].direction = direction;
@@ -155,9 +160,16 @@ db.sequelize.sync().then(function() {
         scores.blue += 10;
       }
       star.x = Math.floor(Math.random() * 700) + 50;
-      star.y = Math.floor(Math.random() * 500) + 50;
+      star.y = Math.floor(Math.random() * 400) + 50;
       io.emit('starLocation', star);
       io.emit('scoreUpdate', scores);
+
+      if (scores.red + scores.blue > 0 && ((scores.red + scores.blue) % 40 == 0)) {
+        bomb.x = Math.floor(Math.random()*(800-0+1)+0);
+        // generate the y coordinate betewen 400 and 600
+        bomb.y = Math.floor(Math.random()*(200-0+1)+0);
+        io.emit('bombLocation', bomb);
+      }
     });
 
     socket.on('sensor', function(value){

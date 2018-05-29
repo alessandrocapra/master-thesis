@@ -36,6 +36,12 @@ function create() {
     collideWorldBounds: true
   });
 
+  this.bombs = this.physics.add.group({
+    bounceY: 1,
+    collideWorldBounds: true,
+  });
+  this.bombs.allowGravity = false;
+
   this.socket.on('currentPlayers', function (players) {
     Object.keys(players).forEach(function (id) {
       if (players[id].playerId === self.socket.id) {
@@ -127,6 +133,15 @@ function create() {
     }, null, self);
   });
 
+  this.socket.on('bombLocation', function (bombLocation) {
+    console.log("bombLocation message received");
+    var bomb = self.bombs.create(bombLocation.x, bombLocation.y, 'bomb');
+    bomb.setBounce(1);
+    bomb.setCollideWorldBounds(true);
+    bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
+  });
+
+  this.physics.add.collider(this.bombs, this.platforms);
 
   this.blueScoreText = this.add.text(16, 16, '', { fontSize: '32px', fill: '#0000FF' });
   this.redScoreText = this.add.text(584, 16, '', { fontSize: '32px', fill: '#FF0000' });
@@ -194,8 +209,6 @@ function addPlayer(self, playerInfo) {
     self.player.setTint(0xff0000);
   }
 }
-
-// UPDATE THIS FUNCTION IN WEBSTORM
 function addOtherPlayers(self, playerInfo) {
   var otherPlayer = self.add.sprite(playerInfo.x, playerInfo.y, 'dude');
   self.physics.add.collider(otherPlayer, self.platforms);
