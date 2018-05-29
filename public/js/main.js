@@ -63,6 +63,15 @@ function create() {
   this.socket.on('playerMoved', function (playerInfo) {
     self.otherPlayers.getChildren().forEach(function (otherPlayer) {
       if (playerInfo.playerId === otherPlayer.playerId) {
+        console.log("Direction: " + playerInfo.direction);
+        if(playerInfo.direction === 'left'){
+          otherPlayer.anims.play('left', true);
+        } else if(playerInfo.direction === 'right'){
+          otherPlayer.anims.play('right', true);
+        } else {
+          otherPlayer.anims.play('turn');
+        }
+
         otherPlayer.setPosition(playerInfo.x, playerInfo.y);
       }
     });
@@ -129,6 +138,9 @@ function create() {
   this.socket.on('starLocation', function (starLocation) {
     if (self.star) self.star.destroy();
     self.star = self.physics.add.image(starLocation.x, starLocation.y, 'star');
+    self.physics.add.collider(self.star, self.platforms);
+    self.star.setBounceY(Phaser.Math.FloatBetween(0.4, 0.6));
+
     self.physics.add.overlap(self.player, self.star, function () {
       this.socket.emit('starCollected');
     }, null, self);
@@ -187,7 +199,7 @@ function update() {
       this.player.anims.play('turn');
     }
 
-    if (this.cursors.up.isDown || sensorValue == "up" && this.player.body.touching.down)
+    if ((this.cursors.up.isDown || sensorValue == "up") && this.player.body.touching.down)
     {
       this.player.setVelocityY(-330);
     }
@@ -220,6 +232,7 @@ function addPlayer(self, playerInfo) {
 
 function addOtherPlayers(self, playerInfo) {
   var otherPlayer = self.add.sprite(playerInfo.x, playerInfo.y, 'dude');
+  self.physics.add.collider(otherPlayer, self.platforms);
   if (playerInfo.team === 'blue') {
     otherPlayer.setTint(0x0000ff);
   } else {
