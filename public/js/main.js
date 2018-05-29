@@ -71,7 +71,6 @@ function create() {
         }
 
         otherPlayer.setPosition(playerInfo.x, playerInfo.y);
-        otherPlayer.anims.play('turn');
       }
     });
   });
