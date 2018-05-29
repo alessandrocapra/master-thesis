@@ -78,7 +78,10 @@ function create() {
         otherPlayerHasMoved = false;
 
         if(!otherPlayerHasMoved){
-          otherPlayer.anims.play('turn');
+          setTimeout(function() {
+            otherPlayer.anims.play('turn');
+          }, 100);
+
         }
       }
     });
