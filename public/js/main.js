@@ -58,7 +58,10 @@ function create() {
     });
   });
 
+  var otherPlayerHasMoved = false;
   this.socket.on('playerMoved', function (playerInfo) {
+    otherPlayerHasMoved = true;
+
     self.otherPlayers.getChildren().forEach(function (otherPlayer) {
       if (playerInfo.playerId === otherPlayer.playerId) {
         console.log("Direction: " + playerInfo.direction);
@@ -71,6 +74,12 @@ function create() {
         }
 
         otherPlayer.setPosition(playerInfo.x, playerInfo.y);
+
+        otherPlayerHasMoved = false;
+
+        if(!otherPlayerHasMoved){
+          otherPlayer.anims.play('turn');
+        }
       }
     });
   });
