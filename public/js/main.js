@@ -158,11 +158,11 @@ function create() {
   });
 
   // text displaying pressure from arduino
-  this.pressureText = this.add.text(300, 16, 'pressure: 0Pa', { fontSize: '32px', fill: '#000' });
+  // this.pressureText = this.add.text(300, 16, 'pressure: 0Pa', { fontSize: '32px', fill: '#000' });
 
   //  Collide the player and the stars with the platforms
   this.physics.add.collider(this.player, this.platforms);
-  this.physics.add.collider(this.stars, this.platforms);
+  // this.physics.add.collider(this.stars, this.platforms);
   this.physics.add.collider(this.bombs, this.platforms);
 
   //  Checks to see if the player overlaps with any of the stars, if he does call the collectStar function
@@ -248,7 +248,7 @@ function collectStar (player, star)
 
   //  Add and update the score
   score += 10;
-  scoreText.setText('Score: ' + score);
+  // scoreText.setText('Score: ' + score);
 
   if (this.stars.countActive(true) === 0)
   {
