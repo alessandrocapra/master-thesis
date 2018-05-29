@@ -113,23 +113,37 @@ function create() {
   this.cursors = this.input.keyboard.createCursorKeys();
 
   //  Some stars to collect, 12 in total, evenly spaced 70 pixels apart along the x axis
-  this.stars = this.physics.add.group({
-    key: 'star',
-    repeat: 11,
-    setXY: { x: 12, y: 0, stepX: 70 }
-  });
+  // this.stars = this.physics.add.group({
+  //   key: 'star',
+  //   repeat: 11,
+  //   setXY: { x: 12, y: 0, stepX: 70 }
+  // });
+	//
+  // this.stars.children.iterate(function (child) {
+	//
+  //   //  Give each star a slightly different bounce
+  //   child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+	//
+  // });
 
-  this.stars.children.iterate(function (child) {
-
-    //  Give each star a slightly different bounce
-    child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
-
+  this.socket.on('starLocation', function (starLocation) {
+    if (self.star) self.star.destroy();
+    self.star = self.physics.add.image(starLocation.x, starLocation.y, 'star');
+    self.physics.add.overlap(self.player, self.star, function () {
+      this.socket.emit('starCollected');
+    }, null, self);
   });
 
   this.bombs = this.physics.add.group();
 
   //  The score
-  this.scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
+  this.scoreTextBlue = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
+  this.scoreTextRed = this.add.text(584, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
+
+  this.socket.on('scoreUpdate', function (scores) {
+    self.scoreTextBlue.setText('Blue: ' + scores.blue);
+    self.scoreTextRed.setText('Red: ' + scores.red);
+  });
 
   // text displaying pressure from arduino
   this.pressureText = this.add.text(300, 16, 'pressure: 0Pa', { fontSize: '32px', fill: '#000' });
@@ -195,13 +209,22 @@ function update() {
 }
 function addPlayer(self, playerInfo) {
   self.player = self.physics.add.sprite(playerInfo.x, playerInfo.y, 'dude');
+  if (playerInfo.team === 'blue') {
+    self.player.setTint(0x0000ff);
+  } else {
+    self.player.setTint(0xff0000);
+  }
   self.player.setBounce(0.2);
   self.player.setCollideWorldBounds(true);
 }
 
 function addOtherPlayers(self, playerInfo) {
   var otherPlayer = self.add.sprite(playerInfo.x, playerInfo.y, 'dude');
-
+  if (playerInfo.team === 'blue') {
+    otherPlayer.setTint(0x0000ff);
+  } else {
+    otherPlayer.setTint(0xff0000);
+  }
   otherPlayer.playerId = playerInfo.playerId;
   self.otherPlayers.add(otherPlayer);
 }

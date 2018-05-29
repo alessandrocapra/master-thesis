@@ -85,6 +85,15 @@ db.sequelize.sync().then(function() {
   // storing all connected players
   var players = {};
 
+  var star = {
+    x: Math.floor(Math.random() * 700) + 50,
+    y: Math.floor(Math.random() * 500) + 50
+  };
+  var scores = {
+    blue: 0,
+    red: 0
+  };
+
   // listen for a connection request from any client
   io.on('connection', function(socket){
     console.log('a user connected');
@@ -95,10 +104,17 @@ db.sequelize.sync().then(function() {
       x: Math.floor(Math.random() * 700) + 50,
       y: Math.floor(Math.random() * 500) + 50,
       playerId: socket.id,
+      team: (Math.floor(Math.random() * 2) == 0) ? 'red' : 'blue'
     };
 
     // send the players object to the new player
     socket.emit('currentPlayers', players);
+
+    // send the star object to the new player
+    socket.emit('starLocation', star);
+    // send the current scores
+    socket.emit('scoreUpdate', scores);
+
     // update all other players of the new player
     socket.broadcast.emit('newPlayer', players[socket.id]);
 
@@ -118,6 +134,18 @@ db.sequelize.sync().then(function() {
 
       // emit a message to all players about the player that moved
       socket.broadcast.emit('playerMoved', players[socket.id]);
+    });
+
+    socket.on('starCollected', function () {
+      if (players[socket.id].team === 'red') {
+        scores.red += 10;
+      } else {
+        scores.blue += 10;
+      }
+      star.x = Math.floor(Math.random() * 700) + 50;
+      star.y = Math.floor(Math.random() * 500) + 50;
+      io.emit('starLocation', star);
+      io.emit('scoreUpdate', scores);
     });
 
     socket.on('sensor', function(value){
