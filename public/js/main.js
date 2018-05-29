@@ -58,13 +58,13 @@ function create() {
     });
   });
 
-  var otherPlayerHasMoved = false;
   this.socket.on('playerMoved', function (playerInfo) {
-    otherPlayerHasMoved = true;
+    console.log("playerMoved");
 
     self.otherPlayers.getChildren().forEach(function (otherPlayer) {
       if (playerInfo.playerId === otherPlayer.playerId) {
         console.log("Direction: " + playerInfo.direction);
+
         if(playerInfo.direction === 'left'){
           otherPlayer.anims.play('left', true);
         } else if(playerInfo.direction === 'right'){
@@ -74,15 +74,6 @@ function create() {
         }
 
         otherPlayer.setPosition(playerInfo.x, playerInfo.y);
-
-        otherPlayerHasMoved = false;
-
-        if(!otherPlayerHasMoved){
-          setTimeout(function() {
-            otherPlayer.anims.play('turn');
-          }, 100);
-
-        }
       }
     });
   });
@@ -125,7 +116,6 @@ function create() {
     repeat: -1
   });
 
-  // COPY THIS FUNCTION
   this.socket.on('starLocation', function (starLocation) {
     if (self.star) self.star.destroy();
     self.star = self.physics.add.image(starLocation.x, starLocation.y, 'star');
