@@ -142,13 +142,13 @@ function create() {
   });
 
   this.socket.on('starLocation', function (starLocation) {
-    // if (self.star) self.star.destroy();
+    if (self.star) self.star.destroy();
     self.star = self.physics.add.image(starLocation.x, starLocation.y, 'star');
     self.physics.add.collider(self.star, self.platforms);
     self.star.setBounceY(Phaser.Math.FloatBetween(0.4, 0.6));
 
     self.physics.add.overlap(self.player, self.star, function () {
-      if (self.star) self.star.destroy();
+      // if (self.star) self.star.destroy();
       this.socket.emit('starCollected');
     }, null, self);
   });
