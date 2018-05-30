@@ -30,7 +30,7 @@ function preload() {
 
 function create() {
   var self = this;
-  this.socket = io();
+  this.socket = io.connect(window.location.hostname, { secure: true, reconnect: true, rejectUnauthorized : false } );
   this.otherPlayers = this.physics.add.group({
     bounceY: 0.2,
     collideWorldBounds: true
