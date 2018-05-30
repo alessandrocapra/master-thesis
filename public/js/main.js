@@ -17,9 +17,10 @@ var config = {
   }
 };
 
-var game = new Phaser.Game(config);
 var sensorValue;
 var pressureText;
+
+var game = new Phaser.Game(config);
 
 function preload() {
   this.load.image('sky', 'assets/sky.png');
@@ -54,12 +55,6 @@ function create() {
     bounceY: 0.2,
     collideWorldBounds: true
   });
-
-  this.bombs = this.physics.add.group({
-    bounceY: 1,
-    collideWorldBounds: true,
-  });
-  this.bombs.allowGravity = false;
 
   this.socket.on('currentPlayers', function (players) {
     Object.keys(players).forEach(function (id) {
@@ -153,6 +148,15 @@ function create() {
     }, null, self);
   });
 
+
+  this.bombs = this.physics.add.group();
+
+  this.physics.add.collider(this.bombs, this.platforms);
+  this.physics.add.collider(this.player, this.bombs, hitBomb, null, this);
+
+  // this.bombs.setVelocityX(Phaser.Math.Between(-200,200), 20);
+  // this.bombs.setVelocityY(20);
+
   this.socket.on('bombLocation', function (bombLocation) {
     console.log("bombLocation message received");
     var bomb = self.bombs.create(bombLocation.x, bombLocation.y, 'bomb');
@@ -162,8 +166,6 @@ function create() {
     bomb.allowGravity = false;
   });
 
-  this.physics.add.collider(this.bombs, this.platforms);
-
   this.blueScoreText = this.add.text(16, 16, '', { fontSize: '32px', fill: '#0000FF' });
   this.redScoreText = this.add.text(584, 16, '', { fontSize: '32px', fill: '#FF0000' });
 
@@ -171,7 +173,6 @@ function create() {
     self.blueScoreText.setText('Blue: ' + scores.blue);
     self.redScoreText.setText('Red: ' + scores.red);
   });
-
 
   this.cursors = this.input.keyboard.createCursorKeys();
 }
@@ -240,4 +241,11 @@ function addOtherPlayers(self, playerInfo) {
   }
   otherPlayer.playerId = playerInfo.playerId;
   self.otherPlayers.add(otherPlayer);
+}
+
+function hitBomb(player, bomb){
+  console.log("Inside hitBomb")
+  this.physics.pause();
+  player.setTint(0x000000);
+  player.anims.play('turn');
 }
