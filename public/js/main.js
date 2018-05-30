@@ -35,7 +35,7 @@ function create() {
   //listen to the “connect” message from the server. The server
   //automatically emit a “connect” message when the cleint connets.When
   //the client connects, call onsocketConnected.
-  socket.on("connect", onsocketConnected);
+  this.socket.on("connect", onsocketConnected);
 
   this.otherPlayers = this.physics.add.group({
     bounceY: 0.2,
