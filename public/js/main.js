@@ -19,6 +19,7 @@ var config = {
 
 var game = new Phaser.Game(config);
 var sensorValue;
+var pressureText;
 
 function preload() {
   this.load.image('sky', 'assets/sky.png');
@@ -232,12 +233,12 @@ function addOtherPlayers(self, playerInfo) {
 function onsocketConnected () {
   console.log("client (game) connected to server");
 
-  socket.on('sensor', function(data){
+  this.socket.on('sensor', function(data){
     console.log('data: ' + data.message);
     sensorValue = data.message;
   });
 
-  socket.on('pressure', function(data){
+  this.socket.on('pressure', function(data){
     pressureText.setText('Pressure: ' + data.pressure + 'Pa');
   });
 }
