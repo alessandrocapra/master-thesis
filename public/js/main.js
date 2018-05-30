@@ -107,8 +107,6 @@ function create() {
     // check if the player that lost is in the otherPlayers array
     if(otherPlayers){
       otherPlayers.getChildren().forEach(function (otherPlayer) {
-        console.log("child object ID:\t", otherPlayer);
-        console.log("socketId passed:\t" + socketPassed);
         if (otherPlayer.playerId == socketPassed){
           otherPlayer.setTint(0x000000);
         }
@@ -118,7 +116,6 @@ function create() {
     }
 
     // ...or it is the current player
-    console.log("player.playerId:\t" + player.playerId);
     if(player.playerId == socketId){
       player.setTint(0x000000);
     }
