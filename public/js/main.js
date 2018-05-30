@@ -31,6 +31,12 @@ function preload() {
 function create() {
   var self = this;
   this.socket = io.connect(window.location.hostname, { secure: true, reconnect: true, rejectUnauthorized : false } );
+
+  //listen to the “connect” message from the server. The server
+  //automatically emit a “connect” message when the cleint connets.When
+  //the client connects, call onsocketConnected.
+  socket.on("connect", onsocketConnected);
+
   this.otherPlayers = this.physics.add.group({
     bounceY: 0.2,
     collideWorldBounds: true
@@ -225,4 +231,18 @@ function addOtherPlayers(self, playerInfo) {
   }
   otherPlayer.playerId = playerInfo.playerId;
   self.otherPlayers.add(otherPlayer);
+}
+
+// this function is fired when we connect
+function onsocketConnected () {
+  console.log("client (game) connected to server");
+
+  socket.on('sensor', function(data){
+    console.log('data: ' + data.message);
+    sensorValue = data.message;
+  });
+
+  socket.on('pressure', function(data){
+    pressureText.setText('Pressure: ' + data.pressure + 'Pa');
+  });
 }
