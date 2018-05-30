@@ -90,11 +90,6 @@ function create() {
     });
   });
 
-  this.socket.on('sensor', function(data){
-    console.log('data: ' + data.message);
-    sensorValue = data.message;
-  });
-
   this.gameOver = false;
 
   //  A simple background for our game
