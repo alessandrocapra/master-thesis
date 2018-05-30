@@ -75,27 +75,27 @@ app.use((err, req, res, next) => {
 app.set('port', process.env.PORT || 3000);
 
 db.sequelize.sync().then(function() {
-  var server = app.listen(app.get('port'), function() {
+  let server = app.listen(app.get('port'), function() {
     console.log('Express server listening on port ' + server.address().port);
   });
 
   // socketIO integration
-  var io = require('socket.io').listen(server);
+  let io = require('socket.io').listen(server);
 
   // storing all connected players
-  var players = {};
+  let players = {};
 
-  var star = {
+  let star = {
     x: Math.floor(Math.random() * 700) + 50,
     y: Math.floor(Math.random() * 500) + 50
   };
 
-  var bomb = {
+  let bomb = {
     x: Math.floor(Math.random() * 700) + 50,
     y: Math.floor(Math.random() * 400) + 50
   };
 
-  var scores = {
+  let scores = {
     blue: 0,
     red: 0
   };
@@ -135,7 +135,7 @@ db.sequelize.sync().then(function() {
 
     // when a player moves, update the player data
     socket.on('playerMovement', function (movementData) {
-      var direction;
+      let direction;
 
       if(players[socket.id].x < movementData.x){
         direction = "right";

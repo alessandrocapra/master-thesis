@@ -1,6 +1,7 @@
-var config = {
+let gameScene = new Phaser.Scene('Game');
+
+let config = {
   type: Phaser.AUTO,
-  parent: 'phaser-example',
   width: 800,
   height: 600,
   physics: {
@@ -10,12 +11,10 @@ var config = {
       gravity: { y: 300 }
     }
   },
-  scene: {
-    preload: preload,
-    create: create,
-    update: update
-  }
+  scene: gameScene
 };
+
+let game = new Phaser.Game(config);
 
 var sensorValue;
 var pressureText;
@@ -28,17 +27,15 @@ var otherPlayers;
 var blueScoreText;
 var redScoreText;
 
-var game = new Phaser.Game(config);
-
-function preload() {
+gameScene.preload = function () {
   this.load.image('sky', 'assets/sky.png');
   this.load.image('ground', 'assets/platform.png');
   this.load.image('star', 'assets/star.png');
   this.load.image('bomb', 'assets/bomb.png');
   this.load.spritesheet('dude', 'assets/dude.png', { frameWidth: 32, frameHeight: 48 });
-}
+};
 
-function create() {
+gameScene.create = function () {
   var self = this;
   this.socket = io();
   // this.socket = io.connect(window.location.hostname, { secure: true, reconnect: true, rejectUnauthorized : false } );
@@ -229,9 +226,10 @@ function create() {
   });
 
   this.cursors = this.input.keyboard.createCursorKeys();
-}
+};
 
-function update() {
+
+gameScene.update = function() {
   if(player){
     if (this.cursors.left.isDown || sensorValue == "left")
     {
@@ -273,8 +271,9 @@ function update() {
       y: player.y,
     };
   }
-}
-function addPlayer(self, playerInfo) {
+};
+
+addPlayer = function(self, playerInfo) {
   player = self.physics.add.sprite(playerInfo.x, playerInfo.y, 'dude');
   player.setBounce(0.2);
   player.setCollideWorldBounds(true);
@@ -287,8 +286,9 @@ function addPlayer(self, playerInfo) {
   }
 
   player.playerId = playerInfo.playerId;
-}
-function addOtherPlayers(self, playerInfo) {
+};
+
+addOtherPlayers = function(self, playerInfo) {
   var otherPlayer = self.add.sprite(playerInfo.x, playerInfo.y, 'dude');
   self.physics.add.collider(otherPlayer, platforms);
   if (playerInfo.team === 'blue') {
@@ -298,12 +298,12 @@ function addOtherPlayers(self, playerInfo) {
   }
   otherPlayer.playerId = playerInfo.playerId;
   otherPlayers.add(otherPlayer);
-}
+};
 
-function hitBomb(player, bomb){
+hitBomb = function(player, bomb){
   console.log("Inside hitBomb");
 
   // send an event to server to communicate the end of current game, player has been hit
   // self.socket.id
   this.socket.emit('endGame', this.socket.id);
-}
+};
