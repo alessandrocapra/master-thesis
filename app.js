@@ -168,6 +168,9 @@ db.sequelize.sync().then(function() {
         bomb.x = Math.floor(Math.random()*(800-0+1)+0);
         // generate the y coordinate betewen 400 and 600
         bomb.y = Math.floor(Math.random()*(200-0+1)+0);
+        bomb.velocityX = Math.floor(Math.random()*200) + 1; // this will get a number between 1 and 200
+        bomb.velocityX *= Math.floor(Math.random()*2) == 1 ? 1 : -1; // this will add minus sign in 50% of cases
+        bomb.velocityY = 20;
         io.emit('bombLocation', bomb);
       }
     });

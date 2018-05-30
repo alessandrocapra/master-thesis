@@ -148,7 +148,7 @@ function create() {
     self.star.setBounceY(Phaser.Math.FloatBetween(0.4, 0.6));
 
     self.physics.add.overlap(self.player, self.star, function () {
-      if (self.star) self.star.destroy();
+      // self.star.destroy();
       this.socket.emit('starCollected');
     }, null, self);
   });
@@ -158,7 +158,8 @@ function create() {
     var bomb = self.bombs.create(bombLocation.x, bombLocation.y, 'bomb');
     bomb.setBounce(1);
     bomb.setCollideWorldBounds(true);
-    bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
+    bomb.setVelocity(bombLocation.velocityX, bombLocation.velocityY);
+    bomb.allowGravity = false;
   });
 
   this.physics.add.collider(this.bombs, this.platforms);
