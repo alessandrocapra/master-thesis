@@ -36,7 +36,7 @@ function create() {
   //listen to the “connect” message from the server. The server
   //automatically emit a “connect” message when the cleint connets.When
   //the client connects, call onsocketConnected.
-  this.socket.on("connect", onsocketConnected);
+  this.socket.on("connect", onsocketConnected(self));
 
   this.otherPlayers = this.physics.add.group({
     bounceY: 0.2,
@@ -230,15 +230,15 @@ function addOtherPlayers(self, playerInfo) {
 }
 
 // this function is fired when we connect
-function onsocketConnected () {
+function onsocketConnected (self) {
   console.log("client (game) connected to server");
 
-  this.socket.on('sensor', function(data){
+  self.socket.on('sensor', function(data){
     console.log('data: ' + data.message);
     sensorValue = data.message;
   });
 
-  this.socket.on('pressure', function(data){
+  self.socket.on('pressure', function(data){
     pressureText.setText('Pressure: ' + data.pressure + 'Pa');
   });
 }
