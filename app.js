@@ -164,7 +164,8 @@ db.sequelize.sync().then(function() {
       io.emit('starLocation', star);
       io.emit('scoreUpdate', scores);
 
-      if (scores.red + scores.blue > 0 && ((scores.red + scores.blue) % 10 == 0)) {
+      // spawn a new bomb every 7 stars that have been collected
+      if (scores.red + scores.blue > 0 && ((scores.red + scores.blue) % 70 == 0)) {
         bomb.x = Math.floor(Math.random()*(800-0+1)+0);
         // generate the y coordinate betewen 400 and 600
         // bomb.y = Math.floor(Math.random()*(200-0+1)+0);
@@ -175,6 +176,10 @@ db.sequelize.sync().then(function() {
         bomb.velocityY = 20;
         io.emit('bombLocation', bomb);
       }
+    });
+
+    socket.on('endGame', function (socketId) {
+      io.emit('gameOver', socketId);
     });
 
     socket.on('sensor', function(value){

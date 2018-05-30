@@ -19,6 +19,14 @@ var config = {
 
 var sensorValue;
 var pressureText;
+var player;
+var star;
+var platforms;
+var bombs;
+var gameOver;
+var otherPlayers;
+var blueScoreText;
+var redScoreText;
 
 var game = new Phaser.Game(config);
 
@@ -41,21 +49,29 @@ function create() {
   this.socket.on("connect", function () {
     console.log("client (game) connected to server");
 
+    // receives data from the sensor, but processed by the server. The possible values are: left, right, turn.
     self.socket.on('sensor', function(data){
       console.log('data: ' + data.message);
       sensorValue = data.message;
     });
 
+    // receives the raw pressure number
     self.socket.on('pressure', function(data){
       pressureText.setText('Pressure: ' + data.pressure + 'Pa');
     });
   });
 
-  this.otherPlayers = this.physics.add.group({
+  // array that holds all the external players
+  otherPlayers = this.physics.add.group({
     bounceY: 0.2,
     collideWorldBounds: true
   });
 
+  /*
+  * Receives an updated list of all the players connected to the game.
+  * - if the socketId is the same as the current client, a new player will be create that this user will control
+  * - if the socketId is not of the current socket connection, another external player will be created.
+  * */
   this.socket.on('currentPlayers', function (players) {
     Object.keys(players).forEach(function (id) {
       if (players[id].playerId === self.socket.id) {
@@ -66,25 +82,59 @@ function create() {
     });
   });
 
+  /*
+  * New player has connected to the game, creating another player on the screen
+  * */
   this.socket.on('newPlayer', function (playerInfo) {
     addOtherPlayers(self, playerInfo);
   });
 
+  /*
+  * When an external player disconnects, remove it from the game.
+  * */
   this.socket.on('disconnect', function (playerId) {
-    self.otherPlayers.getChildren().forEach(function (otherPlayer) {
+    otherPlayers.getChildren().forEach(function (otherPlayer) {
       if (playerId === otherPlayer.playerId) {
         otherPlayer.destroy();
       }
     });
   });
 
+  this.socket.on('gameOver', function (socketId) {
+    var socketPassed = socketId;
+    self.physics.pause();
+
+    // check if the player that lost is in the otherPlayers array
+    if(otherPlayers){
+      otherPlayers.getChildren().forEach(function (otherPlayer) {
+        console.log("child object ID:\t", otherPlayer);
+        console.log("socketId passed:\t" + socketPassed);
+        if (otherPlayer.playerId == socketPassed){
+          otherPlayer.setTint(0x000000);
+        }
+        // Change with otherPlayers instance!
+        otherPlayer.anims.play('turn');
+      });
+    }
+
+    // ...or it is the current player
+    console.log("player.playerId:\t" + player.playerId);
+    if(player.playerId == socketId){
+      player.setTint(0x000000);
+    }
+    player.anims.play('turn');
+  });
+  /*
+  * Information coming from the server about a player movement. Update its position.
+  * */
   this.socket.on('playerMoved', function (playerInfo) {
     console.log("playerMoved");
 
-    self.otherPlayers.getChildren().forEach(function (otherPlayer) {
+    otherPlayers.getChildren().forEach(function (otherPlayer) {
       if (playerInfo.playerId === otherPlayer.playerId) {
         console.log("Direction: " + playerInfo.direction);
 
+        // playing the animation for the movement communicated by the server
         if(playerInfo.direction === 'left'){
           otherPlayer.anims.play('left', true);
         } else if(playerInfo.direction === 'right'){
@@ -98,22 +148,23 @@ function create() {
     });
   });
 
-  this.gameOver = false;
+  // variable that will be made true when a player is hit by a bomb
+  gameOver = false;
 
-  //  A simple background for our game
+  //  A simple background for the game
   this.add.image(400, 300, 'sky');
 
   //  The platforms group contains the ground and the 2 ledges we can jump on
-  this.platforms = this.physics.add.staticGroup();
+  platforms = this.physics.add.staticGroup();
 
   //  Here we create the ground.
   //  Scale it to fit the width of the game (the original sprite is 400x32 in size)
-  this.platforms.create(400, 568, 'ground').setScale(2).refreshBody();
+  platforms.create(400, 568, 'ground').setScale(2).refreshBody();
 
   //  Now let's create some ledges
-  this.platforms.create(600, 400, 'ground');
-  this.platforms.create(50, 250, 'ground');
-  this.platforms.create(750, 220, 'ground');
+  platforms.create(600, 400, 'ground');
+  platforms.create(50, 250, 'ground');
+  platforms.create(750, 220, 'ground');
 
   //  Our player animations, turning, walking left and walking right.
   this.anims.create({
@@ -136,116 +187,126 @@ function create() {
     repeat: -1
   });
 
+  /*
+  * Socket event that receives information where to spawn the next star,
+  * after it has sent an event when it has been collected.
+  * */
   this.socket.on('starLocation', function (starLocation) {
-    if (self.star) self.star.destroy();
-    self.star = self.physics.add.image(starLocation.x, starLocation.y, 'star');
-    self.physics.add.collider(self.star, self.platforms);
-    self.star.setBounceY(Phaser.Math.FloatBetween(0.4, 0.6));
+    if (star) star.destroy();
+    star = self.physics.add.image(starLocation.x, starLocation.y, 'star');
+    self.physics.add.collider(star, platforms);
+    star.setBounceY(Phaser.Math.FloatBetween(0.4, 0.6));
 
-    self.physics.add.overlap(self.player, self.star, function () {
-      // self.star.destroy();
+    self.physics.add.overlap(player, star, function () {
       this.socket.emit('starCollected');
     }, null, self);
   });
 
+  // Creating a group for all the bombs in the game
+  bombs = this.physics.add.group();
 
-  this.bombs = this.physics.add.group();
+  // Collisions between bombs and platforms
+  this.physics.add.collider(bombs, platforms);
 
-  this.physics.add.collider(this.bombs, this.platforms);
-  this.physics.add.collider(this.player, this.bombs, hitBomb, null, this);
-
-  // this.bombs.setVelocityX(Phaser.Math.Between(-200,200), 20);
-  // this.bombs.setVelocityY(20);
-
+  // Socket event that receives infor from the server on where to spawn the next bomb
   this.socket.on('bombLocation', function (bombLocation) {
     console.log("bombLocation message received");
-    var bomb = self.bombs.create(bombLocation.x, bombLocation.y, 'bomb');
+    var bomb = bombs.create(bombLocation.x, bombLocation.y, 'bomb');
     bomb.setBounce(1);
     bomb.setCollideWorldBounds(true);
     bomb.setVelocity(bombLocation.velocityX, bombLocation.velocityY);
     bomb.allowGravity = false;
+
+    // Checking the collision between player and bombs
+    self.physics.add.collider(player, bombs, hitBomb, null, self);
   });
 
-  this.blueScoreText = this.add.text(16, 16, '', { fontSize: '32px', fill: '#0000FF' });
-  this.redScoreText = this.add.text(584, 16, '', { fontSize: '32px', fill: '#FF0000' });
+  // Score text
+  blueScoreText = this.add.text(16, 16, '', { fontSize: '32px', fill: '#0000FF' });
+  redScoreText = this.add.text(584, 16, '', { fontSize: '32px', fill: '#FF0000' });
 
+  // Update event from the server with the new score
   this.socket.on('scoreUpdate', function (scores) {
-    self.blueScoreText.setText('Blue: ' + scores.blue);
-    self.redScoreText.setText('Red: ' + scores.red);
+    blueScoreText.setText('Blue: ' + scores.blue);
+    redScoreText.setText('Red: ' + scores.red);
   });
 
   this.cursors = this.input.keyboard.createCursorKeys();
 }
 
 function update() {
-  if(this.player){
+  if(player){
     if (this.cursors.left.isDown || sensorValue == "left")
     {
-      this.player.setVelocityX(-160);
-      this.player.anims.play('left', true);
+      player.setVelocityX(-160);
+      player.anims.play('left', true);
     }
     else if (this.cursors.right.isDown || sensorValue == "right")
     {
-      this.player.setVelocityX(160);
-      this.player.anims.play('right', true);
+      player.setVelocityX(160);
+      player.anims.play('right', true);
     }
     else if(sensorValue == "turn")
     {
-      this.player.setVelocityX(0);
-      this.player.anims.play('turn');
+      player.setVelocityX(0);
+      player.anims.play('turn');
     }
     else
     {
-      this.player.setVelocityX(0);
-      this.player.anims.play('turn');
+      player.setVelocityX(0);
+      player.anims.play('turn');
     }
 
-    if ((this.cursors.up.isDown || sensorValue == "up") && this.player.body.touching.down)
+    if ((this.cursors.up.isDown || sensorValue == "up") && player.body.touching.down)
     {
-      this.player.setVelocityY(-330);
+      player.setVelocityY(-330);
     }
 
     // emit player movement
-    var x = this.player.x;
-    var y = this.player.y;
+    var x = player.x;
+    var y = player.y;
 
-    if (this.player.oldPosition && (x !== this.player.oldPosition.x || y !== this.player.oldPosition.y)) {
-      this.socket.emit('playerMovement', { x: this.player.x, y: this.player.y});
+    if (player.oldPosition && (x !== player.oldPosition.x || y !== player.oldPosition.y)) {
+      this.socket.emit('playerMovement', { x: player.x, y: player.y});
     }
 
     // save old position data
-    this.player.oldPosition = {
-      x: this.player.x,
-      y: this.player.y,
+    player.oldPosition = {
+      x: player.x,
+      y: player.y,
     };
   }
 }
 function addPlayer(self, playerInfo) {
-  self.player = self.physics.add.sprite(playerInfo.x, playerInfo.y, 'dude');
-  self.player.setBounce(0.2);
-  self.player.setCollideWorldBounds(true);
-  self.physics.add.collider(self.player, self.platforms);
+  player = self.physics.add.sprite(playerInfo.x, playerInfo.y, 'dude');
+  player.setBounce(0.2);
+  player.setCollideWorldBounds(true);
+  self.physics.add.collider(player, platforms);
+
   if (playerInfo.team === 'blue') {
-    self.player.setTint(0x0000ff);
+    player.setTint(0x0000ff);
   } else {
-    self.player.setTint(0xff0000);
+    player.setTint(0xff0000);
   }
+
+  player.playerId = playerInfo.playerId;
 }
 function addOtherPlayers(self, playerInfo) {
   var otherPlayer = self.add.sprite(playerInfo.x, playerInfo.y, 'dude');
-  self.physics.add.collider(otherPlayer, self.platforms);
+  self.physics.add.collider(otherPlayer, platforms);
   if (playerInfo.team === 'blue') {
     otherPlayer.setTint(0x0000ff);
   } else {
     otherPlayer.setTint(0xff0000);
   }
   otherPlayer.playerId = playerInfo.playerId;
-  self.otherPlayers.add(otherPlayer);
+  otherPlayers.add(otherPlayer);
 }
 
 function hitBomb(player, bomb){
-  console.log("Inside hitBomb")
-  this.physics.pause();
-  player.setTint(0x000000);
-  player.anims.play('turn');
+  console.log("Inside hitBomb");
+
+  // send an event to server to communicate the end of current game, player has been hit
+  // self.socket.id
+  this.socket.emit('endGame', this.socket.id);
 }
