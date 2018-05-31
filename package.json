@@ -4,7 +4,8 @@
   "private": true,
   "main": "app.js",
   "scripts": {
-    "start": "node ./bin/www",
+    "start": "node server.js",
+    "build": "brunch build --production",
     "test": "mocha --recursive test",
     "test:coverage": "nyc npm test",
     "test:unit": "mocha --recursive test/middleware test/models test/routes",
@@ -25,6 +26,12 @@
     "socket.io": "^2.1.0"
   },
   "devDependencies": {
+    "auto-reload-brunch": "^2",
+    "brunch": "^2",
+    "clean-css-brunch": "^2",
+    "css-brunch": "^2",
+    "javascript-brunch": "^2",
+    "uglify-js-brunch": "^2",
     "chai": "^3.5.0",
     "debug": "^2.2.0",
     "gulp": "^3.9.0",

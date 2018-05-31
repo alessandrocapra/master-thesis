@@ -1,4 +1,4 @@
-var Server = require('../app');
+var Server = require('../server');
 
 module.exports = {
   receiveSensorData(req, res) {
