@@ -182,9 +182,11 @@ module.exports = {
 			star = self.physics.add.image(starLocation.x, starLocation.y, 'star');
 			self.physics.add.collider(star, platforms);
 			star.setBounceY(Phaser.Math.FloatBetween(0.4, 0.6));
+			console.log("Created new star!");
 
 			self.physics.add.overlap(player, star, function () {
 				if (star) star.destroy();
+				console.log("Destroyed collected star");
 				socket.emit('starCollected');
 			}, null, self);
 		});
