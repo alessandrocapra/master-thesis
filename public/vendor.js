@@ -181,7 +181,7 @@
   var host = br.server || window.location.hostname || 'localhost';
 
   var connect = function(){
-    var connection = new WebSocket('ws://' + host + ':' + port);
+    var connection = new WebSocket('wss://' + host + ':' + port);
     connection.onmessage = function(event){
       if (ar.disabled) return;
       var message = event.data;

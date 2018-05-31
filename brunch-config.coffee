@@ -21,6 +21,7 @@ module.exports =
     noPushState: on
   plugins: {
     autoReload: {
-      enabled: false
+      enabled: false,
+      forcewss: true
     }
   }
