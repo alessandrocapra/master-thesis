@@ -184,8 +184,8 @@ module.exports = {
 			star.setBounceY(Phaser.Math.FloatBetween(0.4, 0.6));
 
 			self.physics.add.overlap(player, star, function () {
-				socket.emit('starCollected');
 				if (star) star.destroy();
+				socket.emit('starCollected');
 			}, null, self);
 		});
 
