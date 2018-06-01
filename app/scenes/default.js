@@ -46,7 +46,7 @@ module.exports = {
 
 			// receives the raw pressure number
 			socket.on('pressure', function(data){
-				pressureText.setText('Pressure: ' + data.pressure + 'Pa');
+				// pressureText.setText('Pressure: ' + data.pressure + 'Pa');
 			});
 		});
 
@@ -196,13 +196,6 @@ module.exports = {
 
 		// Collisions between bombs and platforms
 		this.physics.add.collider(bombs, platforms);
-
-		// Wait 3 seconds to be sure that the player is created, so the collider can be associated with it
-		// setTimeout(function () {
-		//   // Checking the collision between player and bombs
-		//   self.physics.add.collider(player, bombs, hitBomb, null, self);
-		// }, 3000);
-
 
 		// Socket event that receives infor from the server on where to spawn the next bomb
 		socket.on('bombLocation', function (bombLocation) {

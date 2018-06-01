@@ -189,12 +189,12 @@ db.sequelize.sync().then(function() {
     });
 
     socket.on('pressure', function(value){
-      console.log("value received from sensor is " + value.pressure);
+      // console.log("value received from sensor is " + value.pressure);
       io.emit('pressure', value);
     });
 
     socket.on('renewSocketConnection', function(value){
-      console.log("value received from sensor is " + value.pressure);
+      // console.log("value received from sensor is " + value.pressure);
     });
   });
 
