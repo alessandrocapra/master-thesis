@@ -225,17 +225,17 @@ module.exports = {
 
   update: function () {
 		if(player){
-			if (this.cursors.left.isDown || sensorValue == "left")
+			if (this.cursors.left.isDown || sensorValue == "l")
 			{
 				player.setVelocityX(-160);
 				player.anims.play('left', true);
 			}
-			else if (this.cursors.right.isDown || sensorValue == "right")
+			else if (this.cursors.right.isDown || sensorValue == "r")
 			{
 				player.setVelocityX(160);
 				player.anims.play('right', true);
 			}
-			else if(sensorValue == "turn")
+			else if(sensorValue == "t")
 			{
 				player.setVelocityX(0);
 				player.anims.play('turn');
@@ -246,7 +246,7 @@ module.exports = {
 				player.anims.play('turn');
 			}
 
-			if ((this.cursors.up.isDown || sensorValue == "up") && player.body.touching.down)
+			if ((this.cursors.up.isDown || sensorValue == "u") && player.body.touching.down)
 			{
 				player.setVelocityY(-330);
 			}
