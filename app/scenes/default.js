@@ -41,12 +41,12 @@ module.exports = {
 			// receives data from the sensor, but processed by the server. The possible values are: left, right, turn.
 			socket.on('s', function(data){
 				// console.log('data: ' + data.message);
-				sensorValue = data.message;
+				sensorValue = data.m;
 			});
 
 			// receives the raw pressure number
 			socket.on('p', function(data){
-				// pressureText.setText('Pressure: ' + data.pressure + 'Pa');
+				// pressureText.setText('Pressure: ' + data.p + 'Pa');
 			});
 		});
 
