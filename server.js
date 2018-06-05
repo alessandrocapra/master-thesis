@@ -183,14 +183,14 @@ db.sequelize.sync().then(function() {
       io.emit('gameOver', socketId);
     });
 
-    socket.on('sensor', function(value){
-      console.log("value received from sensor is " + value.message);
-      io.emit('sensor', value);
+    socket.on('s', function(value){
+      // console.log("value received from sensor is " + value.message);
+      io.emit('s', value);
     });
 
-    socket.on('pressure', function(value){
+    socket.on('p', function(value){
       // console.log("value received from sensor is " + value.pressure);
-      io.emit('pressure', value);
+      io.emit('p', value);
     });
 
     socket.on('renewSocketConnection', function(value){

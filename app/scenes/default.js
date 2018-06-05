@@ -39,13 +39,13 @@ module.exports = {
 			console.log("client (game) connected to server");
 
 			// receives data from the sensor, but processed by the server. The possible values are: left, right, turn.
-			socket.on('sensor', function(data){
-				console.log('data: ' + data.message);
+			socket.on('s', function(data){
+				// console.log('data: ' + data.message);
 				sensorValue = data.message;
 			});
 
 			// receives the raw pressure number
-			socket.on('pressure', function(data){
+			socket.on('p', function(data){
 				// pressureText.setText('Pressure: ' + data.pressure + 'Pa');
 			});
 		});
