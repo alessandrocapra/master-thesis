@@ -17,7 +17,7 @@ module.exports = {
 		logintext.anchor.set(0.5,0.5);
 
 		loginButton.addChild(logintext);
-		loginButton.events.onInputDown.add(this.loginPage, this);
+		loginButton.events.onInputDown.add(this.loginPage.bind(this), this);
 
     // this.input.onTap.add(this.startGame.bind(this));
 

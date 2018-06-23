@@ -5,6 +5,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
+		password: {
+			type: DataTypes.STRING,
+			allowNull: false
+		},
     high_score: {
       type: DataTypes.INTEGER,
       defaultValue: 0

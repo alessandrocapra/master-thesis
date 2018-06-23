@@ -6,6 +6,7 @@ module.exports = {
     return User
       .create({
         name:req.body.name,
+        password: req.body.password,
         high_score:req.body.high_score,
       })
       .then(user => res.status(201).send(user))
@@ -28,6 +29,7 @@ module.exports = {
         return user
           .update({
             name: req.body.name || user.name,
+						password: req.body.password || user.password,
             high_score: req.body.high_score || user.high_score,
           })
           .then(() => res.status(200).send(user))  // Send back the updated user.

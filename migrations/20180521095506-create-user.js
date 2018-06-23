@@ -9,8 +9,13 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       name: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+				allowNull: false
       },
+			password: {
+				type: Sequelize.STRING,
+				allowNull: false
+			},
       high_score: {
         type: Sequelize.INTEGER,
         defaultValue: 0

@@ -53,8 +53,9 @@ module.exports = {
 
 		checkLoginBtn.addChild(chechLoginText);
 
-		// debugger;
-		checkLoginBtn.events.onInputDown.add(this.checkLogin(this.nameInput.value, this.passwordInput.value), this);
+		checkLoginBtn.events.onInputDown.add(function () {
+			console.log('name: ' + this.nameInput.value + ', pass: ' + this.passwordInput.value);
+		}, this);
 
 
     // this.input.onTap.add(this.startGame.bind(this));
@@ -64,8 +65,8 @@ module.exports = {
     this.state.start('game');
   },
 
-  checkLogin: function(name, password) {
-    console.table(name, password);
-  }
+  // checkLogin: function(name, password) {
+  //   console.table(name, password);
+  // }
 
 };

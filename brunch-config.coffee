@@ -13,15 +13,20 @@ module.exports =
     autoRequire:
       'app.js': ['initialize']
   npm:
+# We're using Phaser as `window.Phaser`
     static: [
-      'node_modules/phaser/dist/phaser.js'
-      # 'node_modules/phaser/dist/phaser-arcade-physics.js'
+      'node_modules/phaser/build/phaser.js'
+      'node_modules/phaser-ce/build/phaser.js'
+    ]
+  plugins:
+# https://github.com/babel/babel-brunch#configuration
+    babel:
+      ignore: ['node_modules/**', 'vendor/**']
+    off: [
+# You can turn these plugins off if you're not using them
+      'babel-brunch'
+      'brunch-typescript'
+# 'coffee-script-brunch'
     ]
   server:
     noPushState: on
-  plugins: {
-    autoReload: {
-      enabled: false,
-      forcewss: true
-    }
-  }

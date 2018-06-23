@@ -139,7 +139,7 @@ module.exports = {
 
 		// hearts for health
 		this.hearts = this.add.group();
-		for(let i=0; i < 6; i++){
+		for(var i=0; i < 6; i++){
 			this.hearts.create(50 + i*45, 40, 'heartFull')
 		}
 		// change anchor and scale for all hearts
@@ -229,17 +229,16 @@ module.exports = {
 		this.camera.deadzone = new Phaser.Rectangle(0, 0, 100, 400);
 
 		groundLayer.resizeWorld();
-
 		var cursors = this.cursors = this.input.keyboard.createCursorKeys();
 
-		cursors.down.onDown.add(() => {
-			if(this.duck.body.y > this.world.centerY - 35 && this.duck.body.y < this.world.height - 70 )
-				this.duck.body.velocity.y = 600;
+		cursors.down.onDown.add(function() {
+			if(self.duck.body.y > self.world.centerY - 35 && self.duck.body.y < self.world.height - 70 )
+				self.duck.body.velocity.y = 600;
 		});
 
-		cursors.up.onDown.add(() => {
-			if( this.duck.body.y <= this.world.centerY + 50 && this.duck.body.y > 100 )
-				this.duck.body.velocity.y = -600;
+		cursors.up.onDown.add(function() {
+			if( self.duck.body.y <= self.world.centerY + 50 && self.duck.body.y > 100 )
+				self.duck.body.velocity.y = -600;
 		});
   },
 
@@ -382,8 +381,8 @@ module.exports = {
 			this.add.tween(this.duck.scale).to( { x: 3, y: 3 }, 500, Phaser.Easing.Linear.None, true).yoyo(true);
 
 			// update hearts count and display
-			for(let i = this.hearts.length-1; i > 0; i--){
-				let currentHeart = this.hearts.getAt(i);
+			for(var i = this.hearts.length-1; i > 0; i--){
+				var currentHeart = this.hearts.getAt(i);
 
 				if(currentHeart.key === 'heartFull'){
 					currentHeart.loadTexture('heartEmpty');
@@ -429,8 +428,8 @@ module.exports = {
 		var choice = this.rnd.between(0,100);
 		if(choice > 50){
 			// get additional heart, if one has been lost already
-			for(let i = 0; i < this.hearts.length; i++){
-				let currentHeart = this.hearts.getAt(i);
+			for(var i = 0; i < this.hearts.length; i++){
+				var currentHeart = this.hearts.getAt(i);
 
 				if(currentHeart.key === 'heartEmpty'){
 					currentHeart.loadTexture('heartFull');
@@ -491,7 +490,7 @@ module.exports = {
 	switchAlphaInstructions: function(arrayElements){
 		// if alpha is 0, switch it on. If it's one, do the tween in a for loop for the array
 
-		for(let i = 0; i < arrayElements.length; i++){
+		for(var i = 0; i < arrayElements.length; i++){
 
 			this.add.tween(arrayElements[i]).to( { alpha: 0 }, 500, "Linear", true);
 			// if(arrayElements[i].alpha === 0){
