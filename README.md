@@ -1,16 +1,11 @@
-Brunch with Phaser 3
+Brunch with Phaser 2
 ====================
 
-A [Brunch](http://brunch.io) skeleton for making games with [Phaser 3](http://phaser.io/phaser3). ([Why Brunch?](http://brunch.io/docs/why-brunch))
+A [Brunch](http://brunch.io) skeleton for making games with [Phaser 2 (CE)](https://github.com/photonstorm/phaser-ce). (For Phaser 3, please see [brunch-phaser](https://github.com/samme/brunch-phaser).)
 
-    brunch new <project> -s phaser
+You can use CoffeeScript, ES6, TypeScript, or plain JavaScript.
 
-Or choose one of these variants:
-
-- [brunch-phaser-coffee](https://github.com/samme/brunch-phaser-coffee "Brunch with Phaser 3 and CoffeeScript")
-- [brunch-phaser-es6](https://github.com/samme/brunch-phaser-es6 "Brunch with Phaser 3 and ES6")
-- [brunch-phaser-typescript](https://github.com/samme/brunch-phaser-typescript "Brunch with Phaser 3 and TypeScript")
-- [brunch-phaser2](https://github.com/samme/brunch-phaser2 "Brunch with Phaser CE")
+    brunch new <project> -s samme/brunch-phaser2
 
 Get started
 -----------
@@ -19,70 +14,64 @@ Get started
   - [Node.js](https://nodejs.org)
   - [Brunch](http://brunch.io): `npm install -g brunch`
 - Run:
-  - `brunch new <project> -s phaser`
+  - `brunch new <project> -s samme/brunch-phaser2` (or see [Clone](#clone), below)
   - `npm run start` or `brunch watch --server` watches the project with continuous rebuild.
-  - `npm run build` or `brunch build --production` builds a minified project for production.
-  - [trouble?](http://brunch.io/docs/troubleshooting)
+  - `npm run build` or `brunch build --production` builds minified project for production.
 - Make:
   - Write your code in [app](app).
   - Put game assets in [assets](app/static/assets).
 
+### Clone
+
+The skeleton includes a sample game written in plain (ES5) JavaScript. If you'd like to start with a sample written in CoffeeScript, ES6, or TypeScript, create your new project by cloning this repository instead:
+
+```shell
+# Choose one
+git clone https://github.com/samme/brunch-phaser2.git --branch coffee
+git clone https://github.com/samme/brunch-phaser2.git --branch es6
+git clone https://github.com/samme/brunch-phaser2.git --branch typescript
+```
+
 Phaser
 ------
 
-Phaser is managed through [npm](https://docs.npmjs.com/cli/npm). The latest release is installed when you create a new project.
-
-    npm view phaser version
-
-You can install a specific version instead:
-
-    npm install -S phaser@3.7
-
-Update with:
+Phaser is managed through [npm](https://docs.npmjs.com/cli/npm). Update with:
 
     npm update
 
-### Other builds
+If you want to switch libraries:
 
-See the `npm.static` entry in [brunch-config](./brunch-config.coffee).
+    npm remove -S phaser-ce && npm install -S phaser
 
 Add packages
 ------------
 
-    npm install -S <package-name>
+    npm install -S <package>
 
-and in your code:
+and `require('<package>')` in your code.
 
-```javascript
-require('package-name');
-```
+Add bower packages
+------------------
+
+    bower install -S <package>
 
 Add other libraries
 -------------------
 
 Add the unminified script to [vendor](vendor).
 
-Configuration
--------------
+Plugins
+-------
 
-- [brunch](http://brunch.io/docs/config)
-- [uglify-js-brunch](https://www.npmjs.com/package/uglify-js-brunch#usage)
-  - [minify options](https://www.npmjs.com/package/uglify-js#minify-options)
-
-Save
-----
-
-You can make your own local skeleton (template):
+You can remove any plugins for languages you aren't using.
 
 ```shell
-git clone https://github.com/samme/brunch-phaser.git brunch-phaser
-cd brunch-phaser
-# If you make changes, commit them to master:
-git commit # etc.
-```
+# List
+npm list --dev --depth=0
 
-Now use it with `brunch new`:
+# Add (http://brunch.io/plugins)
+npm install -D plugin-name
 
-```shell
-brunch new <project> -s ./path/to/brunch-phaser
+# Remove, e.g.,
+npm uninstall -D babel-brunch coffee-script-brunch typescript-brunch
 ```

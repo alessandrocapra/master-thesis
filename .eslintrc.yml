@@ -3,7 +3,9 @@ env:
   commonjs: yes
 extends: 'eslint:recommended'
 globals:
+  p2: no
   Phaser: no
+  PIXI: no
 rules:
   indent:
     - error
@@ -11,15 +13,6 @@ rules:
   linebreak-style:
     - error
     - unix
-  no-console:
-    - warn
-    - allow:
-      - debug
-      - error
-      - info
-      - log
-      - time
-      - timeEnd
   quotes:
     - error
     - single

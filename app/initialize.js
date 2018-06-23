@@ -1,69 +1,20 @@
-window.game = new Phaser.Game({
-  // See <https://github.com/photonstorm/phaser/blob/master/src/boot/Config.js>
-  width: 800,
-  height: 600,
-  // zoom: 1,
-  // resolution: 1,
-  type: Phaser.AUTO,
-  // parent: null,
-  // canvas: null,
-  // canvasStyle: null,
-  // seed: null,
-  title: '☕️ Brunch with Phaser', // 'My Phaser 3 Game'
-  url: 'https://github.com/samme/brunch-phaser',
-  version: '0.0.1',
-  // input: {
-  //   keyboard: true,
-  //   mouse: true,
-  //   touch: true,
-  //   gamepad: false
-  // },
-  // disableContextMenu: false,
-  // banner: false
-  banner: {
-    // hidePhaser: false,
-    // text: 'white',
-    background: ['#e54661', '#ffa644', '#998a2f', '#2c594f', '#002d40']
-  },
-  // fps: {
-  //   min: 10,
-  //   target: 60
-  // },
-  // antialias: true,
-  // pixelArt: false,
-  // autoResize: false,
-  // roundPixels: false,
-  // transparent: false,
-  // clearBeforeRender: true,
-  // backgroundColor: 0x000000, // black
-  loader: {
-    // baseURL: '',
-    path: 'assets/',
-    // maxParallelDownloads: 32
-    // crossOrigin: '', // e.g., 'anonymous'
-    // timeout: 0
-  },
-  physics: {
-    default: 'arcade',
-    arcade: {
-      gravity: {
-        y: 300
-      }
-    }
-  },
-  // audio: {
-  //   disableWebAudio: false,
-  //   noAudio: false
-  // },
-  callbacks: {
-    postBoot: function (game) {
-      console.debug('game.config', game.config);
-    }
-  },
-  scene: [
-    require('scenes/boot'),
-    require('scenes/default'),
-    require('scenes/menu')
-  ]
-
+var game = window.GAME = new Phaser.Game({
+  // See <https://photonstorm.github.io/phaser-ce/global.html#GameConfig>
+  // antialias:               true,
+  // backgroundColor:         0x000000,
+  // disableVisibilityChange: false,
+  // enableDebug:             true,
+  height:                  630,
+  renderer:                Phaser.AUTO,
+  // resolution:              1,
+  // scaleMode:               Phaser.ScaleManager.NO_SCALE,
+  // transparent:             false,
+  width:                   800,
 });
+
+game.state.add('boot', require('states/boot'));
+game.state.add('game', require('states/game'));
+game.state.add('menu', require('states/menu'));
+game.state.add('login', require('states/login'));
+
+game.state.start('boot');
