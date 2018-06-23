@@ -2,6 +2,8 @@ module.exports = {
 
   create: function () {
 
+  	var self = this;
+
 		var title = this.add.text(this.world.centerX, 200, 'Login', {
       fill: 'white',
       font: '80px Arial'
@@ -30,18 +32,6 @@ module.exports = {
 			type: PhaserInput.InputType.password
 		});
 
-		var xhr  = new XMLHttpRequest();
-		xhr.open('GET', 'https://duchennegame.herokuapp.com/api/users', true);
-		xhr.onload = function () {
-			var users = JSON.parse(xhr.responseText);
-			if (xhr.readyState == 4 && xhr.status == "200") {
-				console.table(users);
-			} else {
-				console.error(users);
-			}
-		};
-		xhr.send(null);
-
 		// login button and text
 		var checkLoginBtn = this.checkLoginBtn= this.add.sprite(this.world.centerX, this.world.centerY+140, 'button', 'blue_button04.png');
 		checkLoginBtn.anchor.set(0.5,0.5);
@@ -54,7 +44,45 @@ module.exports = {
 		checkLoginBtn.addChild(chechLoginText);
 
 		checkLoginBtn.events.onInputDown.add(function () {
-			console.log('name: ' + this.nameInput.value + ', pass: ' + this.passwordInput.value);
+			var name = this.nameInput.value;
+			var password = this.passwordInput.value;
+
+			console.log('name: ' + name + ', pass: ' + password);
+
+			var xhr  = new XMLHttpRequest();
+			xhr.open('GET', 'https://duchennegame.herokuapp.com/api/users', true);
+			xhr.onload = function () {
+				var users = JSON.parse(xhr.responseText);
+				if (xhr.readyState == 4 && xhr.status == "200") {
+					console.log(users);
+					var userFound = false;
+
+					users.forEach(function(user){
+						if(user.name === name && user.password === password){
+							self.state.start('game');
+							// userFound = true;
+						} else {
+							console.log("User not found!");
+						}
+					});
+				} else {
+					console.error(users);
+				}
+			};
+			xhr.send(null);
+
+
+
+			// var xhttp = new XMLHttpRequest();
+			// xhttp.open("POST", "https://duchennegame.herokuapp.com/api/users",true);
+			// xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+			// var input = JSON.stringify({
+			// 	"name": name,
+			// 	"password": password
+			// });
+			// xhttp.send(input);
+
+
 		}, this);
 
 
