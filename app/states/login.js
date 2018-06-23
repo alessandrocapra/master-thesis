@@ -66,7 +66,7 @@ module.exports = {
 
 					users.forEach(function(user){
 						if(user.name === name && user.password === password){
-							self.state.start('game');
+							self.state.start('welcome');
 							userFound = true;
 						}
 					});

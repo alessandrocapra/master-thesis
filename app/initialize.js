@@ -16,5 +16,8 @@ game.state.add('boot', require('states/boot'));
 game.state.add('game', require('states/game'));
 game.state.add('menu', require('states/menu'));
 game.state.add('login', require('states/login'));
+game.state.add('welcome', require('states/welcome'));
+game.state.add('settings', require('states/settings'));
+game.state.add('ranking', require('states/ranking'));
 
 game.state.start('boot');
