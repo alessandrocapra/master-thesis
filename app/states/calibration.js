@@ -19,9 +19,15 @@ module.exports = {
 
 			// receives the raw pressure number
 			self.socket.on('p', function(data){
-				console.log('p: ' + data.p)
+				console.log('p: ' + data.p);
 
-				self.mapPressureToCircle(data.p);
+				// self.mapPressureToCircle(data.p);
+				var mappedValue = function(pressure){
+					console.log('raw pressure: ' + pressure);
+					return Math.mapLinear(pressure, -2000, 1500, 150, 300);
+				};
+
+				console.log('\n\nmappedValue: ' + mappedValue);
 			});
 		});
 
