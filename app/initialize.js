@@ -45,6 +45,7 @@ game.state.add('login', require('states/login'));
 game.state.add('welcome', require('states/welcome'));
 game.state.add('settings', require('states/settings'));
 game.state.add('ranking', require('states/ranking'));
-game.state.add('calibration', require('states/calibration'));
+game.state.add('calibration', require('states/calibration1'));
+game.state.add('calibration', require('states/calibration2'));
 
 game.state.start('boot');

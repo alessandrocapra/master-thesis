@@ -31,29 +31,12 @@ module.exports = {
 		// middleCircle.beginFill(this.game.global.primaryColorTint, 1);
 		// middleCircle.drawCircle(this.world.centerX, this.world.centerY + 100, 50);
 
-		// keyboard/touch button
-		// var keyTouchBtn = this.keyTouchBtn= this.add.sprite(this.world.width*0.45, this.world.height * 0.6, 'button', 'blue_button04.png');
-		// keyTouchBtn.anchor.set(0.5,0.5);
-		// keyTouchBtn.alpha = 0.6;
-		// keyTouchBtn.inputEnabled = true;
-		// keyTouchBtn.input.useHandCursor = true;
-		//
-		// var keyTouchText = this.add.text(0,0,'Keyboard/Touch', this.optionsButtonStyle);
-		// keyTouchText.anchor.set(0.5,0.5);
-		//
-		// keyTouchBtn.addChild(keyTouchText);
-		//
-		// keyTouchBtn.events.onInputDown.add(function () {
-		// 	// select this option
-		// 	self.game.global.inputDevice = 'keyboard_touch';
-		// 	calibrationBtn.visible = false;
-		// }, this);
-		//
   },
 	
 	update: function () {
   	var self = this;
 
+  	// update circle diameter with mapped value
 		this.largerCircle.diameter = this.updatedCircleDiameter;
 
 		// draw update figure on the invisible circle

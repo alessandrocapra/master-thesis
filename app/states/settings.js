@@ -63,7 +63,7 @@ module.exports = {
 		calibrationBtn.addChild(calibrationText);
 
 		calibrationBtn.events.onInputDown.add(function () {
-			this.state.start('calibration');
+			this.state.start('calibration1');
 		}, this);
 
   },
