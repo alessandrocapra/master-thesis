@@ -67,6 +67,6 @@ module.exports = {
 		this.graphics.drawCircle(this.world.centerX, this.world.centerY + 100, this.largerCircle.diameter);
 		setTimeout(function(){
 			self.graphics.kill();
-		},10);
+		},1000);
 	}
 };
