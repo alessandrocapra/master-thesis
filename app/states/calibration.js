@@ -23,13 +23,14 @@ module.exports = {
 		title.anchor.set(0.5);
 
 		// circle that changes in shape, according to breathing
-		var middleCircle = this.graphics = this.add.graphics(0, 0);
+		var middleCircle = this.middleCircle = this.add.graphics(0, 0);
 		middleCircle.beginFill(this.game.global.primaryColorTint, 0.5);
-		middleCircle.drawCircle(this.world.centerX, this.world.centerY + 50, 150);
+		middleCircle.drawCircle(this.world.centerX, this.world.centerY + 100, 150);
 
 		// basic circle, which stays in the middle
-		middleCircle.beginFill(this.game.global.primaryColorTint, 1);
-		middleCircle.drawCircle(this.world.centerX, this.world.centerY + 50, 100);
+		var largerCircle = this.largerCircle = this.add.graphics(0, 0);
+		largerCircle.beginFill(this.game.global.primaryColorTint, 1);
+		largerCircle.drawCircle(this.world.centerX, this.world.centerY + 100, 100);
 
 		// keyboard/touch button
 		// var keyTouchBtn = this.keyTouchBtn= this.add.sprite(this.world.width*0.45, this.world.height * 0.6, 'button', 'blue_button04.png');
@@ -49,5 +50,9 @@ module.exports = {
 		// 	calibrationBtn.visible = false;
 		// }, this);
 		//
-  }
+  },
+	
+	update: function () {
+		this.largerCircle.diameter = this.pressure;
+	}
 };
