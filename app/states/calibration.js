@@ -15,8 +15,7 @@ module.exports = {
 
 			// receives the raw pressure number
 			self.socket.on('p', function(data){
-				self.updatedCircleDiameter = Phaser.Math.mapLinear(data.p, -2000, 1500, 150, 300);
-				console.log('mappedValue: ' + self.updatedCircleDiameter);
+				self.updatedCircleDiameter = Phaser.Math.mapLinear(data.p, -2000, 1500, 30, 250);
 			});
 		});
 
@@ -24,13 +23,13 @@ module.exports = {
 		title.anchor.set(0.5);
 
 		// draw an empty circle that is going to chane with pressure data
-		this.largerCircle = new Phaser.Circle(this.world.centerX, this.world.centerY + 100, 150);
+		this.largerCircle = new Phaser.Circle(this.world.centerX, this.world.centerY + 100, 100);
 		this.graphics = this.add.graphics(0, 0);
 
 		// basic circle, which stays in the middle
-		var middleCircle = this.middleCircle = this.add.graphics(0, 0);
-		middleCircle.beginFill(this.game.global.primaryColorTint, 1);
-		middleCircle.drawCircle(this.world.centerX, this.world.centerY + 100, 100);
+		// var middleCircle = this.middleCircle = this.add.graphics(0, 0);
+		// middleCircle.beginFill(this.game.global.primaryColorTint, 1);
+		// middleCircle.drawCircle(this.world.centerX, this.world.centerY + 100, 50);
 
 		// keyboard/touch button
 		// var keyTouchBtn = this.keyTouchBtn= this.add.sprite(this.world.width*0.45, this.world.height * 0.6, 'button', 'blue_button04.png');
