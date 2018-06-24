@@ -92,7 +92,7 @@ db.sequelize.sync().then(function() {
 
     socket.on('p', function(value){
       console.log("pressure: " + value.p);
-      // io.emit('p', value);
+      io.broadcast.emit('p', value);
     });
 
     socket.on('renewSocketConnection', function(value){
