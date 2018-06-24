@@ -1,14 +1,13 @@
 module.exports = {
 
   create: function () {
-		var title = this.add.text(this.world.centerX, 200, 'Welcome', {
-			fill: 'white',
-			font: '80px Arial'
-		});
+		var title = this.add.text(this.game.global.titlePlacement.x, this.game.global.titlePlacement.y, 'Welcome', this.game.global.titleStyle);
 		title.anchor.set(0.5);
 
+		title.setText('Welcome, ' + this.game.global.currentUser.name + '!');
+
 		// add text with explanation of the game
-		var gameInstructions = this.gameInstruction = this.add.text(this.world.centerX, this.world.height * 0.45, "Here goes some explanation on how the game works!", {
+		var gameInstructions = this.gameInstruction = this.add.text(this.world.centerX, this.world.height * 0.4, "Here goes some explanation on how the game works!", {
 			fill: "#FFF",
 			font: '20px Arial'
 		});
@@ -17,6 +16,7 @@ module.exports = {
 		// gear icon for settings
 		var settings = this.settings = this.add.image(this.world.width - 90, 50, 'gear');
 		settings.scale.setTo(0.6, 0.6);
+		settings.tint = this.game.global.primaryColorTint;
 		settings.inputEnabled = true;
 		settings.input.useHandCursor = true;
 
@@ -28,6 +28,7 @@ module.exports = {
 		// leaderboard icon for rankings
 		var leaderboard = this.leaderboard = this.add.image(this.world.width - 160, 50, 'leaderboard');
 		leaderboard.scale.setTo(0.6, 0.6);
+		leaderboard.tint = this.game.global.primaryColorTint;
 		leaderboard.inputEnabled = true;
 		leaderboard.input.useHandCursor = true;
 
@@ -42,7 +43,7 @@ module.exports = {
 		startBtn.inputEnabled = true;
 		startBtn.input.useHandCursor = true;
 
-		var startText = this.add.text(0,0,'Login', {align: "center"});
+		var startText = this.add.text(0,0,'Login', this.game.global.buttonLabelStyle);
 		startText.anchor.set(0.5,0.5);
 
 		startBtn.addChild(startText);

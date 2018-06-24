@@ -4,10 +4,7 @@ module.exports = {
 
   	var self = this;
 
-		var title = this.add.text(this.world.centerX, 200, 'Login', {
-      fill: 'white',
-      font: '80px Arial'
-    });
+		var title = this.add.text(this.game.global.titlePlacement.x, this.game.global.titlePlacement.y, 'Login', this.game.global.titleStyle);
     title.anchor.set(0.5);
     // title.alignIn(this.world, Phaser.CENTER);
 
@@ -45,7 +42,7 @@ module.exports = {
 		checkLoginBtn.inputEnabled = true;
 		checkLoginBtn.input.useHandCursor = true;
 
-		var chechLoginText = this.add.text(0,0,'Login', {align: "center"});
+		var chechLoginText = this.add.text(0,0,'Login', this.game.global.buttonLabelStyle);
 		chechLoginText.anchor.set(0.5,0.5);
 
 		checkLoginBtn.addChild(chechLoginText);
@@ -66,6 +63,9 @@ module.exports = {
 
 					users.forEach(function(user){
 						if(user.name === name && user.password === password){
+							// save user details in the global variables
+							self.game.global.currentUser = user;
+
 							self.state.start('welcome');
 							userFound = true;
 						}

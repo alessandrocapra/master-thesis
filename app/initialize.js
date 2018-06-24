@@ -12,6 +12,32 @@ var game = window.GAME = new Phaser.Game({
   width:                   800,
 });
 
+game.global = {
+	// global vars to store important data that goes throughout scenes
+  inputDevice: 'keyboard_touch',
+  currentUser: {},
+
+	// general styling
+	primaryColorHex: "#2cb2ed",
+	primaryColorTint: "0x2cb2ed",
+
+  // title styling and placement
+  titlePlacement: {
+    x: 400,
+    y: 170
+  },
+  titleStyle: {
+		fill: 'white',
+		font: '60px Arial'
+	},
+
+	// button label styling
+	buttonLabelStyle : {
+		font: "20px Arial",
+		align: "center"
+  }
+};
+
 game.state.add('boot', require('states/boot'));
 game.state.add('game', require('states/game'));
 game.state.add('menu', require('states/menu'));
@@ -19,5 +45,6 @@ game.state.add('login', require('states/login'));
 game.state.add('welcome', require('states/welcome'));
 game.state.add('settings', require('states/settings'));
 game.state.add('ranking', require('states/ranking'));
+game.state.add('calibration', require('states/calibration'));
 
 game.state.start('boot');
