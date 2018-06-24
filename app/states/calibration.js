@@ -68,6 +68,6 @@ module.exports = {
 		this.graphics.visible = true;
 		setTimeout(function(){
 			self.graphics.visible = false;
-		},100);
+		},10);
 	}
 };
