@@ -65,8 +65,9 @@ module.exports = {
 		// draw update figure on it
 		this.graphics.beginFill(this.game.global.primaryColorTint, 0.5);
 		this.graphics.drawCircle(this.world.centerX, this.world.centerY + 100, this.largerCircle.diameter);
+		this.graphics.visible = true;
 		setTimeout(function(){
-			self.graphics.kill();
-		},1000);
+			self.graphics.visible = false;
+		},100);
 	}
 };
