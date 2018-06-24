@@ -20,7 +20,8 @@ module.exports = {
 			// receives the raw pressure number
 			self.socket.on('p', function(data){
 				console.log('p: ' + data.p)
-				// pressureText.setText('Pressure: ' + data.p + 'Pa');
+
+				self.mapPressureToCircle(data.p);
 			});
 		});
 
@@ -58,7 +59,11 @@ module.exports = {
 		//
   },
 	
-	changeCircleSize: function () {
-		
+	mapPressureToCircle: function (pressure) {
+		console.log('raw pressure: ' + pressure);
+
+		var mappedValue = Math.mapLinear(pressure, -2000, 1500, 150, 300);
+
+		console.log('\n\nmappedValue: ' + mappedValue);
 	}
 };
