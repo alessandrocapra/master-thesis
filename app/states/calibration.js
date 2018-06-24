@@ -3,6 +3,7 @@ module.exports = {
   create: function () {
 
   	var self = this;
+  	var pressure = this.pressure;
 
 		this.socket = io();
 		// this.socket = io.connect(window.location.hostname, { secure: true, reconnect: true, rejectUnauthorized : false } );
@@ -19,19 +20,12 @@ module.exports = {
 
 			// receives the raw pressure number
 			self.socket.on('p', function(data){
-				console.log('p: ' + data.p);
+				// console.log('p: ' + data.p);
 
-				// self.mapPressureToCircle(data.p);
-				var mappedValue = function(pressure){
-					console.log('raw pressure: ' + pressure);
-					return Math.mapLinear(pressure, -2000, 1500, 150, 300);
-				};
-
-				console.log('\n\nmappedValue: ' + mappedValue);
+				pressure = Math.mapLinear(data.p, -2000, 1500, 150, 300);
+				console.log('\n\nmappedValue: ' + pressure);
 			});
 		});
-
-  	var self = this;
 
 		var title = this.add.text(this.game.global.titlePlacement.x, this.game.global.titlePlacement.y, 'Calibration', this.game.global.titleStyle);
 		title.anchor.set(0.5);
@@ -64,6 +58,9 @@ module.exports = {
 		// }, this);
 		//
   },
+
+	update: function(){
+	},
 	
 	mapPressureToCircle: function (pressure) {
 		console.log('raw pressure: ' + pressure);
