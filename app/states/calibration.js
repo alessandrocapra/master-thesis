@@ -4,6 +4,7 @@ module.exports = {
 
   	var self = this;
   	var pressure = this.pressure;
+  	var updatedCircleDiameter = this.updatedCircleDiameter;
 
 		this.socket = io();
 		// this.socket = io.connect(window.location.hostname, { secure: true, reconnect: true, rejectUnauthorized : false } );
@@ -14,8 +15,8 @@ module.exports = {
 
 			// receives the raw pressure number
 			self.socket.on('p', function(data){
-				pressure = Phaser.Math.mapLinear(data.p, -2000, 1500, 150, 300);
-				console.log('mappedValue: ' + pressure);
+				updatedCircleDiameter = Phaser.Math.mapLinear(data.p, -2000, 1500, 150, 300);
+				console.log('mappedValue: ' + updatedCircleDiameter);
 			});
 		});
 
@@ -30,7 +31,7 @@ module.exports = {
 		// basic circle, which stays in the middle
 		var largerCircle = this.largerCircle = this.add.graphics(0, 0);
 		largerCircle.beginFill(this.game.global.primaryColorTint, 1);
-		largerCircle.drawCircle(this.world.centerX, this.world.centerY + 100, 100);
+		var circle = this.circle = largerCircle.drawCircle(this.world.centerX, this.world.centerY + 100, 100);
 
 		// keyboard/touch button
 		// var keyTouchBtn = this.keyTouchBtn= this.add.sprite(this.world.width*0.45, this.world.height * 0.6, 'button', 'blue_button04.png');
@@ -53,6 +54,6 @@ module.exports = {
   },
 	
 	update: function () {
-		this.largerCircle.diameter = this.pressure;
+		this.circle.diameter = this.updatedCircleDiameter;
 	}
 };
