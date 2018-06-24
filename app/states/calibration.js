@@ -4,6 +4,28 @@ module.exports = {
 
   	var self = this;
 
+		this.socket = io();
+		// this.socket = io.connect(window.location.hostname, { secure: true, reconnect: true, rejectUnauthorized : false } );
+		// this.socket = io.connect();
+
+		this.socket.on("connect", function () {
+			console.log("client (game) connected to server");
+
+			// receives data from the sensor, but processed by the server. The possible values are: left, right, turn.
+			// this.socket.on('s', function(data){
+			// 	// console.log('data: ' + data.message);
+			// 	sensorValue = data.m;
+			// });
+
+			// receives the raw pressure number
+			self.socket.on('p', function(data){
+				console.log('p: ' + data.p)
+				// pressureText.setText('Pressure: ' + data.p + 'Pa');
+			});
+		});
+
+  	var self = this;
+
 		var title = this.add.text(this.game.global.titlePlacement.x, this.game.global.titlePlacement.y, 'Calibration', this.game.global.titleStyle);
 		title.anchor.set(0.5);
 
