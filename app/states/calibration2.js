@@ -40,6 +40,8 @@ module.exports = {
 		this.largerCircle.diameter = this.updatedCircleDiameter;
 
 		// draw update figure on the invisible circle
+		this.graphics.clear();
+
 		this.graphics.visible = true;
 		this.graphics.beginFill(this.game.global.primaryColorTint, 0.5);
 		this.graphics.drawCircle(this.world.centerX, this.world.centerY + 100, this.largerCircle.diameter);
