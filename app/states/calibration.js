@@ -15,8 +15,8 @@ module.exports = {
 
 			// receives the raw pressure number
 			self.socket.on('p', function(data){
-				updatedCircleDiameter = Phaser.Math.mapLinear(data.p, -2000, 1500, 150, 300);
-				console.log('mappedValue: ' + updatedCircleDiameter);
+				self.updatedCircleDiameter = Phaser.Math.mapLinear(data.p, -2000, 1500, 150, 300);
+				console.log('mappedValue: ' + self.updatedCircleDiameter);
 			});
 		});
 
@@ -28,7 +28,9 @@ module.exports = {
 		// largerCircle.beginFill(this.game.global.primaryColorTint, 0.5);
 		// largerCircle.drawCircle(this.world.centerX, this.world.centerY + 100, 150);
 		var largerCircle = this.largerCircle = new Phaser.Circle(this.world.centerX, this.world.centerY + 100, 150);
-
+		var graphics = this.graphics = this.add.graphics(0, 0);
+		// largerCircle.beginFill(this.game.global.primaryColorTint, 0.5);
+		// largerCircle.drawCircle(this.world.centerX, this.world.centerY + 100, 150);
 
 		// basic circle, which stays in the middle
 		var middleCircle = this.middleCircle = this.add.graphics(0, 0);
@@ -57,5 +59,10 @@ module.exports = {
 	
 	update: function () {
 		this.largerCircle.diameter = this.updatedCircleDiameter;
+
+		// draw update figure on it
+		this.graphics.beginFill(this.game.global.primaryColorTint, 0.5);
+		this.graphics.drawCircle(this.world.centerX, this.world.centerY + 100, this.largerCircle.diameter);
+
 	}
 };
