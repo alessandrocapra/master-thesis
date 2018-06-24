@@ -14,7 +14,7 @@ module.exports = {
 
 			// receives the raw pressure number
 			self.socket.on('p', function(data){
-				pressure = Math.mapLinear(data.p, -2000, 1500, 150, 300);
+				pressure = Phaser.Math.mapLinear(data.p, -2000, 1500, 150, 300);
 				console.log('mappedValue: ' + pressure);
 			});
 		});
