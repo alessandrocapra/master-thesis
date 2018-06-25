@@ -10,8 +10,8 @@ module.exports = {
 				// check if calibrations exists for this user
 				if(user.calibrations.length){
 					// the api returns the last calibration always as the first element of the array
-					this.game.global.currentUserCalibration.min = user.calibrations[0].max_inhale;
-					this.game.global.currentUserCalibration.max = user.calibrations[0].max_exhale;
+					self.game.global.currentUserCalibration.min = user.calibrations[0].max_inhale;
+					self.game.global.currentUserCalibration.max = user.calibrations[0].max_exhale;
 				} else {
 					console.log('You should do a calibration to use the breathing');
 				}
