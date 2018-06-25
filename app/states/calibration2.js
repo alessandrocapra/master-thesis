@@ -22,12 +22,12 @@ module.exports = {
 				// console.log("pressure received: " + parseFloat(pressure));
 
 				// take 50 measurements to have an idea of the average value received
-				if(self.pressureCount < numMeasurements){
+				if(self.pressureCount < self.numMeasurements){
 					self.averagePressure += self.pressure;
 					self.pressureCount++;
 				}
 
-				if(pressureCount === numMeasurements){
+				if(self.pressureCount === self.numMeasurements){
 					self.averagePressure /= self.pressureCount;
 					// this allows to enter this code only once
 					self.pressureCount++;
@@ -47,6 +47,10 @@ module.exports = {
 		this.largerCircle = new Phaser.Circle(this.world.centerX, this.world.centerY + 100, 100);
 		this.graphics = this.add.graphics(0, 0);
 
+		// circles for max and min breathing achieved
+		this.maxCircle = this.add.graphics(0, 0);
+		this.minCircle = this.add.graphics(0, 0);
+
   },
 	
 	update: function () {
@@ -65,10 +69,21 @@ module.exports = {
 					console.log("update max");
 					this.game.global.currentUserCalibration.max = this.pressure;
 					this.maxText.setText('max: ' + this.game.global.currentUserCalibration.max);
+
+					// draw the updated max circle
+					this.maxCircle.clear();
+					this.maxCircle.lineStyle(2, 0x00ff00, 1);
+					this.maxCircle.drawCircle(this.world.centerX, this.world.centerY + 100, this.game.global.currentUserCalibration.max);
+
 				} else if(this.pressure < this.game.global.currentUserCalibration.min){
 					console.log("update min");
 					this.game.global.currentUserCalibration.min = this.pressure;
 					this.minText.setText('min: ' + this.game.global.currentUserCalibration.min);
+
+					// draw the updated min circle
+					this.maxCircle.clear();
+					this.maxCircle.lineStyle(2, 0x00ff00, 1);
+					this.maxCircle.drawCircle(this.world.centerX, this.world.centerY + 100, this.game.global.currentUserCalibration.min);
 				}
 			}
 		}
