@@ -9,6 +9,10 @@ module.exports = {
   	this.numMeasurements = 50;
   	this.updatedCircleDiameter = 0;
 
+		// reset the global vars for the calibration
+		this.game.global.currentUserCalibration.min = 0;
+		this.game.global.currentUserCalibration.max = 0;
+
 		this.socket = io();
 		// this.socket = io.connect(window.location.hostname, { secure: true, reconnect: true, rejectUnauthorized : false } );
 		// this.socket = io.connect();

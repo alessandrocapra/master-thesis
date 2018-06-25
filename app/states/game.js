@@ -8,6 +8,19 @@ module.exports = {
     // set the velocity to which the level moves
 		var speed = this.speed = 3;
 
+		// vars for controlling the game through breathing
+		this.pressure = 0;
+
+		this.socket = io();
+		this.socket.on("connect", function () {
+			console.log("client (game) connected to server");
+
+			// receives the raw pressure number
+			self.socket.on('p', function(data){
+				self.pressure = parseFloat(data.p);
+			});
+		});
+
 		// delay the music start
 		this.time.events.add(Phaser.Timer.SECOND * 7.8, function(){
 			self.music = self.sound.play('song');
@@ -91,21 +104,6 @@ module.exports = {
 		* Initial instructions when the game starts
 		*
 		* */
-
-		// arrows for instructions at the beginning
-		// var arrowUp = this.arrowUp = this.add.sprite(this.world.centerX*0.6, this.world.height*0.4, 'arrowUp');
-		// arrowUp.scale.setTo(0.05,0.05);
-		// arrowUp.anchor.setTo(.5,.5);
-		// arrowUp.fixedToCamera = true;
-		//
-		// var arrowDown = this.arrowDown = this.add.sprite(this.world.centerX*0.6, this.world.height*0.5, 'arrowUp')
-		// arrowDown.scale.setTo(0.05,0.05);
-		// arrowDown.anchor.setTo(.5,.5);
-		// // flip it horizontally
-		// arrowDown.scale.y *= -1;
-		// arrowDown.fixedToCamera = true;
-
-
 		var mouth = this.mouth = this.add.sprite(this.camera.width*0.4, this.world.height*0.4, 'mouth');
 		mouth.scale.setTo(0.1,0.1);
 		mouth.anchor.setTo(0.5,0.5);
@@ -231,15 +229,26 @@ module.exports = {
 		groundLayer.resizeWorld();
 		var cursors = this.cursors = this.input.keyboard.createCursorKeys();
 
+		// controlling with up and down keys
 		cursors.down.onDown.add(function() {
 			if(self.duck.body.y > self.world.centerY - 35 && self.duck.body.y < self.world.height - 70 )
 				self.duck.body.velocity.y = 600;
 		});
-
 		cursors.up.onDown.add(function() {
 			if( self.duck.body.y <= self.world.centerY + 50 && self.duck.body.y > 100 )
 				self.duck.body.velocity.y = -600;
 		});
+
+		// controlling with breath
+		if(this.pressure < this.game.global.currentUserCalibration.min * 0.2){
+			if(self.duck.body.y > self.world.centerY - 35 && self.duck.body.y < self.world.height - 70 )
+				self.duck.body.velocity.y = 600;
+		}
+
+		if(this.pressure > this.game.global.currentUserCalibration.max * 0.2){
+			if( self.duck.body.y <= self.world.centerY + 50 && self.duck.body.y > 100 )
+				self.duck.body.velocity.y = -600;
+		}
   },
 
   update: function () {
@@ -335,9 +344,9 @@ module.exports = {
 		}
 
 		// This bit gives the player a little boost if they press and hold the cursor key rather than just tap
-		if( this.cursors.up.isDown ){
+		if( this.cursors.up.isDown || this.pressure > this.game.global.currentUserCalibration.max * 0.2){
 			this.duck.body.acceleration.y = -600;
-		}else if( this.cursors.down.isDown ){
+		}else if( this.cursors.down.isDown || this.pressure < this.game.global.currentUserCalibration.min * 0.2){
 			this.duck.body.acceleration.y = 600;
 		}else{
 			this.duck.body.acceleration.y = 0;
