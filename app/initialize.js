@@ -16,6 +16,10 @@ game.global = {
 	// global vars to store important data that goes throughout scenes
   inputDevice: 'keyboard_touch',
   currentUser: {},
+	currentUserCalibration: {
+  	min: 0,
+		max: 0
+	},
 
 	// general styling
 	primaryColorHex: "#2cb2ed",
