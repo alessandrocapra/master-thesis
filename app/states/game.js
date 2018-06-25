@@ -256,7 +256,6 @@ module.exports = {
 
 		console.log('\n----------------------------');
 		console.log('pressure: ' + this.pressure);
-  	console.log('average: ' + this.averagePressure);
   	console.log('maxInhale: ' + this.game.global.currentUserCalibration.min);
   	console.log('maxExhale: ' + this.game.global.currentUserCalibration.max);
 		console.log('----------------------------\n');

@@ -1,6 +1,26 @@
 module.exports = {
 
   create: function () {
+		// connect to API to retrieve last calibration of current user
+		var xhr  = new XMLHttpRequest();
+		xhr.open('GET', 'https://duchennegame.herokuapp.com/api/users/' + this.game.globa.currentUser.id, true);
+		xhr.onload = function () {
+			var user = JSON.parse(xhr.responseText);
+			if (xhr.readyState == 4 && xhr.status == "200") {
+				// check if calibrations exists for this user
+				if(user.calibrations.length){
+					// the api returns the last calibration always as the first element of the array
+					this.game.global.currentUserCalibration.min = user.calibrations[0].max_inhale;
+					this.game.global.currentUserCalibration.max = user.calibrations[0].max_exhale;
+				} else {
+					console.log('You should do a calibration to use the breathing');
+				}
+			} else {
+				console.error(users);
+			}
+		};
+		xhr.send(null);
+
 		var title = this.add.text(this.game.global.titlePlacement.x, this.game.global.titlePlacement.y, 'Welcome', this.game.global.titleStyle);
 		title.anchor.set(0.5);
 
@@ -54,6 +74,10 @@ module.exports = {
 		}, this);
 
   },
+
+	update: function() {
+		console.log("minGlobal: " + this.game.global.currentUserCalibration.min);
+	},
 
   startGame: function () {
     this.state.start('game');
