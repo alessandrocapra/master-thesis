@@ -22,15 +22,15 @@ module.exports = {
 				// console.log("pressure received: " + parseFloat(pressure));
 
 				// take 50 measurements to have an idea of the average value received
-				if(pressureCount < numMeasurements){
+				if(self.pressureCount < numMeasurements){
 					averagePressure += pressure;
-					pressureCount++;
+					self.pressureCount++;
 				}
 
 				if(pressureCount === numMeasurements){
-					averagePressure /= pressureCount;
+					averagePressure /= self.pressureCount;
 					// this allows to enter this code only once
-					pressureCount++;
+					self.pressureCount++;
 				}
 
 				self.updatedCircleDiameter = Phaser.Math.mapLinear(self.pressure, -2000, 1500, 30, 250);
