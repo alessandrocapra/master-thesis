@@ -239,20 +239,6 @@ module.exports = {
 			if( self.duck.body.y <= self.world.centerY + 50 && self.duck.body.y > 100 )
 				self.duck.body.velocity.y = -600;
 		});
-
-		// controlling with breath
-		if(this.pressure < this.game.global.currentUserCalibration.min * 0.2){
-			if(self.duck.body.y > self.world.centerY - 35 && self.duck.body.y < self.world.height - 70)
-				self.duck.body.velocity.y = 600;
-		}
-
-		if(this.pressure > this.game.global.currentUserCalibration.max * 0.2){
-			console.log('Inside controlling up with breath');
-			console.log('---- therefore ' + this.pressure + ' > ' + this.game.global.currentUserCalibration.max * 0.2);
-			if(self.duck.body.y <= self.world.centerY + 50 && self.duck.body.y > 100)
-				console.log('-------- inside the -600 thingy');
-				self.duck.body.velocity.y = -600;
-		}
   },
 
   update: function () {
@@ -347,6 +333,21 @@ module.exports = {
 			// Don't do this if they are trying to swim down
 			if( !this.cursors.down.isDown )
 				this.duck.body.drag.set(0, drag);
+		}
+
+		// controlling with breath
+		if(this.pressure < this.game.global.currentUserCalibration.min * 0.2){
+			if(this.duck.body.y > this.world.centerY - 35 && this.duck.body.y < this.world.height - 70)
+				this.duck.body.velocity.y = 600;
+		}
+
+		if(this.pressure > this.game.global.currentUserCalibration.max * 0.2){
+			console.log('Inside controlling up with breath');
+			console.log('---- therefore ' + this.pressure + ' > ' + this.game.global.currentUserCalibration.max * 0.2);
+			if(this.duck.body.y <= this.world.centerY + 50 && this.duck.body.y > 100) {
+				console.log('-------- inside the -600 thingy');
+				this.duck.body.velocity.y = -600;
+			}
 		}
 
 		// This bit gives the player a little boost if they press and hold the cursor key rather than just tap
