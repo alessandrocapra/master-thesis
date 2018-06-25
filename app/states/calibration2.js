@@ -46,8 +46,8 @@ module.exports = {
 		this.graphics.beginFill(this.game.global.primaryColorTint, 0.5);
 		this.graphics.drawCircle(this.world.centerX, this.world.centerY + 100, this.largerCircle.diameter);
 
-		var sprite = this.add.sprite(this.world.centerX, this.world.centerY + 100, this.graphics.generateTexture());
-		sprite.anchor.set(0.5);
+		// var sprite = this.add.sprite(this.world.centerX, this.world.centerY + 100, this.graphics.generateTexture());
+		// sprite.anchor.set(0.5);
 
 		// setTimeout(function(){
 		// 	self.graphics.visible = false;
