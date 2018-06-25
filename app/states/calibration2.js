@@ -23,12 +23,12 @@ module.exports = {
 
 				// take 50 measurements to have an idea of the average value received
 				if(self.pressureCount < numMeasurements){
-					averagePressure += pressure;
+					self.averagePressure += self.pressure;
 					self.pressureCount++;
 				}
 
 				if(pressureCount === numMeasurements){
-					averagePressure /= self.pressureCount;
+					self.averagePressure /= self.pressureCount;
 					// this allows to enter this code only once
 					self.pressureCount++;
 				}
@@ -58,7 +58,7 @@ module.exports = {
 			console.log("> 50");
 			console.log("actual pressure: " + this.pressure + ", average: " + this.averagePressure);
 			// if measured pressure is outside the range, keep updating the max value
-			if(this.pressure > (this.averagePressure + 20) && this.pressure < (this.averagePressure - 20)){
+			if(this.pressure > (this.averagePressure + 20) || this.pressure < (this.averagePressure - 20)){
 				console.log("outside average range");
 				// if the current measurement is greater than the one before, update the max value
 				if(this.pressure > this.game.global.currentUserCalibration.max){
