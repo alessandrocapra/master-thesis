@@ -18,10 +18,10 @@ module.exports = {
 			// receives the raw pressure number
 			self.socket.on('p', function(data){
 				var pressure = data.p;
-				console.log("pressure received type: " + typeof pressure);
+				console.log("pressure received type: " + parseFloat(pressure));
 
 				if(pressureCount < 50){
-					averagePressure += pressure;
+					averagePressure += parseFloat(pressure);
 					pressureCount++;
 				} else {
 					averagePressure /= pressureCount;
