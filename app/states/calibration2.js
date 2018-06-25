@@ -4,10 +4,10 @@ module.exports = {
 
   	var self = this;
   	var pressure = this.pressure;
-  	var averagePressure = this.averagePressure = 0;
-  	var pressureCount = this.pressureCount = 0;
-  	var numMeasurements = this.numMeasurements = 50;
-  	var updatedCircleDiameter = this.updatedCircleDiameter;
+  	this.averagePressure = 0;
+  	this.pressureCount = 0;
+  	this.numMeasurements = 50;
+  	this.updatedCircleDiameter = 0;
 
 		this.socket = io();
 		// this.socket = io.connect(window.location.hostname, { secure: true, reconnect: true, rejectUnauthorized : false } );
@@ -40,8 +40,8 @@ module.exports = {
 		var title = this.add.text(this.game.global.titlePlacement.x, this.game.global.titlePlacement.y, 'Calibration', this.game.global.titleStyle);
 		title.anchor.set(0.5);
 
-		var maxText = this.maxText = this.add.text(100, 500, 'max: 0', {fill: 'white'});
-		var minText = this.minText = this.add.text(300, 500, 'min: 0', {fill: 'white'});
+		this.maxText = this.add.text(100, 500, 'max: 0', {fill: 'white'});
+		this.minText = this.add.text(300, 500, 'min: 0', {fill: 'white'});
 
 		// draw an empty circle that is going to chane with pressure data
 		this.largerCircle = new Phaser.Circle(this.world.centerX, this.world.centerY + 100, 100);
@@ -81,9 +81,9 @@ module.exports = {
 					this.minText.setText('min: ' + this.game.global.currentUserCalibration.min);
 
 					// draw the updated min circle
-					this.maxCircle.clear();
-					this.maxCircle.lineStyle(2, 0x00ff00, 1);
-					this.maxCircle.drawCircle(this.world.centerX, this.world.centerY + 100, this.game.global.currentUserCalibration.min);
+					this.minCircle.clear();
+					this.minCircle.lineStyle(2, 0x00ff00, 1);
+					this.minCircle.drawCircle(this.world.centerX, this.world.centerY + 100, this.game.global.currentUserCalibration.min);
 				}
 			}
 		}
