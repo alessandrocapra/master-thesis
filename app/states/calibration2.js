@@ -52,6 +52,7 @@ module.exports = {
 	update: function () {
   	var self = this;
 
+  	console.log(this.pressureCount);
   	// check if average measure has already been taken
 		if(this.pressureCount >= this.numMeasurements){
 			console.log("> 50");
