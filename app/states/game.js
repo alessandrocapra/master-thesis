@@ -10,6 +10,7 @@ module.exports = {
 
 		// vars for controlling the game through breathing
 		this.pressure = 0;
+		this.percentageEffort = 0.8;
 
 		this.socket = io();
 		this.socket.on("connect", function () {
@@ -336,12 +337,12 @@ module.exports = {
 		}
 
 		// controlling with breath
-		if(this.pressure < this.game.global.currentUserCalibration.min * 0.2){
+		if(this.pressure < this.game.global.currentUserCalibration.min * this.percentageEffort){
 			if(this.duck.body.y > this.world.centerY - 35 && this.duck.body.y < this.world.height - 70)
 				this.duck.body.velocity.y = 600;
 		}
 
-		if(this.pressure > this.game.global.currentUserCalibration.max * 0.2){
+		if(this.pressure > this.game.global.currentUserCalibration.max * this.percentageEffort){
 			console.log('Inside controlling up with breath');
 			console.log('---- therefore ' + this.pressure + ' > ' + this.game.global.currentUserCalibration.max * 0.2);
 			if(this.duck.body.y <= this.world.centerY + 50 && this.duck.body.y > 100) {
@@ -351,9 +352,9 @@ module.exports = {
 		}
 
 		// This bit gives the player a little boost if they press and hold the cursor key rather than just tap
-		if( this.cursors.up.isDown || this.pressure > this.game.global.currentUserCalibration.max * 0.2){
+		if( this.cursors.up.isDown || this.pressure > this.game.global.currentUserCalibration.max * this.percentageEffort){
 			this.duck.body.acceleration.y = -600;
-		}else if( this.cursors.down.isDown || this.pressure < this.game.global.currentUserCalibration.min * 0.2){
+		}else if( this.cursors.down.isDown || this.pressure < this.game.global.currentUserCalibration.min * this.percentageEffort){
 			this.duck.body.acceleration.y = 600;
 		}else{
 			this.duck.body.acceleration.y = 0;
