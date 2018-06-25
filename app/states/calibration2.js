@@ -41,7 +41,7 @@ module.exports = {
 		title.anchor.set(0.5);
 
 		var maxText = this.maxText = this.add.text(100, 500, 'max: 0', {fill: 'white'});
-		var minText = this.minText = this.add.text(300, 500, 'max: 0', {fill: 'white'});
+		var minText = this.minText = this.add.text(300, 500, 'min: 0', {fill: 'white'});
 
 		// draw an empty circle that is going to chane with pressure data
 		this.largerCircle = new Phaser.Circle(this.world.centerX, this.world.centerY + 100, 100);
@@ -54,13 +54,17 @@ module.exports = {
 
   	// check if average measure has already been taken
 		if(this.pressureCount >= this.numMeasurements){
+			console.log("> 50");
 			// if measured pressure is outside the range, keep updating the max value
 			if(this.pressure > (this.averagePressure + 20) && this.pressure < (this.averagePressure - 20)){
+				console.log("outside average range");
 				// if the current measurement is greater than the one before, update the max value
 				if(this.pressure > this.game.global.currentUserCalibration.max){
+					console.log("update max");
 					this.game.global.currentUserCalibration.max = this.pressure;
 					this.maxText.setText('max: ' + this.game.global.currentUserCalibration.max);
 				} else if(this.pressure < this.game.global.currentUserCalibration.min){
+					console.log("update min");
 					this.game.global.currentUserCalibration.min = this.pressure;
 					this.minText.setText('min: ' + this.game.global.currentUserCalibration.min);
 				}
