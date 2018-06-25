@@ -18,6 +18,7 @@ module.exports = {
 			// receives the raw pressure number
 			self.socket.on('p', function(data){
 				self.pressure = parseFloat(data.p);
+				console.log('pressure: ' + self.pressure);
 			});
 		});
 
