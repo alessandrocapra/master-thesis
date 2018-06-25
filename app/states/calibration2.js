@@ -20,10 +20,13 @@ module.exports = {
 				var pressure = data.p;
 				console.log("pressure received type: " + parseFloat(pressure));
 
+				// take 50 measurements to have an idea of the average value received
 				if(pressureCount < 50){
 					averagePressure += parseFloat(pressure);
 					pressureCount++;
-				} else {
+				}
+
+				if(pressureCount === 50){
 					averagePressure /= pressureCount;
 					console.log("averagePressure: " + averagePressure);
 					console.log("pressureCount: " + pressureCount);
