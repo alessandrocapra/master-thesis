@@ -52,10 +52,11 @@ module.exports = {
 	update: function () {
   	var self = this;
 
-  	console.log(this.pressureCount);
+  	// console.log(this.pressureCount);
   	// check if average measure has already been taken
 		if(this.pressureCount >= this.numMeasurements){
 			console.log("> 50");
+			console.log("actual pressure: " + this.pressure + ", average: " + this.averagePressure);
 			// if measured pressure is outside the range, keep updating the max value
 			if(this.pressure > (this.averagePressure + 20) && this.pressure < (this.averagePressure - 20)){
 				console.log("outside average range");
