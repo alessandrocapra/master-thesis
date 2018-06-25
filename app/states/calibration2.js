@@ -29,6 +29,8 @@ module.exports = {
 				if(pressureCount === 50){
 					averagePressure /= pressureCount;
 
+					console.log("\n\n AVERAGE PRESSURE \n\n" + averagePressure);
+
 					// this allows to enter this code only once
 					pressureCount++;
 				}
