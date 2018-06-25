@@ -86,19 +86,6 @@ module.exports = {
 				}
 			};
 			xhr.send(null);
-
-
-
-			// var xhttp = new XMLHttpRequest();
-			// xhttp.open("POST", "https://duchennegame.herokuapp.com/api/users",true);
-			// xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-			// var input = JSON.stringify({
-			// 	"name": name,
-			// 	"password": password
-			// });
-			// xhttp.send(input);
-
-
 		}, this);
 
 

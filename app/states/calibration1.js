@@ -12,6 +12,7 @@ module.exports = {
 			fill: "#FFF",
 			font: '20px Arial'
 		});
+		gameInstructions.anchor.setTo(0.5);
 
 		// start button
 		var startBtn = this.keyTouchBtn= this.add.sprite(this.world.width*0.45, this.world.height * 0.6, 'button', 'blue_button04.png');
