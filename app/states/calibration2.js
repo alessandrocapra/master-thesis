@@ -5,7 +5,8 @@ module.exports = {
   	var self = this;
   	var pressure = this.pressure;
   	var averagePressure = this.averagePressure = 0;
-  	var pressureCount = 0;
+  	var pressureCount = this.pressureCount = 0;
+  	var numMeasurements = this.numMeasurements = 50;
   	var updatedCircleDiameter = this.updatedCircleDiameter;
 
 		this.socket = io();
@@ -17,31 +18,30 @@ module.exports = {
 
 			// receives the raw pressure number
 			self.socket.on('p', function(data){
-				var pressure = data.p;
-				// console.log("pressure received type: " + parseFloat(pressure));
+				self.pressure = parseFloat(data.p);
+				// console.log("pressure received: " + parseFloat(pressure));
 
 				// take 50 measurements to have an idea of the average value received
-				if(pressureCount < 50){
-					averagePressure += parseFloat(pressure);
-					console.log(averagePressure);
+				if(pressureCount < numMeasurements){
+					averagePressure += pressure;
 					pressureCount++;
 				}
 
-				if(pressureCount === 50){
+				if(pressureCount === numMeasurements){
 					averagePressure /= pressureCount;
-
-					console.log("\n\n AVERAGE PRESSURE \n\n" + averagePressure);
-
 					// this allows to enter this code only once
 					pressureCount++;
 				}
 
-				self.updatedCircleDiameter = Phaser.Math.mapLinear(pressure, -2000, 1500, 30, 250);
+				self.updatedCircleDiameter = Phaser.Math.mapLinear(self.pressure, -2000, 1500, 30, 250);
 			});
 		});
 
 		var title = this.add.text(this.game.global.titlePlacement.x, this.game.global.titlePlacement.y, 'Calibration', this.game.global.titleStyle);
 		title.anchor.set(0.5);
+
+		var maxText = this.maxText = this.add.text(100, 500, 'max: 0', {fill: 'white'});
+		var minText = this.minText = this.add.text(300, 500, 'max: 0', {fill: 'white'});
 
 		// draw an empty circle that is going to chane with pressure data
 		this.largerCircle = new Phaser.Circle(this.world.centerX, this.world.centerY + 100, 100);
@@ -52,9 +52,20 @@ module.exports = {
 	update: function () {
   	var self = this;
 
-  	// take average of last 50 values received and make a range around that value
-
-		// when the measurement goes above it, update the maximum value received every time
+  	// check if average measure has already been taken
+		if(this.pressureCount >= this.numMeasurements){
+			// if measured pressure is outside the range, keep updating the max value
+			if(this.pressure > (this.averagePressure + 20) && this.pressure < (this.averagePressure - 20)){
+				// if the current measurement is greater than the one before, update the max value
+				if(this.pressure > this.game.global.currentUserCalibration.max){
+					this.game.global.currentUserCalibration.max = this.pressure;
+					this.maxText.setText('max: ' + this.game.global.currentUserCalibration.max);
+				} else if(this.pressure < this.game.global.currentUserCalibration.min){
+					this.game.global.currentUserCalibration.min = this.pressure;
+					this.minText.setText('min: ' + this.game.global.currentUserCalibration.min);
+				}
+			}
+		}
 
 		// once the values received go back into the previous average range, fire event that stops recording and switches to inhaling
 
