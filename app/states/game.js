@@ -18,7 +18,7 @@ module.exports = {
 			// receives the raw pressure number
 			self.socket.on('p', function(data){
 				self.pressure = parseFloat(data.p);
-				console.log('pressure: ' + self.pressure);
+				// console.log('pressure: ' + self.pressure);
 			});
 		});
 
@@ -242,23 +242,26 @@ module.exports = {
 
 		// controlling with breath
 		if(this.pressure < this.game.global.currentUserCalibration.min * 0.2){
-			if(self.duck.body.y > self.world.centerY - 35 && self.duck.body.y < self.world.height - 70 )
+			if(self.duck.body.y > self.world.centerY - 35 && self.duck.body.y < self.world.height - 70)
 				self.duck.body.velocity.y = 600;
 		}
 
 		if(this.pressure > this.game.global.currentUserCalibration.max * 0.2){
-			if( self.duck.body.y <= self.world.centerY + 50 && self.duck.body.y > 100 )
+			if(self.duck.body.y <= self.world.centerY + 50 && self.duck.body.y > 100)
 				self.duck.body.velocity.y = -600;
 		}
   },
 
   update: function () {
 
-  	var self = this;
+		console.log('\n----------------------------');
+		console.log('pressure: ' + this.pressure);
+  	console.log('average: ' + this.averagePressure);
+  	console.log('maxInhale: ' + this.game.global.currentUserCalibration.min);
+  	console.log('maxExhale: ' + this.game.global.currentUserCalibration.max);
+		console.log('----------------------------\n');
 
-		// if(this.duck.x > this.world.width * 0.05){
-  		// this.state.start('menu');
-		// }
+  	var self = this;
 
   	/*
   	*
