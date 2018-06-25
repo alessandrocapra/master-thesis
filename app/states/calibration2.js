@@ -72,8 +72,8 @@ module.exports = {
 
 					// draw the updated max circle
 					this.maxCircle.clear();
-					this.maxCircle.lineStyle(2, 0x00ff00, 1);
-					this.maxCircle.drawCircle(this.world.centerX, this.world.centerY + 100, this.game.global.currentUserCalibration.max);
+					this.maxCircle.lineStyle(5, 0x0000ff, 1);
+					this.maxCircle.drawCircle(this.world.centerX, this.world.centerY + 100, Phaser.Math.mapLinear(this.game.global.currentUserCalibration.max, -2000, 1500, 30, 250));
 
 				} else if(this.pressure < this.game.global.currentUserCalibration.min){
 					console.log("update min");
@@ -82,8 +82,8 @@ module.exports = {
 
 					// draw the updated min circle
 					this.minCircle.clear();
-					this.minCircle.lineStyle(2, 0x00ff00, 1);
-					this.minCircle.drawCircle(this.world.centerX, this.world.centerY + 100, this.game.global.currentUserCalibration.min);
+					this.minCircle.lineStyle(5, 0x00ccff, 1);
+					this.minCircle.drawCircle(this.world.centerX, this.world.centerY + 100, Phaser.Math.mapLinear(this.game.global.currentUserCalibration.min, -2000, 1500, 30, 250));
 				}
 			}
 		}
