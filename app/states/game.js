@@ -247,7 +247,10 @@ module.exports = {
 		}
 
 		if(this.pressure > this.game.global.currentUserCalibration.max * 0.2){
+			console.log('Inside controlling up with breath');
+			console.log('---- therefore ' + this.pressure + ' > ' + this.game.global.currentUserCalibration.max * 0.2);
 			if(self.duck.body.y <= self.world.centerY + 50 && self.duck.body.y > 100)
+				console.log('-------- inside the -600 thingy');
 				self.duck.body.velocity.y = -600;
 		}
   },
