@@ -27,12 +27,15 @@ module.exports = {
 
 				// take 50 measurements to have an idea of the average value received
 				if(self.pressureCount < self.numMeasurements){
+					console.log('self.averagePressure prima: ' + self.averagePressure);
 					self.averagePressure += self.pressure;
+					console.log('self.averagePressure dopo: ' + self.averagePressure);
 					self.pressureCount++;
 				}
 
 				if(self.pressureCount === self.numMeasurements){
 					self.averagePressure /= self.pressureCount;
+					console.log('self.averagePressure divisione: ' + self.averagePressure);
 					// this allows to enter this code only once
 					self.pressureCount++;
 				}
