@@ -1,6 +1,8 @@
 module.exports = {
 
   create: function () {
+  	var self = this;
+
 		// connect to API to retrieve last calibration of current user
 		var xhr  = new XMLHttpRequest();
 		xhr.open('GET', 'https://duchennegame.herokuapp.com/api/users/' + this.game.global.currentUser.id, true);
