@@ -3,7 +3,7 @@ module.exports = {
   create: function () {
   	var self = this;
   	var sortedUsers = [];
-		var title = this.add.text(this.game.global.titlePlacement.x, this.game.global.titlePlacement.x, 'Ranking', this.game.global.titleStyle);
+		var title = this.add.text(this.game.global.titlePlacement.x, this.game.global.titlePlacement.y, 'Ranking', this.game.global.titleStyle);
 		title.anchor.set(0.5);
 
 		// connect to API to retrieve all users and order them to display the ranking
@@ -11,9 +11,11 @@ module.exports = {
 		xhr.open('GET', 'https://duchennegame.herokuapp.com/api/users', true);
 		xhr.onload = function () {
 			var users = JSON.parse(xhr.responseText);
+			console.log("users from db: ", users);
 			if (xhr.readyState == 4 && xhr.status == "200") {
 					users.sort(function(a,b) {return a.high_score - b.high_score;});
 					sortedUsers = users;
+					console.log("sortedUsers: ", sortedUsers);
 			} else {
 				console.error(users);
 			}
@@ -22,6 +24,8 @@ module.exports = {
 
 		// display the ranking, username and high_score
 		for(var i = 0; i < sortedUsers.length; i++){
+			console.log("sortedUser[i].name: " + sortedUsers[i].name);
+			console.log("sortedUser[i].high_score: " + sortedUsers[i].high_score);
 			this.add.text(100, this.game.global.titlePlacement.y + 50 * i+1, sortedUsers[i].name, {fill: 'white'});
 			this.add.text(200, this.game.global.titlePlacement.y + 50 * i+1, sortedUsers[i].high_score, {fill: 'white'});
 		}
