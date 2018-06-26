@@ -18,7 +18,7 @@ module.exports = {
 					console.log('You should do a calibration to use the breathing');
 				}
 			} else {
-				console.error(users);
+				console.error(user);
 			}
 		};
 		xhr.send(null);
