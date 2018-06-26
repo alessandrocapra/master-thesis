@@ -74,14 +74,47 @@ module.exports = {
 					"name": name,
 					"password": password,
 				});
+				xhttp.send(input);
 
-				// save user details in the global variables
-				self.game.global.currentUser = user;
+				// save user details in the global variables, get user after registration in db
+				var xhr  = new XMLHttpRequest();
+				xhr.open('GET', 'https://duchennegame.herokuapp.com/api/users', true);
+				xhr.onload = function () {
+					var users = JSON.parse(xhr.responseText);
+					if (xhr.readyState == 4 && xhr.status == "200") {
+						var userFound = false;
+
+						users.forEach(function(user){
+							if(user.name === name){
+								// save user details in the global variables
+								self.game.global.currentUser = user;
+
+								self.state.start('welcome');
+								userFound = true;
+							}
+						});
+
+						// if user has not been found / wrong password, display error message
+						if(!userFound){
+							errorMessage.setText('Problem in retrieving the current user');
+							errorMessage.visible = true;
+
+							// make text become not visible again after few seconds
+							self.time.events.add(Phaser.Timer.SECOND * 3, function () {
+								errorMessage.visible = false;
+							}, this);
+
+						}
+					} else {
+						console.error(users);
+					}
+				};
+				xhr.send(null);
 
 				// go to welcome screen with this user
 				self.state.start('welcome');
 
-				xhttp.send(input);
+
 			} else {
 				errorMessage.visible = true;
 
