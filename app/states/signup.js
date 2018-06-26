@@ -88,7 +88,7 @@ module.exports = {
 			xhttp.send(input);
 
 			xhttp.onreadystatechange = function() {//Call a function when the state changes.
-				if(xhttp.readyState == XMLHttpRequest.DONE && xhttp.status == 200) {
+				if(xhttp.readyState == XMLHttpRequest.DONE && xhttp.status == 201) {
 					console.log(xhttp.responseText);
 					self.retrieveNewUser(name);
 				}
