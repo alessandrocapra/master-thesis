@@ -89,8 +89,11 @@ module.exports = {
 
 			xhttp.onreadystatechange = function() {//Call a function when the state changes.
 				if(xhttp.readyState == XMLHttpRequest.DONE && xhttp.status == 201) {
-					console.log(xhttp.responseText);
-					self.retrieveNewUser(name);
+					var newUser = JSON.parse(xhttp.responseText);
+
+					// set global value for current user
+					self.game.global.currentUser = newUser;
+					self.state.start('welcome');
 				}
 			};
 
@@ -104,43 +107,43 @@ module.exports = {
 		}
 	},
 
-	retrieveNewUser: function (name) {
-  	var self = this;
-
-		// save user details in the global variables, get user after registration in db
-		var xhr  = new XMLHttpRequest();
-		xhr.open('GET', 'https://duchennegame.herokuapp.com/api/users', true);
-		xhr.onload = function () {
-			var users = JSON.parse(xhr.responseText);
-			if (xhr.readyState == 4 && xhr.status == "200") {
-				var userFound = false;
-
-				users.forEach(function(user){
-					if(user.name === name){
-						// save user details in the global variables
-						self.game.global.currentUser = user;
-
-						self.state.start('welcome');
-						userFound = true;
-					}
-				});
-
-				// if user has not been found / wrong password, display error message
-				if(!userFound){
-					self.errorMessage.setText('Problem in retrieving the current user');
-					self.errorMessage.visible = true;
-
-					// make text become not visible again after few seconds
-					self.time.events.add(Phaser.Timer.SECOND * 3, function () {
-						self.errorMessage.visible = false;
-					}, self);
-
-				}
-			} else {
-				console.error(users);
-			}
-		};
-		xhr.send(null);
-	}
+	// retrieveNewUser: function (userId) {
+  	// var self = this;
+	//
+	// 	// save user details in the global variables, get user after registration in db
+	// 	var xhr  = new XMLHttpRequest();
+	// 	xhr.open('GET', 'https://duchennegame.herokuapp.com/api/users/' + userId, true);
+	// 	xhr.onload = function () {
+	// 		var user = JSON.parse(xhr.responseText);
+	// 		if (xhr.readyState == 4 && xhr.status == "200") {
+	// 			self.game.global.currentUser = user.name;
+	//
+	// 			users.forEach(function(user){
+	// 				if(user.name === name){
+	// 					// save user details in the global variables
+	// 					self.game.global.currentUser = user;
+	//
+	// 					self.state.start('welcome');
+	// 					userFound = true;
+	// 				}
+	// 			});
+	//
+	// 			// if user has not been found / wrong password, display error message
+	// 			if(!userFound){
+	// 				self.errorMessage.setText('Problem in retrieving the current user');
+	// 				self.errorMessage.visible = true;
+	//
+	// 				// make text become not visible again after few seconds
+	// 				self.time.events.add(Phaser.Timer.SECOND * 3, function () {
+	// 					self.errorMessage.visible = false;
+	// 				}, self);
+	//
+	// 			}
+	// 		} else {
+	// 			console.error(users);
+	// 		}
+	// 	};
+	// 	xhr.send(null);
+	// }
 
 };
