@@ -64,7 +64,6 @@ module.exports = {
 			var password = this.passwordInput.value;
 
 			console.log('name: ' + name + ', pass: ' + password);
-
 			self.saveNewUser(name, password);
 
 		}, this);
@@ -86,15 +85,15 @@ module.exports = {
 				"name": name,
 				"password": password,
 			});
+			xhttp.send(input);
 
 			xhttp.onreadystatechange = function() {//Call a function when the state changes.
-				if(xhttp.readyState == 4 && xhttp.status == 200) {
+				if(xhttp.readyState == XMLHttpRequest.DONE && xhttp.status == 200) {
 					console.log(xhttp.responseText);
 					self.retrieveNewUser(name);
 				}
 			};
 
-			xhttp.send(input);
 		} else {
 			self.errorMessage.visible = true;
 
@@ -143,9 +142,5 @@ module.exports = {
 		};
 		xhr.send(null);
 	}
-
-  // checkLogin: function(name, password) {
-  //   console.table(name, password);
-  // }
 
 };
