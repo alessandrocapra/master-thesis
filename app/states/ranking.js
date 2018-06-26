@@ -20,9 +20,9 @@ module.exports = {
 					for(var i = 0; i < sortedUsers.length; i++){
 						console.log("sortedUser[i].name: " + sortedUsers[i].name);
 						console.log("sortedUser[i].high_score: " + sortedUsers[i].high_score);
-						self.add.text(100, self.game.global.titlePlacement.y + 100 * i+1, i+1, {fill: 'white'});
-						self.add.text(200, self.game.global.titlePlacement.y + 100 * i+1, sortedUsers[i].name, {fill: 'white'});
-						self.add.text(300, self.game.global.titlePlacement.y + 100 * i+1, sortedUsers[i].high_score, {fill: 'white'});
+						self.add.text(100, self.game.global.titlePlacement.y + 50 * i+1, i+1, {fill: 'white'}).anchor.setTo(0.5);
+						self.add.text(200, self.game.global.titlePlacement.y + 50 * i+1, sortedUsers[i].name, {fill: 'white'}).anchor.setTo(0.5);
+						self.add.text(300, self.game.global.titlePlacement.y + 50 * i+1, sortedUsers[i].high_score, {fill: 'white'}).anchor.setTo(0.5);
 					}
 			} else {
 				console.error(users);
