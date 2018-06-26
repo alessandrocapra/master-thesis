@@ -19,6 +19,18 @@ module.exports = {
 		loginButton.addChild(logintext);
 		loginButton.events.onInputDown.add(this.loginPage.bind(this), this);
 
+		// signup button and text
+		var signupBtn = this.button = this.add.sprite(this.world.centerX, this.world.centerY+200, 'button', 'blue_button04.png');
+		signupBtn.anchor.set(0.5,0.5);
+		signupBtn.inputEnabled = true;
+		signupBtn.input.useHandCursor = true;
+
+		var signupText = this.add.text(0,0,'Signup', {align: "center"});
+		signupText.anchor.set(0.5,0.5);
+
+		signupBtn.addChild(signupText);
+		signupBtn.events.onInputDown.add(this.signupPage.bind(this), this);
+
     // this.input.onTap.add(this.startGame.bind(this));
 
     // add login and sign in buttons
@@ -31,6 +43,10 @@ module.exports = {
 
   loginPage: function () {
 		this.state.start('login');
+	},
+
+	signupPage: function () {
+		this.state.start('signup');
 	}
 
 };

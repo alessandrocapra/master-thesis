@@ -65,7 +65,7 @@ module.exports = {
 		startBtn.inputEnabled = true;
 		startBtn.input.useHandCursor = true;
 
-		var startText = this.add.text(0,0,'Login', this.game.global.buttonLabelStyle);
+		var startText = this.add.text(0,0,'Start', this.game.global.buttonLabelStyle);
 		startText.anchor.set(0.5,0.5);
 
 		startBtn.addChild(startText);

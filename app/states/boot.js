@@ -29,6 +29,7 @@ module.exports = {
 		this.load.atlasJSONHash('button', 'assets/sprites/button.png', 'assets/sprites/button.json');
 		this.load.image('gear', 'assets/sprites/gear.png');
 		this.load.image('leaderboard', 'assets/sprites/leaderboardsComplex.png');
+		this.load.image('arrowBack', 'assets/sprites/arrowLeft.png');
 
 		// load general assets
     this.load.setPreloadSprite(this.bar);

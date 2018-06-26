@@ -7,6 +7,17 @@ module.exports = {
 		var title = this.add.text(this.game.global.titlePlacement.x, this.game.global.titlePlacement.y, 'Settings', this.game.global.titleStyle);
 		title.anchor.set(0.5);
 
+		// arrow back for previous screen
+		var arrowBack = this.arrowBack = this.add.image(50, 50, 'arrowBack');
+		arrowBack.anchor.set(0.5,0.5);
+		arrowBack.inputEnabled = true;
+		arrowBack.input.useHandCursor = true;
+
+		arrowBack.events.onInputDown.add(function () {
+			self.state.start('welcome');
+		}, this);
+
+
 		// Input device label
 		var deviceLabel = this.add.text(this.world.centerX*0.25, this.world.height * 0.6, 'Input device', {
 			fill: 'white',
@@ -65,7 +76,6 @@ module.exports = {
 		calibrationBtn.events.onInputDown.add(function () {
 			this.state.start('calibration1');
 		}, this);
-
   },
 
 	update: function(){
