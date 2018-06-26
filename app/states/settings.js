@@ -10,6 +10,8 @@ module.exports = {
 		// arrow back for previous screen
 		var arrowBack = this.arrowBack = this.add.image(50, 50, 'arrowBack');
 		arrowBack.anchor.set(0.5,0.5);
+		arrowBack.scale.setTo(0.6, 0.6);
+		arrowBack.tint = this.game.global.primaryColorTint;
 		arrowBack.inputEnabled = true;
 		arrowBack.input.useHandCursor = true;
 
