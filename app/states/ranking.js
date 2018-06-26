@@ -13,15 +13,16 @@ module.exports = {
 			var users = JSON.parse(xhr.responseText);
 			console.log("users from db: ", users);
 			if (xhr.readyState == 4 && xhr.status == "200") {
-					sortedUsers = users.sort(function(a,b) {return a.high_score - b.high_score;});
+					sortedUsers = users.sort(function(a,b) {return b.high_score - a.high_score;});
 					console.log("sortedUsers: ", sortedUsers);
 
 					// display the ranking, username and high_score
 					for(var i = 0; i < sortedUsers.length; i++){
 						console.log("sortedUser[i].name: " + sortedUsers[i].name);
 						console.log("sortedUser[i].high_score: " + sortedUsers[i].high_score);
-						self.add.text(100, self.game.global.titlePlacement.y + 50 * i+1, sortedUsers[i].name, {fill: 'white'});
-						self.add.text(200, self.game.global.titlePlacement.y + 50 * i+1, sortedUsers[i].high_score, {fill: 'white'});
+						self.add.text(100, self.game.global.titlePlacement.y + 100 * i+1, i+1, {fill: 'white'});
+						self.add.text(200, self.game.global.titlePlacement.y + 100 * i+1, sortedUsers[i].name, {fill: 'white'});
+						self.add.text(300, self.game.global.titlePlacement.y + 100 * i+1, sortedUsers[i].high_score, {fill: 'white'});
 					}
 			} else {
 				console.error(users);
