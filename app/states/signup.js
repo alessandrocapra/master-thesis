@@ -65,36 +65,7 @@ module.exports = {
 
 			console.log('name: ' + name + ', pass: ' + password);
 
-			if(name && password){
-				// create new calibration data for the current user
-				var xhttp = new XMLHttpRequest();
-				xhttp.open("POST", "https://duchennegame.herokuapp.com/api/users",true);
-				xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-				var input = JSON.stringify({
-					"name": name,
-					"password": password,
-				});
-
-				xhttp.onreadystatechange = function() {//Call a function when the state changes.
-					if(xhttp.readyState == XMLHttpRequest.DONE && xhttp.status == 200) {
-						self.retrieveNewUser();
-					}
-				};
-
-				xhttp.send(input);
-
-				// go to welcome screen with this user
-				self.state.start('welcome');
-
-
-			} else {
-				errorMessage.visible = true;
-
-				// make text become not visible again after few seconds
-				self.time.events.add(Phaser.Timer.SECOND * 3, function () {
-					errorMessage.visible = false;
-				}, this);
-			}
+			self.saveNewUser(name, password);
 
 		}, this);
   },
@@ -102,6 +73,34 @@ module.exports = {
   startGame: function () {
     this.state.start('game');
   },
+
+	saveNewUser: function(name, password){
+		if(name && password){
+			// create new calibration data for the current user
+			var xhttp = new XMLHttpRequest();
+			xhttp.open("POST", "https://duchennegame.herokuapp.com/api/users",true);
+			xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+			var input = JSON.stringify({
+				"name": name,
+				"password": password,
+			});
+
+			xhttp.onreadystatechange = function() {//Call a function when the state changes.
+				if(xhttp.readyState == 4 && xhttp.status == 200) {
+					alert(http.responseText);
+				}
+			};
+
+			xhttp.send(input);
+		} else {
+			errorMessage.visible = true;
+
+			// make text become not visible again after few seconds
+			self.time.events.add(Phaser.Timer.SECOND * 3, function () {
+				errorMessage.visible = false;
+			}, this);
+		}
+	},
 
 	retrieveNewUser: function () {
   	var self = this;
