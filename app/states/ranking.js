@@ -22,7 +22,7 @@ module.exports = {
 						console.log("sortedUser[i].high_score: " + sortedUsers[i].high_score);
 						self.add.text(100, self.game.global.titlePlacement.y + 100 + 50 * i+1, i+1, {fill: 'white'}).anchor.setTo(0.5);
 						self.add.text(150, self.game.global.titlePlacement.y + 100 + 50 * i+1, sortedUsers[i].name, {fill: 'white'}).anchor.setTo(0.5);
-						self.add.text(200, self.game.global.titlePlacement.y + 100 + 50 * i+1, sortedUsers[i].high_score, {fill: 'white'}).anchor.setTo(0.5);
+						self.add.text(250, self.game.global.titlePlacement.y + 100 + 50 * i+1, sortedUsers[i].high_score, {fill: 'white'}).anchor.setTo(0.5);
 					}
 			} else {
 				console.error(users);
