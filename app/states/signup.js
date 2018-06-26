@@ -75,6 +75,8 @@ module.exports = {
   },
 
 	saveNewUser: function(name, password){
+  	var self = this;
+
 		if(name && password){
 			// create new calibration data for the current user
 			var xhttp = new XMLHttpRequest();
@@ -87,22 +89,23 @@ module.exports = {
 
 			xhttp.onreadystatechange = function() {//Call a function when the state changes.
 				if(xhttp.readyState == 4 && xhttp.status == 200) {
-					alert(http.responseText);
+					console.log(xhttp.responseText);
+					self.retrieveNewUser(name);
 				}
 			};
 
 			xhttp.send(input);
 		} else {
-			errorMessage.visible = true;
+			self.errorMessage.visible = true;
 
 			// make text become not visible again after few seconds
 			self.time.events.add(Phaser.Timer.SECOND * 3, function () {
-				errorMessage.visible = false;
+				self.errorMessage.visible = false;
 			}, this);
 		}
 	},
 
-	retrieveNewUser: function () {
+	retrieveNewUser: function (name) {
   	var self = this;
 
 		// save user details in the global variables, get user after registration in db
