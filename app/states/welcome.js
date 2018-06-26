@@ -77,10 +77,6 @@ module.exports = {
 
   },
 
-	update: function() {
-		console.log("minGlobal: " + this.game.global.currentUserCalibration.min);
-	},
-
   startGame: function () {
     this.state.start('game');
   },

@@ -13,22 +13,21 @@ module.exports = {
 			var users = JSON.parse(xhr.responseText);
 			console.log("users from db: ", users);
 			if (xhr.readyState == 4 && xhr.status == "200") {
-					users.sort(function(a,b) {return a.high_score - b.high_score;});
-					sortedUsers = users;
+					sortedUsers = users.sort(function(a,b) {return a.high_score - b.high_score;});
 					console.log("sortedUsers: ", sortedUsers);
+
+					// display the ranking, username and high_score
+					for(var i = 0; i < sortedUsers.length; i++){
+						console.log("sortedUser[i].name: " + sortedUsers[i].name);
+						console.log("sortedUser[i].high_score: " + sortedUsers[i].high_score);
+						self.add.text(100, self.game.global.titlePlacement.y + 50 * i+1, sortedUsers[i].name, {fill: 'white'});
+						self.add.text(200, self.game.global.titlePlacement.y + 50 * i+1, sortedUsers[i].high_score, {fill: 'white'});
+					}
 			} else {
 				console.error(users);
 			}
 		};
 		xhr.send(null);
-
-		// display the ranking, username and high_score
-		for(var i = 0; i < sortedUsers.length; i++){
-			console.log("sortedUser[i].name: " + sortedUsers[i].name);
-			console.log("sortedUser[i].high_score: " + sortedUsers[i].high_score);
-			this.add.text(100, this.game.global.titlePlacement.y + 50 * i+1, sortedUsers[i].name, {fill: 'white'});
-			this.add.text(200, this.game.global.titlePlacement.y + 50 * i+1, sortedUsers[i].high_score, {fill: 'white'});
-		}
 
 		// exit button
 		var exitBtn = this.checkLoginBtn= this.add.sprite(this.world.centerX, this.world.height * 0.8, 'button', 'blue_button04.png');
