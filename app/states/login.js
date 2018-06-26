@@ -8,6 +8,18 @@ module.exports = {
     title.anchor.set(0.5);
     // title.alignIn(this.world, Phaser.CENTER);
 
+		// arrow back for previous screen
+		var arrowBack = this.arrowBack = this.add.image(50, 50, 'arrowBack');
+		arrowBack.anchor.set(0.5,0.5);
+		arrowBack.scale.setTo(0.6, 0.6);
+		arrowBack.tint = this.game.global.primaryColorTint;
+		arrowBack.inputEnabled = true;
+		arrowBack.input.useHandCursor = true;
+
+		arrowBack.events.onInputDown.add(function () {
+			self.state.start('menu');
+		}, this);
+
 		this.nameInput = this.add.inputField(this.world.centerX - 140, this.world.centerY - 50, {
 			font: '20px Arial',
 		  width: 250,
