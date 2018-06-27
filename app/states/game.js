@@ -14,6 +14,7 @@ module.exports = {
 
 		// var to control whether the ranking has been already retrieved
 		this.rankingRetrieved = false;
+		this.scoreUpdated = false;
 
 		this.socket = io();
 		this.socket.on("connect", function () {
@@ -616,7 +617,10 @@ module.exports = {
 	saveScoreOnDb: function () {
 		var self = this;
 
-		if(this.score > this.game.global.currentUser.high_score){
+		if(!this.scoreUpdated && this.score > this.game.global.currentUser.high_score){
+			// do this just once
+			this.scoreUpdated = true;
+
 			// save current score on Db
 			var xhttp = new XMLHttpRequest();
 			xhttp.open("PUT", "https://duchennegame.herokuapp.com/api/users/" + this.game.global.currentUser.id, true);
