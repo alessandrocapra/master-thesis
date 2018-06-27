@@ -248,7 +248,8 @@ module.exports = {
 		this.camera.deadzone = new Phaser.Rectangle(0, 0, 100, 400);
 
 		// create an invisible wall at the end of the level to know when the player reaches the end
-		var endGameWall = this.endGameWall = this.add.sprite(this.world.width * 0.3, 0);
+		console.log('world width: ' + this.world.width);
+		var endGameWall = this.endGameWall = this.add.sprite(this.world.width - 100, 0);
 		endGameWall.width = 10;
 		endGameWall.height = this.world.height;
 		endGameWall.tint = '0xFF0000';
@@ -652,6 +653,7 @@ module.exports = {
 	},
 
 	endGame: function () {
+  	console.log('collision with the endWall!');
   	this.stopEverything();
 		this.displayOverlay('gameEnd');
 	}
