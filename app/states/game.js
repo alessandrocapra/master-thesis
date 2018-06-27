@@ -249,7 +249,7 @@ module.exports = {
 
 		// create an invisible wall at the end of the level to know when the player reaches the end
 		console.log('world width: ' + this.world.width);
-		var endGameWall = this.endGameWall = this.add.sprite(this.world.width * 0.1, 0);
+		var endGameWall = this.endGameWall = this.add.sprite(this.world.width * 0.1, this.world.height);
 		endGameWall.width = 100;
 		endGameWall.height = this.world.height;
 		endGameWall.tint = '0xFF0000';
@@ -258,7 +258,7 @@ module.exports = {
 		groundLayer.resizeWorld();
 
 		// update position of invisible wall after world resizing
-		endGameWall.x = this.world.width * 0.1;
+		endGameWall.x = this.world.width * 0.02;
 		console.log('endGameWall.x: ' + endGameWall.x);
 		console.log('endGameWall.y: ' + endGameWall.y);
 		console.log('endGameWall.width: ' + endGameWall.width);
