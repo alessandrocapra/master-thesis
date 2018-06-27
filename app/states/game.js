@@ -156,19 +156,19 @@ module.exports = {
 		this.overlayBackground.y = this.camera.height * 0.5;
 		this.overlayBackground.anchor.set(0.5, 0.5);
 
-		this.overlayText = this.add.text(0, 0, 'Text goes here' , { align: "center", font: "bold 24px Arial", fill: "#fff"});
+		this.overlayText = this.add.text(this.camera.width * 0.5, 100, 'Text goes here' , { align: "center", font: "bold 24px Arial", fill: "#fff"});
 		this.overlayText.anchor.set(0.5, 0.5);
 
 		// add the text as child of the background container
-		this.overlayBackground.addChild(this.overlayText);
-		// this.overlayText.fixedToCamera = true;
+		// this.overlayBackground.addChild(this.overlayText);
+		this.overlayText.fixedToCamera = true;
 
 		this.overlayBackground.fixedToCamera = true;
 		this.overlayBackground.visible = false;
 		this.overlayText.visible = false;
 
 		// OK button for restarting the game
-		this.okBtn = this.add.sprite(this.camera.width * 0.5, this.camera.height * 0.6, 'button','blue_button04.png');
+		this.okBtn = this.add.sprite(this.camera.width * 0.6, this.camera.height * 0.6, 'button','blue_button04.png');
 		this.okBtn.anchor.set(0.5);
 		// this.overlayBackground.addChild(this.okBtn);
 		this.okBtn.inputEnabled = true;
@@ -187,6 +187,24 @@ module.exports = {
 			self.state.restart();
 		});
 
+		// Menu button to go back to welcome after the game ended / player lost
+		this.backToMenuBtn = this.add.sprite(this.camera.width * 0.4, this.camera.height * 0.6, 'button','blue_button04.png');
+		this.backToMenuBtn.anchor.set(0.5);
+		// this.overlayBackground.addChild(this.okBtn);
+		this.backToMenuBtn.inputEnabled = true;
+		this.backToMenuBtn.input.useHandCursor = true;
+		this.backToMenuBtn.visible = false;
+
+		this.backToMenuText = this.add.text(0,0,'Back to Menu', {align: "center"});
+		this.backToMenuText.anchor.set(0.5);
+		this.backToMenuBtn.addChild(this.backToMenuText);
+		this.backToMenuBtn.fixedToCamera = true;
+
+		this.backToMenuBtn.events.onInputUp.add(function(){
+			// setting instructions back to visible
+			self.state.start('welcome');
+		});
+
 		// Create pause button
 		this.pauseButton = this.add.image(this.camera.width - 40, 40, 'pauseButton');
 		this.pauseButton.scale.setTo(0.1,0.1);
@@ -197,7 +215,6 @@ module.exports = {
 
 		this.pauseButton.events.onInputUp.add(function () {
 			// When the pause button is pressed, we pause the game
-			console.log('button pressed!');
 
 			// stop camera
 			if(!self.stopTheCamera){
@@ -274,7 +291,8 @@ module.exports = {
 			this.physics.arcade.isPaused = true;
 			this.music.pause();
 
-			this.overlayBackground.visible = true;
+			// this.overlayBackground.visible = true;
+			this.displayOverlay('pause');
 		} else {
 			// make the background scroll
 			this.background.tilePosition.x -= this.speed;
@@ -528,17 +546,55 @@ module.exports = {
 
   	// gamestate can have values "pause", "gameOver", "gameEnd"
 		if(gameState === 'pause'){
-
-		} else if(gameState === 'gameOver'){
+			this.overlayText.setText('Game paused, click the pause button to resume.');
+		} else if(gameState === 'gameOver' || gameState === 'gameEnd'){
 			// this.overlayText.inputEnabled = true;
 			this.overlayText.setText('Well done! Play again?');
 			this.okBtn.visible = true;
+			this.backToMenuBtn.visible = true;
 
-		} else if(gameState === 'gameEnd'){
+			this.getRankingFromDb();
 
 		} else {
 			console.log('You are not supposed to be here...');
 		}
+	},
+
+	getRankingFromDb: function () {
+		var self = this;
+
+		// connect to API to retrieve all users and order them to display the ranking
+		var xhr  = new XMLHttpRequest();
+		xhr.open('GET', 'https://duchennegame.herokuapp.com/api/users', true);
+		xhr.onload = function () {
+			var users = JSON.parse(xhr.responseText);
+
+			if (xhr.readyState == 4 && xhr.status == "200") {
+				users = users.sort(function(a,b) {return b.high_score - a.high_score;});
+				console.log("sortedUsers: ", users);
+
+				// display the ranking, username and high_score
+				for(var i = 0; i < users.length; i++){
+					// display the first 5 high ranked users
+					if(users[i] <= 4){
+						console.log("sortedUser[i].name: " + users[i].name);
+						console.log("sortedUser[i].high_score: " + users[i].high_score);
+						self.add.text(100, 200 + 50 * i+1, i+1, {fill: 'white'}).anchor.setTo(0.5);
+						self.add.text(150, 200 + 50 * i+1, users[i].name, {fill: 'white'}).anchor.setTo(0.5);
+						self.add.text(250, 200 + 50 * i+1, users[i].high_score, {fill: 'white'}).anchor.setTo(0.5);
+					} else {
+						if(users[i].id === this.game.global.currentUser.id){
+							self.add.text(100, 400, i+1, {fill: 'white', fontWeight: 'bold'}).anchor.setTo(0.5);
+							self.add.text(150, 400, users[i].name, {fill: 'white',fontWeight: 'bold'}).anchor.setTo(0.5);
+							self.add.text(250, 400, users[i].high_score, {fill: 'white', fontWeight: 'bold'}).anchor.setTo(0.5);
+						}
+					}
+				}
+			} else {
+				console.error(users);
+			}
+		};
+		xhr.send(null);
 	}
 
 };
