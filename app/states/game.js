@@ -12,6 +12,9 @@ module.exports = {
 		this.pressure = 0;
 		this.percentageEffort = 0.8;
 
+		// var to control whether the ranking has been already retrieved
+		this.rankingRetrieved = false;
+
 		this.socket = io();
 		this.socket.on("connect", function () {
 			console.log("client (game) connected to server");
@@ -541,7 +544,7 @@ module.exports = {
 	},
 
 	displayOverlay: function(gameState){
-		this.overlayBackground.visible = true;
+		// this.overlayBackground.visible = true;
 		this.overlayText.visible = true;
 
   	// gamestate can have values "pause", "gameOver", "gameEnd"
@@ -563,38 +566,48 @@ module.exports = {
 	getRankingFromDb: function () {
 		var self = this;
 
-		// connect to API to retrieve all users and order them to display the ranking
-		var xhr  = new XMLHttpRequest();
-		xhr.open('GET', 'https://duchennegame.herokuapp.com/api/users', true);
-		xhr.onload = function () {
-			var users = JSON.parse(xhr.responseText);
+		if(!this.rankingRetrieved){
+			// connect to API to retrieve all users and order them to display the ranking
+			var xhr  = new XMLHttpRequest();
+			xhr.open('GET', 'https://duchennegame.herokuapp.com/api/users', true);
+			xhr.onload = function () {
+				var users = JSON.parse(xhr.responseText);
 
-			if (xhr.readyState == 4 && xhr.status == "200") {
-				users = users.sort(function(a,b) {return b.high_score - a.high_score;});
-				console.log("sortedUsers: ", users);
+				if (xhr.readyState == 4 && xhr.status == "200") {
+					// make sure this request is done only once
+					self.rankingRetrieved = true;
 
-				// display the ranking, username and high_score
-				for(var i = 0; i < users.length; i++){
-					// display the first 5 high ranked users
-					if(users[i] <= 4){
-						console.log("sortedUser[i].name: " + users[i].name);
-						console.log("sortedUser[i].high_score: " + users[i].high_score);
-						self.add.text(100, 200 + 50 * i+1, i+1, {fill: 'white'}).anchor.setTo(0.5);
-						self.add.text(150, 200 + 50 * i+1, users[i].name, {fill: 'white'}).anchor.setTo(0.5);
-						self.add.text(250, 200 + 50 * i+1, users[i].high_score, {fill: 'white'}).anchor.setTo(0.5);
-					} else {
-						if(users[i].id === self.game.global.currentUser.id){
-							self.add.text(100, 400, i+1, {fill: 'white', fontWeight: 'bold'}).anchor.setTo(0.5);
-							self.add.text(150, 400, users[i].name, {fill: 'white',fontWeight: 'bold'}).anchor.setTo(0.5);
-							self.add.text(250, 400, users[i].high_score, {fill: 'white', fontWeight: 'bold'}).anchor.setTo(0.5);
+					users = users.sort(function(a,b) {return b.high_score - a.high_score;});
+					console.log("sortedUsers: ", users);
+
+					var userAlreadyDisplayed = false;
+
+					// display the ranking, username and high_score
+					for(var i = 0; i < users.length; i++){
+						// display the first 5 high ranked users
+						if(users[i] <= 4){
+							if(users[i].id === self.game.global.currentUser.id){
+								userAlreadyDisplayed = true;
+							}
+							console.log("sortedUser[i].name: " + users[i].name);
+							console.log("sortedUser[i].high_score: " + users[i].high_score);
+							self.add.text(100, 200 + 50 * i+1, i+1, {fill: 'white'}).anchor.setTo(0.5);
+							self.add.text(150, 200 + 50 * i+1, users[i].name, {fill: 'white'}).anchor.setTo(0.5);
+							self.add.text(250, 200 + 50 * i+1, users[i].high_score, {fill: 'white'}).anchor.setTo(0.5);
+						} else {
+							if(users[i].id === self.game.global.currentUser.id && !userAlreadyDisplayed){
+								self.add.text(100, 400, i+1, {fill: 'white', fontWeight: 'bold'}).anchor.setTo(0.5);
+								self.add.text(150, 400, users[i].name, {fill: 'white',fontWeight: 'bold'}).anchor.setTo(0.5);
+								self.add.text(250, 400, users[i].high_score, {fill: 'white', fontWeight: 'bold'}).anchor.setTo(0.5);
+							}
 						}
 					}
+				} else {
+					console.error(users);
 				}
-			} else {
-				console.error(users);
-			}
-		};
-		xhr.send(null);
+			};
+			xhr.send(null);
+		}
 	}
 
 };
