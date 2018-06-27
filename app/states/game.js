@@ -645,6 +645,8 @@ module.exports = {
 					self.getRankingFromDb();
 				}
 			};
+		} else {
+			self.getRankingFromDb();
 		}
 	},
 
