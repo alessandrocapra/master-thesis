@@ -249,11 +249,13 @@ module.exports = {
 
 		// create an invisible wall at the end of the level to know when the player reaches the end
 		console.log('world width: ' + this.world.width);
-		var endGameWall = this.endGameWall = this.add.sprite(this.world.width * 0.1, this.world.height);
+		var endGameWall = this.endGameWall = this.add.sprite(this.world.width * 0.1);
 		endGameWall.width = 100;
 		endGameWall.height = this.world.height;
 		endGameWall.tint = '0xFF0000';
 		this.physics.arcade.enable(endGameWall);
+
+		var endGameRect = this.add.graphics(0,0);
 
 		groundLayer.resizeWorld();
 
@@ -263,6 +265,9 @@ module.exports = {
 		console.log('endGameWall.y: ' + endGameWall.y);
 		console.log('endGameWall.width: ' + endGameWall.width);
 		console.log('endGameWall.height: ' + endGameWall.height);
+
+		endGameRect.beginFill(0xFF0000);
+		endGameRect.drawRect(endGameWall.x, endGameWall.y, endGameWall.width, endGameWall.height);
 
 		var cursors = this.cursors = this.input.keyboard.createCursorKeys();
 
