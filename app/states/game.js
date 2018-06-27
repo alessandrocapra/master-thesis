@@ -566,12 +566,17 @@ module.exports = {
 	getRankingFromDb: function () {
 		var self = this;
 
+		console.log('Inside the getRankingFromDb function');
+
 		if(!this.rankingRetrieved){
+			console.log('-- Ranking not retrieved yet');
+
 			// connect to API to retrieve all users and order them to display the ranking
 			var xhr  = new XMLHttpRequest();
 			xhr.open('GET', 'https://duchennegame.herokuapp.com/api/users', true);
 			xhr.onload = function () {
 				var users = JSON.parse(xhr.responseText);
+				console.log('-- setting ranking as retrieved');
 				self.rankingRetrieved = true;
 
 				if (xhr.readyState == 4 && xhr.status == "200") {
@@ -582,17 +587,21 @@ module.exports = {
 
 					// display the ranking, username and high_score
 					for(var i = 0; i < users.length; i++){
+						console.log('---- Inside the for loop');
 						// display the first 5 high ranked users
 						if(i <= 4){
+							console.log('---- i is lower than 4');
 							if(users[i].id === self.game.global.currentUser.id){
+								console.log('-------- Setting user as already displayed');
 								userAlreadyDisplayed = true;
 							}
-							console.log(i+1 + ' - ' + users[i].name + ' - ' + users[i].high_score);
+							console.log('---- ' + i+1 + ' - ' + users[i].name + ' - ' + users[i].high_score);
 							self.add.text(100, 200 + 50 * i+1, i+1, {fill: 'white'}).anchor.setTo(0.5);
 							self.add.text(150, 200 + 50 * i+1, users[i].name, {fill: 'white'}).anchor.setTo(0.5);
 							self.add.text(250, 200 + 50 * i+1, users[i].high_score, {fill: 'white'}).anchor.setTo(0.5);
 						} else {
 							if(users[i].id === self.game.global.currentUser.id && !userAlreadyDisplayed){
+								console.log('---- (else) i is higher than 4');
 								console.log(i+1 + ' - ' + users[i].name + ' - ' + users[i].high_score);
 								self.add.text(100, 400, i+1, {fill: 'white', fontWeight: 'bold'}).anchor.setTo(0.5);
 								self.add.text(150, 400, users[i].name, {fill: 'white',fontWeight: 'bold'}).anchor.setTo(0.5);
