@@ -3,25 +3,28 @@ module.exports = {
   create: function () {
   	var self = this;
 
-		// connect to API to retrieve last calibration of current user
-		var xhr  = new XMLHttpRequest();
-		xhr.open('GET', 'https://duchennegame.herokuapp.com/api/users/' + this.game.global.currentUser.id, true);
-		xhr.onload = function () {
-			var user = JSON.parse(xhr.responseText);
-			if (xhr.readyState == 4 && xhr.status == "200") {
-				// check if calibrations exists for this user
-				if(user.calibrations.length){
-					// the api returns the last calibration always as the first element of the array
-					self.game.global.currentUserCalibration.min = user.calibrations[0].max_inhale;
-					self.game.global.currentUserCalibration.max = user.calibrations[0].max_exhale;
+  	// get the current user only if the global vars are empty
+		if(Object.keys(this.game.global.currentUser).length === 0){
+			// connect to API to retrieve last calibration of current user
+			var xhr  = new XMLHttpRequest();
+			xhr.open('GET', 'https://duchennegame.herokuapp.com/api/users/' + this.game.global.currentUser.id, true);
+			xhr.onload = function () {
+				var user = JSON.parse(xhr.responseText);
+				if (xhr.readyState == 4 && xhr.status == "200") {
+					// check if calibrations exists for this user
+					if(user.calibrations.length){
+						// the api returns the last calibration always as the first element of the array
+						self.game.global.currentUserCalibration.min = user.calibrations[0].max_inhale;
+						self.game.global.currentUserCalibration.max = user.calibrations[0].max_exhale;
+					} else {
+						console.log('You should do a calibration to use the breathing');
+					}
 				} else {
-					console.log('You should do a calibration to use the breathing');
+					console.error(user);
 				}
-			} else {
-				console.error(user);
-			}
-		};
-		xhr.send(null);
+			};
+			xhr.send(null);
+		}
 
 		var title = this.add.text(this.game.global.titlePlacement.x, this.game.global.titlePlacement.y, 'Welcome', this.game.global.titleStyle);
 		title.anchor.set(0.5);
