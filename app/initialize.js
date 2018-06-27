@@ -49,7 +49,7 @@ game.global = {
 
 	currentPlayerRankingStyle : {
 		font: '22px Arial',
-		fill: this.game.global.primaryColorTint,
+		fill: "0x2cb2ed",
 		fontWeight: 'bold'
 	}
 };
