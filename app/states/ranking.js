@@ -52,13 +52,13 @@ module.exports = {
 					// self.add.text(250, self.game.global.titlePlacement.y + 100 + 50 * i+1, sortedUsers[i].high_score, {fill: 'white'}).anchor.setTo(0.5);
 
 					if(self.sortedUsers[i].id === self.game.global.currentUser.id){
-						self.add.text(100, self.game.global.titlePlacement.y + 100 + 50 * i+1, i+1, this.game.global.currentPlayerRankingStyle).anchor.setTo(0.5);
-						self.add.text(150, self.game.global.titlePlacement.y + 100 + 50 * i+1, self.sortedUsers[i].name, this.game.global.currentPlayerRankingStyle).anchor.setTo(0.5);
-						self.add.text(250, self.game.global.titlePlacement.y + 100 + 50 * i+1, self.sortedUsers[i].high_score, this.game.global.currentPlayerRankingStyle).anchor.setTo(0.5);
+						self.add.text(100, self.game.global.titlePlacement.y + 100 + 50 * i+1, i+1, self.game.global.currentPlayerRankingStyle).anchor.setTo(0.5);
+						self.add.text(150, self.game.global.titlePlacement.y + 100 + 50 * i+1, self.sortedUsers[i].name, self.game.global.currentPlayerRankingStyle).anchor.setTo(0.5);
+						self.add.text(250, self.game.global.titlePlacement.y + 100 + 50 * i+1, self.sortedUsers[i].high_score, self.game.global.currentPlayerRankingStyle).anchor.setTo(0.5);
 					} else {
-						self.add.text(100, self.game.global.titlePlacement.y + 100 + 50 * i+1, i+1, this.game.global.otherPlayersRankingStyle).anchor.setTo(0.5);
-						self.add.text(150, self.game.global.titlePlacement.y + 100 + 50 * i+1, self.sortedUsers[i].name, this.game.global.otherPlayersRankingStyle).anchor.setTo(0.5);
-						self.add.text(250, self.game.global.titlePlacement.y + 100 + 50 * i+1, self.sortedUsers[i].high_score, this.game.global.otherPlayersRankingStyle).anchor.setTo(0.5);
+						self.add.text(100, self.game.global.titlePlacement.y + 100 + 50 * i+1, i+1, self.game.global.otherPlayersRankingStyle).anchor.setTo(0.5);
+						self.add.text(150, self.game.global.titlePlacement.y + 100 + 50 * i+1, self.sortedUsers[i].name, self.game.global.otherPlayersRankingStyle).anchor.setTo(0.5);
+						self.add.text(250, self.game.global.titlePlacement.y + 100 + 50 * i+1, self.sortedUsers[i].high_score, self.game.global.otherPlayersRankingStyle).anchor.setTo(0.5);
 					}
 				}
 			} else {

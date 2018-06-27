@@ -589,19 +589,19 @@ module.exports = {
 							if(users[i].id === self.game.global.currentUser.id){
 								userAlreadyDisplayed = true;
 
-								self.add.text(self.camera.x + 100, self.camera.height * 0.3 + 50 * i+1, i+1, this.game.global.currentPlayerRankingStyle).anchor.setTo(0.5);
-								self.add.text(self.camera.x + 150, self.camera.height * 0.3 + 50 * i+1, users[i].name, this.game.global.currentPlayerRankingStyle).anchor.setTo(0.5);
-								self.add.text(self.camera.x + 250, self.camera.height * 0.3 + 50 * i+1, users[i].high_score, this.game.global.currentPlayerRankingStyle).anchor.setTo(0.5);
+								self.add.text(self.camera.x + 100, self.camera.height * 0.3 + 50 * i+1, i+1, self.game.global.currentPlayerRankingStyle).anchor.setTo(0.5);
+								self.add.text(self.camera.x + 150, self.camera.height * 0.3 + 50 * i+1, users[i].name, self.game.global.currentPlayerRankingStyle).anchor.setTo(0.5);
+								self.add.text(self.camera.x + 250, self.camera.height * 0.3 + 50 * i+1, users[i].high_score, self.game.global.currentPlayerRankingStyle).anchor.setTo(0.5);
 							} else {
-								self.add.text(self.camera.x + 100, self.camera.height * 0.3 + 50 * i + 1, i + 1, this.game.global.otherPlayersRankingStyle).anchor.setTo(0.5);
-								self.add.text(self.camera.x + 150, self.camera.height * 0.3 + 50 * i + 1, users[i].name, this.game.global.otherPlayersRankingStyle).anchor.setTo(0.5);
-								self.add.text(self.camera.x + 250, self.camera.height * 0.3 + 50 * i + 1, users[i].high_score, this.game.global.otherPlayersRankingStyle).anchor.setTo(0.5);
+								self.add.text(self.camera.x + 100, self.camera.height * 0.3 + 50 * i + 1, i + 1, self.game.global.otherPlayersRankingStyle).anchor.setTo(0.5);
+								self.add.text(self.camera.x + 150, self.camera.height * 0.3 + 50 * i + 1, users[i].name, self.game.global.otherPlayersRankingStyle).anchor.setTo(0.5);
+								self.add.text(self.camera.x + 250, self.camera.height * 0.3 + 50 * i + 1, users[i].high_score, self.game.global.otherPlayersRankingStyle).anchor.setTo(0.5);
 							}
 						} else {
 							if(users[i].id === self.game.global.currentUser.id && !userAlreadyDisplayed){
-								self.add.text(self.camera.x + 100, self.camera.height * 0.6, i+1, this.game.global.currentPlayerRankingStyle).anchor.setTo(0.5);
-								self.add.text(self.camera.x + 150, self.camera.height * 0.6, users[i].name, this.game.global.currentPlayerRankingStyle).anchor.setTo(0.5);
-								self.add.text(self.camera.x + 250, self.camera.height * 0.6, users[i].high_score, this.game.global.currentPlayerRankingStyle).anchor.setTo(0.5);
+								self.add.text(self.camera.x + 100, self.camera.height * 0.6, i+1, self.game.global.currentPlayerRankingStyle).anchor.setTo(0.5);
+								self.add.text(self.camera.x + 150, self.camera.height * 0.6, users[i].name, self.game.global.currentPlayerRankingStyle).anchor.setTo(0.5);
+								self.add.text(self.camera.x + 250, self.camera.height * 0.6, users[i].high_score, self.game.global.currentPlayerRankingStyle).anchor.setTo(0.5);
 							}
 						}
 					}
