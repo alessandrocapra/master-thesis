@@ -584,6 +584,7 @@ module.exports = {
 					for(var i = 0; i < users.length; i++){
 						console.log('looping through retrieved users');
 						// display the first 5 high ranked users
+						console.log('users[' + i + ']: ', users[i]);
 						if(users[i] <= 4){
 							console.log('---- display first 5 users');
 							if(users[i].id === self.game.global.currentUser.id){
