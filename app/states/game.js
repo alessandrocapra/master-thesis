@@ -569,16 +569,16 @@ module.exports = {
 		console.log('Inside the getRankingFromDb function');
 
 		if(!this.rankingRetrieved){
+			// make sure this request is done only once
+			self.rankingRetrieved = true;
+
 			// connect to API to retrieve all users and order them to display the ranking
 			var xhr  = new XMLHttpRequest();
 			xhr.open('GET', 'https://duchennegame.herokuapp.com/api/users', true);
 			xhr.onload = function () {
 				var users = JSON.parse(xhr.responseText);
-				self.rankingRetrieved = true;
 
 				if (xhr.readyState == 4 && xhr.status == "200") {
-					// make sure this request is done only once
-
 					users = users.sort(function(a,b) {return b.high_score - a.high_score;});
 					var userAlreadyDisplayed = false;
 
