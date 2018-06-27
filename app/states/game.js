@@ -140,7 +140,6 @@ module.exports = {
 			this.switchAlphaInstructions([this.mouth, this.nose, this.mouthText, this.noseText]);
 		}, this);
 
-
 		// hearts for health
 		this.hearts = this.add.group();
 		for(var i=0; i < 6; i++){
@@ -248,6 +247,13 @@ module.exports = {
 		this.camera.follow(duck);
 		this.camera.deadzone = new Phaser.Rectangle(0, 0, 100, 400);
 
+		// create an invisible wall at the end of the level to know when the player reaches the end
+		var endGameWall = this.endGameWall = this.add.sprite(this.world.width * 0.1, 0);
+		endGameWall.width = 10;
+		endGameWall.height = this.world.height;
+		endGameWall.tint = '0xFF0000';
+		this.physics.arcade.enable(endGameWall);
+
 		groundLayer.resizeWorld();
 		var cursors = this.cursors = this.input.keyboard.createCursorKeys();
 
@@ -309,6 +315,7 @@ module.exports = {
 
 		this.physics.arcade.collide(this.duck, [this.scenarioLayer, this.foregroundLayer, this.underwaterLayer, this.enemies], this.duckCollision, this.duckProcessCallback, this);
 		this.physics.arcade.collide(this.duck, this.specialBoxesLayer, this.hitSpecialBoxes, null, this);
+		this.physics.arcade.collide(this.duck, this.endGameWall, this.endGame, null, this);
 
 		// overlap with water
 		// easier to check if duck is under a specific Y, instead of using overlap
@@ -638,6 +645,10 @@ module.exports = {
 				}
 			};
 		}
+	},
+
+	endGame: function () {
+		this.displayOverlay('gameEnd');
 	}
 
 };
