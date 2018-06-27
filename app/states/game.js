@@ -248,7 +248,7 @@ module.exports = {
 		this.camera.deadzone = new Phaser.Rectangle(0, 0, 100, 400);
 
 		// create an invisible wall at the end of the level to know when the player reaches the end
-		var endGameWall = this.endGameWall = this.add.sprite(this.world.width * 0.1, 0);
+		var endGameWall = this.endGameWall = this.add.sprite(this.world.width * 0.3, 0);
 		endGameWall.width = 10;
 		endGameWall.height = this.world.height;
 		endGameWall.tint = '0xFF0000';
@@ -285,12 +285,7 @@ module.exports = {
   	* */
 
 		if(this.gameOver){
-			// stop the whole scene
-			this.physics.arcade.isPaused = true;
-			this.paused = true;
-
-			// stop the music, perhaps play another sound
-			this.music.stop();
+			this.stopEverything();
 
 			// display message for game over
 			this.displayOverlay('gameOver');
@@ -647,7 +642,17 @@ module.exports = {
 		}
 	},
 
+	stopEverything: function(){
+		// stop the whole scene
+		this.physics.arcade.isPaused = true;
+		this.paused = true;
+
+		// stop the music, perhaps play another sound
+		this.music.stop();
+	},
+
 	endGame: function () {
+  	this.stopEverything();
 		this.displayOverlay('gameEnd');
 	}
 
