@@ -236,7 +236,7 @@ module.exports = {
 		var endGameWall = this.endGameWall = this.add.sprite(this.world.width, 0);
 		this.physics.arcade.enable(endGameWall);
 		endGameWall.body.collideWorldBounds = true;
-		endGameWall.width = 300;
+		endGameWall.width = 10;
 		endGameWall.height = this.world.height;
 		endGameWall.tint = '0xFF0000';
 
@@ -261,8 +261,7 @@ module.exports = {
 		groundLayer.resizeWorld();
 
 		// update position of invisible wall after world resizing
-		// endGameWall.x = this.world.width * 0.97;
-		endGameWall.x = this.world.width * 0.1;
+		endGameWall.x = this.world.width * 0.97;
 		console.log('endGameWall.x: ' + endGameWall.x);
 		console.log('endGameWall.y: ' + endGameWall.y);
 		console.log('endGameWall.width: ' + endGameWall.width);
