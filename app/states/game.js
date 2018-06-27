@@ -544,7 +544,7 @@ module.exports = {
 	},
 
 	displayOverlay: function(gameState){
-		// this.overlayBackground.visible = true;
+		this.overlayBackground.visible = true;
 		this.overlayText.visible = true;
 
   	// gamestate can have values "pause", "gameOver", "gameEnd"
@@ -578,19 +578,20 @@ module.exports = {
 					self.rankingRetrieved = true;
 
 					users = users.sort(function(a,b) {return b.high_score - a.high_score;});
-					console.log("sortedUsers: ", users);
-
 					var userAlreadyDisplayed = false;
 
 					// display the ranking, username and high_score
 					for(var i = 0; i < users.length; i++){
+						console.log('looping through retrieved users');
 						// display the first 5 high ranked users
 						if(users[i] <= 4){
+							console.log('---- display first 5 users');
 							if(users[i].id === self.game.global.currentUser.id){
 								userAlreadyDisplayed = true;
 							}
 							console.log("sortedUser[i].name: " + users[i].name);
 							console.log("sortedUser[i].high_score: " + users[i].high_score);
+							console.log()
 							self.add.text(100, 200 + 50 * i+1, i+1, {fill: 'white'}).anchor.setTo(0.5);
 							self.add.text(150, 200 + 50 * i+1, users[i].name, {fill: 'white'}).anchor.setTo(0.5);
 							self.add.text(250, 200 + 50 * i+1, users[i].high_score, {fill: 'white'}).anchor.setTo(0.5);
