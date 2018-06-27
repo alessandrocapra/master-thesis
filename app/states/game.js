@@ -270,6 +270,8 @@ module.exports = {
 		endGameRect.beginFill(0xFF0000);
 		endGameRect.drawRect(endGameWall.x, endGameWall.y, endGameWall.width, endGameWall.height);
 
+		console.log(this.endGameWall);
+
 		var cursors = this.cursors = this.input.keyboard.createCursorKeys();
 
 		// controlling with up and down keys
