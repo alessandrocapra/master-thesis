@@ -272,7 +272,7 @@ module.exports = {
 		});
 
 		// swipe controls
-		// this.swipe = this.game.input.activePointer;
+		this.swipe = this.game.input.activePointer;
   },
 
   update: function () {
@@ -332,6 +332,13 @@ module.exports = {
 		* CONTROLS
 		*
 		* */
+
+		// swiping
+		if (this.swipe.isDown && (this.swipe.positionDown.y > this.swipe.position.y)) {
+			this.jump();
+		} else if(this.swipe.isDown && (this.swipe.positionDown.y < this.swipe.position.y)){
+			this.dive();
+		}
 
 		this.duck.body.velocity.x = this.speed*60;
 
