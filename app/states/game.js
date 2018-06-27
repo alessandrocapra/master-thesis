@@ -578,6 +578,7 @@ module.exports = {
 				var users = JSON.parse(xhr.responseText);
 
 				if (xhr.readyState == 4 && xhr.status == "200") {
+					console.log('Correctly retrieved data of users for ranking');
 					users = users.sort(function(a,b) {return b.high_score - a.high_score;});
 					var userAlreadyDisplayed = false;
 
@@ -628,6 +629,7 @@ module.exports = {
 			xhttp.onreadystatechange = function() {//Call a function when the state changes.
 				if(xhttp.readyState == XMLHttpRequest.DONE && xhttp.status == 201) {
 					// Once the user has been inserted, call the function that gets all users
+					console.log('Score saved, now calling the ranking function');
 					self.getRankingFromDb();
 				}
 			};
