@@ -249,7 +249,7 @@ module.exports = {
 
 		// create an invisible wall at the end of the level to know when the player reaches the end
 		console.log('world width: ' + this.world.width);
-		var endGameWall = this.endGameWall = this.add.sprite(this.world.width * 0.1);
+		var endGameWall = this.endGameWall = this.add.sprite(this.world.width, 0);
 		endGameWall.width = 100;
 		endGameWall.height = this.world.height;
 		endGameWall.tint = '0xFF0000';
