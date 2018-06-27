@@ -171,7 +171,7 @@ module.exports = {
 		this.overlayText.visible = false;
 
 		// OK button for restarting the game
-		this.okBtn = this.add.sprite(this.camera.width * 0.65, this.camera.height * 0.6, 'button','blue_button04.png');
+		this.okBtn = this.add.sprite(this.camera.width * 0.65, this.camera.height * 0.85, 'button','blue_button04.png');
 		this.okBtn.anchor.set(0.5);
 		// this.overlayBackground.addChild(this.okBtn);
 		this.okBtn.inputEnabled = true;
@@ -191,7 +191,7 @@ module.exports = {
 		});
 
 		// Menu button to go back to welcome after the game ended / player lost
-		this.backToMenuBtn = this.add.sprite(this.camera.width * 0.35, this.camera.height * 0.6, 'button','blue_button04.png');
+		this.backToMenuBtn = this.add.sprite(this.camera.width * 0.35, this.camera.height * 0.85, 'button','blue_button04.png');
 		this.backToMenuBtn.anchor.set(0.5);
 		// this.overlayBackground.addChild(this.okBtn);
 		this.backToMenuBtn.inputEnabled = true;
@@ -256,21 +256,10 @@ module.exports = {
 		this.camera.follow(duck);
 		this.camera.deadzone = new Phaser.Rectangle(0, 0, 100, 400);
 
-		var endGameRect = this.add.graphics(0,0);
-
 		groundLayer.resizeWorld();
 
 		// update position of invisible wall after world resizing
 		endGameWall.x = this.world.width * 0.97;
-		console.log('endGameWall.x: ' + endGameWall.x);
-		console.log('endGameWall.y: ' + endGameWall.y);
-		console.log('endGameWall.width: ' + endGameWall.width);
-		console.log('endGameWall.height: ' + endGameWall.height);
-
-		endGameRect.beginFill(0xFF0000);
-		endGameRect.drawRect(endGameWall.x, endGameWall.y, endGameWall.width, endGameWall.height);
-
-		console.log(this.endGameWall);
 
 		var cursors = this.cursors = this.input.keyboard.createCursorKeys();
 
