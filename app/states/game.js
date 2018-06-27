@@ -572,10 +572,10 @@ module.exports = {
 			xhr.open('GET', 'https://duchennegame.herokuapp.com/api/users', true);
 			xhr.onload = function () {
 				var users = JSON.parse(xhr.responseText);
+				self.rankingRetrieved = true;
 
 				if (xhr.readyState == 4 && xhr.status == "200") {
 					// make sure this request is done only once
-					self.rankingRetrieved = true;
 
 					users = users.sort(function(a,b) {return b.high_score - a.high_score;});
 					var userAlreadyDisplayed = false;
@@ -585,7 +585,7 @@ module.exports = {
 						console.log('looping through retrieved users');
 						// display the first 5 high ranked users
 						console.log('users[' + i + ']: ', users[i]);
-						if(users[i] <= 4){
+						if(i <= 4){
 							console.log('---- display first 5 users');
 							if(users[i].id === self.game.global.currentUser.id){
 								userAlreadyDisplayed = true;
