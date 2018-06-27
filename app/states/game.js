@@ -168,14 +168,14 @@ module.exports = {
 		this.overlayText.visible = false;
 
 		// OK button for restarting the game
-		this.okBtn = this.add.sprite(this.camera.width * 0.6, this.camera.height * 0.6, 'button','blue_button04.png');
+		this.okBtn = this.add.sprite(this.camera.width * 0.7, this.camera.height * 0.6, 'button','blue_button04.png');
 		this.okBtn.anchor.set(0.5);
 		// this.overlayBackground.addChild(this.okBtn);
 		this.okBtn.inputEnabled = true;
 		this.okBtn.input.useHandCursor = true;
 		this.okBtn.visible = false;
 
-		this.okBtnText = this.add.text(0,0,'Ja', {align: "center"});
+		this.okBtnText = this.add.text(0,0,'Ja', this.game.global.buttonLabelStyle);
 		this.okBtnText.anchor.set(0.5);
 		this.okBtn.addChild(this.okBtnText);
 		this.okBtn.fixedToCamera = true;
@@ -188,14 +188,14 @@ module.exports = {
 		});
 
 		// Menu button to go back to welcome after the game ended / player lost
-		this.backToMenuBtn = this.add.sprite(this.camera.width * 0.4, this.camera.height * 0.6, 'button','blue_button04.png');
+		this.backToMenuBtn = this.add.sprite(this.camera.width * 0.3, this.camera.height * 0.6, 'button','blue_button04.png');
 		this.backToMenuBtn.anchor.set(0.5);
 		// this.overlayBackground.addChild(this.okBtn);
 		this.backToMenuBtn.inputEnabled = true;
 		this.backToMenuBtn.input.useHandCursor = true;
 		this.backToMenuBtn.visible = false;
 
-		this.backToMenuText = this.add.text(0,0,'Back to Menu', {align: "center"});
+		this.backToMenuText = this.add.text(0,0,'Back to Menu', this.game.global.buttonLabelStyle);
 		this.backToMenuText.anchor.set(0.5);
 		this.backToMenuBtn.addChild(this.backToMenuText);
 		this.backToMenuBtn.fixedToCamera = true;
@@ -261,11 +261,11 @@ module.exports = {
 
   update: function () {
 
-		console.log('\n----------------------------');
-		console.log('pressure: ' + this.pressure);
-  	console.log('maxInhale: ' + this.game.global.currentUserCalibration.min);
-  	console.log('maxExhale: ' + this.game.global.currentUserCalibration.max);
-		console.log('----------------------------\n');
+		// console.log('\n----------------------------');
+		// console.log('pressure: ' + this.pressure);
+		// console.log('maxInhale: ' + this.game.global.currentUserCalibration.min);
+		// console.log('maxExhale: ' + this.game.global.currentUserCalibration.max);
+		// console.log('----------------------------\n');
 
   	var self = this;
 
