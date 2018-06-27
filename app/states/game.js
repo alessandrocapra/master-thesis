@@ -204,7 +204,6 @@ module.exports = {
 		this.backToMenuBtn.fixedToCamera = true;
 
 		this.backToMenuBtn.events.onInputUp.add(function(){
-			// setting instructions back to visible
 			self.state.start('welcome');
 		});
 
@@ -556,7 +555,7 @@ module.exports = {
 			this.okBtn.visible = true;
 			this.backToMenuBtn.visible = true;
 
-			this.getRankingFromDb();
+			this.saveScoreOnDb();
 
 		} else {
 			console.log('You are not supposed to be here...');
@@ -610,6 +609,28 @@ module.exports = {
 				}
 			};
 			xhr.send(null);
+		}
+	},
+
+	saveScoreOnDb: function () {
+		var self = this;
+
+		if(this.score > this.game.global.currentUser.high_score){
+			// save current score on Db
+			var xhttp = new XMLHttpRequest();
+			xhttp.open("PUT", "https://duchennegame.herokuapp.com/api/users/" + this.game.global.currentUser.id, true);
+			xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+			var input = JSON.stringify({
+				'high_score': self.score
+			});
+			xhttp.send(input);
+
+			xhttp.onreadystatechange = function() {//Call a function when the state changes.
+				if(xhttp.readyState == XMLHttpRequest.DONE && xhttp.status == 201) {
+					// Once the user has been inserted, call the function that gets all users
+					self.getRankingFromDb();
+				}
+			};
 		}
 	}
 
