@@ -2,7 +2,7 @@ module.exports = {
 
   create: function () {
   	var self = this;
-  	var sortedUsers = [];
+  	this.sortedUsers = [];
 		var title = this.add.text(this.game.global.titlePlacement.x, this.game.global.titlePlacement.y, 'Ranking', this.game.global.titleStyle);
 		title.anchor.set(0.5);
 
@@ -43,16 +43,23 @@ module.exports = {
 			var users = JSON.parse(xhr.responseText);
 			console.log("users from db: ", users);
 			if (xhr.readyState == 4 && xhr.status == "200") {
-				sortedUsers = users.sort(function(a,b) {return b.high_score - a.high_score;});
-				console.log("sortedUsers: ", sortedUsers);
+				self.sortedUsers = users.sort(function(a,b) {return b.high_score - a.high_score;});
 
 				// display the ranking, username and high_score
-				for(var i = 0; i < sortedUsers.length; i++){
-					console.log("sortedUser[i].name: " + sortedUsers[i].name);
-					console.log("sortedUser[i].high_score: " + sortedUsers[i].high_score);
-					self.add.text(100, self.game.global.titlePlacement.y + 100 + 50 * i+1, i+1, {fill: 'white'}).anchor.setTo(0.5);
-					self.add.text(150, self.game.global.titlePlacement.y + 100 + 50 * i+1, sortedUsers[i].name, {fill: 'white'}).anchor.setTo(0.5);
-					self.add.text(250, self.game.global.titlePlacement.y + 100 + 50 * i+1, sortedUsers[i].high_score, {fill: 'white'}).anchor.setTo(0.5);
+				for(var i = 0; i < self.sortedUsers.length; i++){
+					// self.add.text(100, self.game.global.titlePlacement.y + 100 + 50 * i+1, i+1, {fill: 'white'}).anchor.setTo(0.5);
+					// self.add.text(150, self.game.global.titlePlacement.y + 100 + 50 * i+1, sortedUsers[i].name, {fill: 'white'}).anchor.setTo(0.5);
+					// self.add.text(250, self.game.global.titlePlacement.y + 100 + 50 * i+1, sortedUsers[i].high_score, {fill: 'white'}).anchor.setTo(0.5);
+
+					if(self.sortedUsers[i].id === self.game.global.currentUser.id){
+						self.add.text(100, self.game.global.titlePlacement.y + 100 + 50 * i+1, i+1, this.game.global.currentPlayerRankingStyle).anchor.setTo(0.5);
+						self.add.text(150, self.game.global.titlePlacement.y + 100 + 50 * i+1, self.sortedUsers[i].name, this.game.global.currentPlayerRankingStyle).anchor.setTo(0.5);
+						self.add.text(250, self.game.global.titlePlacement.y + 100 + 50 * i+1, self.sortedUsers[i].high_score, this.game.global.currentPlayerRankingStyle).anchor.setTo(0.5);
+					} else {
+						self.add.text(100, self.game.global.titlePlacement.y + 100 + 50 * i+1, i+1, this.game.global.otherPlayersRankingStyle).anchor.setTo(0.5);
+						self.add.text(150, self.game.global.titlePlacement.y + 100 + 50 * i+1, self.sortedUsers[i].name, this.game.global.otherPlayersRankingStyle).anchor.setTo(0.5);
+						self.add.text(250, self.game.global.titlePlacement.y + 100 + 50 * i+1, self.sortedUsers[i].high_score, this.game.global.otherPlayersRankingStyle).anchor.setTo(0.5);
+					}
 				}
 			} else {
 				console.error(users);

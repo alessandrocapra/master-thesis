@@ -39,7 +39,19 @@ game.global = {
 	buttonLabelStyle : {
 		font: "20px Arial",
 		align: "center"
-  }
+  },
+
+	// ranking styling
+	otherPlayersRankingStyle :{
+		font: '22px Arial',
+  	fill: 'white',
+	},
+
+	currentPlayerRankingStyle : {
+		font: '22px Arial',
+		fill: this.game.global.primaryColorTint,
+		fontWeight: 'bold'
+	}
 };
 
 game.state.add('boot', require('states/boot'));

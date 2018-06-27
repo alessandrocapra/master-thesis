@@ -159,7 +159,7 @@ module.exports = {
 		this.overlayBackground.y = this.camera.height * 0.5;
 		this.overlayBackground.anchor.set(0.5, 0.5);
 
-		this.overlayText = this.add.text(this.camera.width * 0.5, 100, 'Text goes here' , { align: "center", font: "bold 24px Arial", fill: "#fff"});
+		this.overlayText = this.add.text(this.camera.width * 0.5, 100, 'Text goes here' , { align: "center", font: "bold 28px Arial", fill: "#fff"});
 		this.overlayText.anchor.set(0.5, 0.5);
 
 		// add the text as child of the background container
@@ -588,15 +588,20 @@ module.exports = {
 						if(i <= 4){
 							if(users[i].id === self.game.global.currentUser.id){
 								userAlreadyDisplayed = true;
+
+								self.add.text(self.camera.x + 100, self.camera.height * 0.3 + 50 * i+1, i+1, this.game.global.currentPlayerRankingStyle).anchor.setTo(0.5);
+								self.add.text(self.camera.x + 150, self.camera.height * 0.3 + 50 * i+1, users[i].name, this.game.global.currentPlayerRankingStyle).anchor.setTo(0.5);
+								self.add.text(self.camera.x + 250, self.camera.height * 0.3 + 50 * i+1, users[i].high_score, this.game.global.currentPlayerRankingStyle).anchor.setTo(0.5);
+							} else {
+								self.add.text(self.camera.x + 100, self.camera.height * 0.3 + 50 * i + 1, i + 1, this.game.global.otherPlayersRankingStyle).anchor.setTo(0.5);
+								self.add.text(self.camera.x + 150, self.camera.height * 0.3 + 50 * i + 1, users[i].name, this.game.global.otherPlayersRankingStyle).anchor.setTo(0.5);
+								self.add.text(self.camera.x + 250, self.camera.height * 0.3 + 50 * i + 1, users[i].high_score, this.game.global.otherPlayersRankingStyle).anchor.setTo(0.5);
 							}
-							self.add.text(self.camera.x + 100, self.camera.height * 0.3 + 50 * i+1, i+1, {fill: 'white'}).anchor.setTo(0.5);
-							self.add.text(self.camera.x + 150, self.camera.height * 0.3 + 50 * i+1, users[i].name, {fill: 'white'}).anchor.setTo(0.5);
-							self.add.text(self.camera.x + 250, self.camera.height * 0.3 + 50 * i+1, users[i].high_score, {fill: 'white'}).anchor.setTo(0.5);
 						} else {
 							if(users[i].id === self.game.global.currentUser.id && !userAlreadyDisplayed){
-								self.add.text(self.camera.x + 100, self.camera.height * 0.6, i+1, {fill: 'white', fontWeight: 'bold'}).anchor.setTo(0.5);
-								self.add.text(self.camera.x + 150, self.camera.height * 0.6, users[i].name, {fill: 'white',fontWeight: 'bold'}).anchor.setTo(0.5);
-								self.add.text(self.camera.x + 250, self.camera.height * 0.6, users[i].high_score, {fill: 'white', fontWeight: 'bold'}).anchor.setTo(0.5);
+								self.add.text(self.camera.x + 100, self.camera.height * 0.6, i+1, this.game.global.currentPlayerRankingStyle).anchor.setTo(0.5);
+								self.add.text(self.camera.x + 150, self.camera.height * 0.6, users[i].name, this.game.global.currentPlayerRankingStyle).anchor.setTo(0.5);
+								self.add.text(self.camera.x + 250, self.camera.height * 0.6, users[i].high_score, this.game.global.currentPlayerRankingStyle).anchor.setTo(0.5);
 							}
 						}
 					}
