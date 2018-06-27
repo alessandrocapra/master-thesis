@@ -8,20 +8,17 @@ module.exports = {
 
 		this.getRankingFromDb();
 
-		// exit button
-		var exitBtn = this.checkLoginBtn= this.add.sprite(this.world.centerX, this.world.height * 0.8, 'button', 'blue_button04.png');
-		exitBtn.anchor.set(0.5,0.5);
-		exitBtn.inputEnabled = true;
-		exitBtn.input.useHandCursor = true;
+		// arrow back for previous screen
+		var arrowBack = this.arrowBack = this.add.image(50, 50, 'arrowBack');
+		arrowBack.anchor.set(0.5,0.5);
+		arrowBack.scale.setTo(0.6, 0.6);
+		arrowBack.tint = this.game.global.primaryColorTint;
+		arrowBack.inputEnabled = true;
+		arrowBack.input.useHandCursor = true;
 
-		var exitText = this.add.text(0,0,'Exit', this.game.global.buttonLabelStyle);
-		exitText.anchor.set(0.5,0.5);
-
-		exitBtn.addChild(exitText);
-
-		exitBtn.events.onInputDown.add(function () {
+		arrowBack.events.onInputDown.add(function () {
 			self.state.start('welcome');
-		});
+		}, this);
 
   },
 
