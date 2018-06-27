@@ -235,6 +235,7 @@ module.exports = {
 		console.log('world width: ' + this.world.width);
 		var endGameWall = this.endGameWall = this.add.sprite(this.world.width, 0);
 		this.physics.arcade.enable(endGameWall);
+		endGameWall.body.collideWorldBounds = true;
 		endGameWall.width = 300;
 		endGameWall.height = this.world.height;
 		endGameWall.tint = '0xFF0000';
