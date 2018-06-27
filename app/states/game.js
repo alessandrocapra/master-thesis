@@ -231,6 +231,14 @@ module.exports = {
 			}
 		});
 
+		// create an invisible wall at the end of the level to know when the player reaches the end
+		console.log('world width: ' + this.world.width);
+		var endGameWall = this.endGameWall = this.add.sprite(this.world.width, 0);
+		this.physics.arcade.enable(endGameWall);
+		endGameWall.width = 300;
+		endGameWall.height = this.world.height;
+		endGameWall.tint = '0xFF0000';
+
 		// define duck and its properties
 		var duck = this.duck = this.add.sprite(80, world.centerY+50, 'duck');
 		duck.anchor.setTo(0.5, 0.5);
@@ -246,14 +254,6 @@ module.exports = {
 
 		this.camera.follow(duck);
 		this.camera.deadzone = new Phaser.Rectangle(0, 0, 100, 400);
-
-		// create an invisible wall at the end of the level to know when the player reaches the end
-		console.log('world width: ' + this.world.width);
-		var endGameWall = this.endGameWall = this.add.sprite(this.world.width, 0);
-		endGameWall.width = 100;
-		endGameWall.height = this.world.height;
-		endGameWall.tint = '0xFF0000';
-		this.physics.arcade.enable(endGameWall);
 
 		var endGameRect = this.add.graphics(0,0);
 
