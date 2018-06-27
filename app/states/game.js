@@ -260,6 +260,9 @@ module.exports = {
 		// update position of invisible wall after world resizing
 		endGameWall.x = this.world.width * 0.1;
 		console.log('endGameWall.x: ' + endGameWall.x);
+		console.log('endGameWall.y: ' + endGameWall.y);
+		console.log('endGameWall.width: ' + endGameWall.width);
+		console.log('endGameWall.height: ' + endGameWall.height);
 
 		var cursors = this.cursors = this.input.keyboard.createCursorKeys();
 
