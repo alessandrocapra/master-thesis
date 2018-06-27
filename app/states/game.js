@@ -631,7 +631,7 @@ module.exports = {
 			xhttp.send(input);
 
 			xhttp.onreadystatechange = function() {//Call a function when the state changes.
-				if(xhttp.readyState == XMLHttpRequest.DONE && xhttp.status == 201) {
+				if(xhttp.readyState == XMLHttpRequest.DONE && xhttp.status == 200) {
 					// Once the user has been inserted, call the function that gets all users
 					console.log('Score saved, now calling the ranking function');
 					self.getRankingFromDb();
