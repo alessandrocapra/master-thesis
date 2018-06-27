@@ -260,7 +260,8 @@ module.exports = {
 		groundLayer.resizeWorld();
 
 		// update position of invisible wall after world resizing
-		endGameWall.x = this.world.width * 0.97;
+		// endGameWall.x = this.world.width * 0.97;
+		endGameWall.x = this.world.width * 0.1;
 		console.log('endGameWall.x: ' + endGameWall.x);
 		console.log('endGameWall.y: ' + endGameWall.y);
 		console.log('endGameWall.width: ' + endGameWall.width);
