@@ -168,7 +168,7 @@ module.exports = {
 		this.overlayText.visible = false;
 
 		// OK button for restarting the game
-		this.okBtn = this.add.sprite(this.camera.width * 0.7, this.camera.height * 0.6, 'button','blue_button04.png');
+		this.okBtn = this.add.sprite(this.camera.width * 0.65, this.camera.height * 0.6, 'button','blue_button04.png');
 		this.okBtn.anchor.set(0.5);
 		// this.overlayBackground.addChild(this.okBtn);
 		this.okBtn.inputEnabled = true;
@@ -188,7 +188,7 @@ module.exports = {
 		});
 
 		// Menu button to go back to welcome after the game ended / player lost
-		this.backToMenuBtn = this.add.sprite(this.camera.width * 0.3, this.camera.height * 0.6, 'button','blue_button04.png');
+		this.backToMenuBtn = this.add.sprite(this.camera.width * 0.35, this.camera.height * 0.6, 'button','blue_button04.png');
 		this.backToMenuBtn.anchor.set(0.5);
 		// this.overlayBackground.addChild(this.okBtn);
 		this.backToMenuBtn.inputEnabled = true;
@@ -583,7 +583,7 @@ module.exports = {
 						self.add.text(150, 200 + 50 * i+1, users[i].name, {fill: 'white'}).anchor.setTo(0.5);
 						self.add.text(250, 200 + 50 * i+1, users[i].high_score, {fill: 'white'}).anchor.setTo(0.5);
 					} else {
-						if(users[i].id === this.game.global.currentUser.id){
+						if(users[i].id === self.game.global.currentUser.id){
 							self.add.text(100, 400, i+1, {fill: 'white', fontWeight: 'bold'}).anchor.setTo(0.5);
 							self.add.text(150, 400, users[i].name, {fill: 'white',fontWeight: 'bold'}).anchor.setTo(0.5);
 							self.add.text(250, 400, users[i].high_score, {fill: 'white', fontWeight: 'bold'}).anchor.setTo(0.5);
