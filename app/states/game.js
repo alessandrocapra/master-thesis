@@ -587,11 +587,13 @@ module.exports = {
 							if(users[i].id === self.game.global.currentUser.id){
 								userAlreadyDisplayed = true;
 							}
+							console.log(i+1 + ' - ' + users[i].name + ' - ' + users[i].high_score);
 							self.add.text(100, 200 + 50 * i+1, i+1, {fill: 'white'}).anchor.setTo(0.5);
 							self.add.text(150, 200 + 50 * i+1, users[i].name, {fill: 'white'}).anchor.setTo(0.5);
 							self.add.text(250, 200 + 50 * i+1, users[i].high_score, {fill: 'white'}).anchor.setTo(0.5);
 						} else {
 							if(users[i].id === self.game.global.currentUser.id && !userAlreadyDisplayed){
+								console.log(i+1 + ' - ' + users[i].name + ' - ' + users[i].high_score);
 								self.add.text(100, 400, i+1, {fill: 'white', fontWeight: 'bold'}).anchor.setTo(0.5);
 								self.add.text(150, 400, users[i].name, {fill: 'white',fontWeight: 'bold'}).anchor.setTo(0.5);
 								self.add.text(250, 400, users[i].high_score, {fill: 'white', fontWeight: 'bold'}).anchor.setTo(0.5);
