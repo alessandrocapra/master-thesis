@@ -265,13 +265,14 @@ module.exports = {
 
 		// controlling with up and down keys
 		cursors.down.onDown.add(function() {
-			if(self.duck.body.y > self.world.centerY - 35 && self.duck.body.y < self.world.height - 70 )
-				self.duck.body.velocity.y = 600;
+			self.jump()
 		});
 		cursors.up.onDown.add(function() {
-			if( self.duck.body.y <= self.world.centerY + 50 && self.duck.body.y > 100 )
-				self.duck.body.velocity.y = -600;
+			self.dive();
 		});
+
+		// swipe controls
+		// this.swipe = this.game.input.activePointer;
   },
 
   update: function () {
@@ -445,6 +446,18 @@ module.exports = {
 		}
 	},
 
+	jump: function(){
+		if(this.duck.body.y > this.world.centerY - 35 && this.duck.body.y < this.world.height - 70 ) {
+			this.duck.body.velocity.y = 600;
+		}
+	},
+
+	dive: function(){
+		if( this.duck.body.y <= this.world.centerY + 50 && this.duck.body.y > 100 ) {
+			this.duck.body.velocity.y = -600;
+		}
+	},
+
 	resetPlayer: function (){
 		// this.duck.alpha = 1;
 		this.duck.tint = 0xFFFFFF;
@@ -514,10 +527,6 @@ module.exports = {
 				});
 			}, this);
 		}
-
-	},
-
-	togglePause: function (isPaused) {
 
 	},
 
