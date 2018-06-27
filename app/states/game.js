@@ -247,6 +247,8 @@ module.exports = {
 		this.camera.follow(duck);
 		this.camera.deadzone = new Phaser.Rectangle(0, 0, 100, 400);
 
+		groundLayer.resizeWorld();
+
 		// create an invisible wall at the end of the level to know when the player reaches the end
 		console.log('world width: ' + this.world.width);
 		var endGameWall = this.endGameWall = this.add.sprite(this.world.width - 100, 0);
@@ -255,7 +257,6 @@ module.exports = {
 		endGameWall.tint = '0xFF0000';
 		this.physics.arcade.enable(endGameWall);
 
-		groundLayer.resizeWorld();
 		var cursors = this.cursors = this.input.keyboard.createCursorKeys();
 
 		// controlling with up and down keys
