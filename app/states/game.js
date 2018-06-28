@@ -16,7 +16,7 @@ module.exports = {
 		this.rankingRetrieved = false;
 		this.scoreUpdated = false;
 
-		this.socket = io();
+		this.socket = io.connect(window.location.hostname, { secure: true, reconnect: true, rejectUnauthorized : false } );
 		this.socket.on("connect", function () {
 			console.log("client (game) connected to server");
 
