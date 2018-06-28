@@ -16,7 +16,18 @@ module.exports = {
 		this.rankingRetrieved = false;
 		this.scoreUpdated = false;
 
-		this.socket = io.connect(window.location.hostname, { secure: true, reconnect: true, rejectUnauthorized : false } );
+		/*
+		*
+		* To correctly use SocketIO, it needs to be initialized differently in local vs production environments.
+		*
+		* */
+
+		// production
+		// this.socket = io.connect(window.location.hostname, { secure: true, reconnect: true, rejectUnauthorized : false } );
+
+		//development
+		this.socket = io.connect('http://localhost:5000');
+
 		this.socket.on("connect", function () {
 			console.log("client (game) connected to server");
 
