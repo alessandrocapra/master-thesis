@@ -20,6 +20,7 @@ game.global = {
   	min: 0,
 		max: 0
 	},
+	pressureEffort: 0.8,
 
 	// general styling
 	primaryColorHex: "#2cb2ed",
@@ -46,7 +47,6 @@ game.global = {
 		font: '22px Arial',
   	fill: 'white',
 	},
-
 	currentPlayerRankingStyle : {
 		font: '22px Arial',
 		fill: "#2cb2ed",
@@ -63,6 +63,7 @@ game.state.add('ranking', require('states/ranking'));
 game.state.add('settings', require('states/settings'));
 game.state.add('calibration1', require('states/calibration1'));
 game.state.add('calibration2', require('states/calibration2'));
+game.state.add('training_level', require('states/training_level'));
 game.state.add('game', require('states/game'));
 
 game.state.start('boot');

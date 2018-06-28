@@ -81,7 +81,7 @@ module.exports = {
   },
 
   startGame: function () {
-    this.state.start('game');
+    this.state.start('training_level');
   },
 
   settingsPage: function () {

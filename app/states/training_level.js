@@ -7,6 +7,8 @@ module.exports = {
   	var self = this;
     // set the velocity to which the level moves
 		var speed = this.speed = 3;
+		// music
+		this.music = null;
 
 		// vars for controlling the game through breathing
 		this.pressure = 0;
@@ -56,20 +58,18 @@ module.exports = {
 		background.fixedToCamera = true;
 
     // tileset creation
-		this.map = this.game.add.tilemap('tilemap');
+		this.map = this.game.add.tilemap('tilemap_training');
 		this.map.addTilesetImage('tiles_spritesheet', 'tiles');
 		this.map.addTilesetImage('Enemy', 'bee_tiles');
 
 		// Import the tileset layers
 		var scenarioLayer = this.scenarioLayer = this.map.createLayer('Scenario');
-		var foregroundLayer = this.foregroundLayer = this.map.createLayer('Foreground');
 		var groundLayer = this.groundLayer = this.map.createLayer('Ground');
 		var underwaterLayer = this.underwaterLayer = this.map.createLayer('Underwater');
 		underwaterLayer.alpha = 0.7;
 		var specialBoxesLayer = this.specialBoxesLayer = this.map.createLayer('SpecialBoxes');
 
 		this.map.setCollisionBetween(1, 200, true, 'Scenario');
-		this.map.setCollisionBetween(1, 200, true, 'Foreground');
 		this.map.setCollisionBetween(1, 200, true, 'Underwater');
 		this.map.setCollisionBetween(1, 200, true, 'SpecialBoxes');
 		// this.map.setCollisionBetween(1, 200, true, 'Ground');
@@ -169,7 +169,7 @@ module.exports = {
 		this.overlayBackground.y = this.camera.height * 0.5;
 		this.overlayBackground.anchor.set(0.5, 0.5);
 
-		this.overlayText = this.add.text(this.camera.width * 0.5, 100, 'Text goes here' , { align: "center", font: "bold 28px Arial", fill: "#fff"});
+		this.overlayText = this.add.text(this.camera.width * 0.5, this.camera.height * 0.45, 'Text goes here' , { align: "center", font: "bold 28px Arial", fill: "#fff"});
 		this.overlayText.anchor.set(0.5, 0.5);
 
 		// add the text as child of the background container
@@ -180,41 +180,56 @@ module.exports = {
 		this.overlayBackground.visible = false;
 		this.overlayText.visible = false;
 
-		// OK button for restarting the game
-		this.okBtn = this.add.sprite(this.camera.width * 0.65, this.camera.height * 0.85, 'button','blue_button04.png');
-		this.okBtn.anchor.set(0.5);
-		// this.overlayBackground.addChild(this.okBtn);
-		this.okBtn.inputEnabled = true;
-		this.okBtn.input.useHandCursor = true;
-		this.okBtn.visible = false;
+		// button to resume the game after instructions
+		this.resumeGameBtn = this.add.sprite(this.camera.width * 0.5, this.camera.height * 0.6, 'button','blue_button04.png');
+		this.resumeGameBtn.anchor.set(0.5);
+		this.resumeGameBtn.inputEnabled = true;
+		this.resumeGameBtn.input.useHandCursor = true;
+		this.resumeGameBtn.visible = false;
 
-		this.okBtnText = this.add.text(0,0,'Ja', this.game.global.buttonLabelStyle);
+		this.okBtnText = this.add.text(0,0,'Resume Game', this.game.global.buttonLabelStyle);
 		this.okBtnText.anchor.set(0.5);
-		this.okBtn.addChild(this.okBtnText);
-		this.okBtn.fixedToCamera = true;
+		this.resumeGameBtn.addChild(this.okBtnText);
+		this.resumeGameBtn.fixedToCamera = true;
 
-		this.okBtn.events.onInputUp.add(function(){
-			// setting instructions back to visible
-			self.switchAlphaInstructions([self.mouth, self.nose, self.mouthText, self.noseText]);
+		this.resumeGameBtn.events.onInputUp.add(function(){
+			self.displayOverlay('resumeGame');
+		});
 
-			self.state.restart();
+		// OK button for restarting the game
+		this.playGameBtn = this.add.sprite(this.camera.width * 0.65, this.camera.height * 0.6, 'button','blue_button04.png');
+		this.playGameBtn.anchor.set(0.5);
+		// this.overlayBackground.addChild(this.playGameBtn);
+		this.playGameBtn.inputEnabled = true;
+		this.playGameBtn.input.useHandCursor = true;
+		this.playGameBtn.visible = false;
+
+		this.okBtnText = this.add.text(0,0,'Play Game', this.game.global.buttonLabelStyle);
+		this.okBtnText.anchor.set(0.5);
+		this.playGameBtn.addChild(this.okBtnText);
+		this.playGameBtn.fixedToCamera = true;
+
+		this.playGameBtn.events.onInputUp.add(function(){
+			self.state.start('game');
 		});
 
 		// Menu button to go back to welcome after the game ended / player lost
-		this.backToMenuBtn = this.add.sprite(this.camera.width * 0.35, this.camera.height * 0.85, 'button','blue_button04.png');
-		this.backToMenuBtn.anchor.set(0.5);
-		// this.overlayBackground.addChild(this.okBtn);
-		this.backToMenuBtn.inputEnabled = true;
-		this.backToMenuBtn.input.useHandCursor = true;
-		this.backToMenuBtn.visible = false;
+		this.practiceAgainBtn = this.add.sprite(this.camera.width * 0.35, this.camera.height * 0.6, 'button','blue_button04.png');
+		this.practiceAgainBtn.anchor.set(0.5);
+		// this.overlayBackground.addChild(this.playGameBtn);
+		this.practiceAgainBtn.inputEnabled = true;
+		this.practiceAgainBtn.input.useHandCursor = true;
+		this.practiceAgainBtn.visible = false;
 
-		this.backToMenuText = this.add.text(0,0,'Back to Menu', this.game.global.buttonLabelStyle);
+		this.backToMenuText = this.add.text(0,0,'Practice again', this.game.global.buttonLabelStyle);
 		this.backToMenuText.anchor.set(0.5);
-		this.backToMenuBtn.addChild(this.backToMenuText);
-		this.backToMenuBtn.fixedToCamera = true;
+		this.practiceAgainBtn.addChild(this.backToMenuText);
+		this.practiceAgainBtn.fixedToCamera = true;
 
-		this.backToMenuBtn.events.onInputUp.add(function(){
-			self.state.start('welcome');
+		this.practiceAgainBtn.events.onInputUp.add(function(){
+			// setting instructions back to visible
+			self.switchAlphaInstructions([self.mouth, self.nose, self.mouthText, self.noseText]);
+			self.state.restart();
 		});
 
 		// Create pause button
@@ -227,27 +242,44 @@ module.exports = {
 
 		this.pauseButton.events.onInputUp.add(function () {
 			// When the pause button is pressed, we pause the game
-
 			// stop camera
 			if(!self.stopTheCamera){
 				self.stopTheCamera = true;
 			} else {
-				self.music.resume();
-				self.paused = false;
-				self.physics.arcade.isPaused = (!self.physics.arcade.isPaused);
-				self.overlayBackground.visible = false;
+				// self.music.resume();
+				// self.paused = false;
+				// self.physics.arcade.isPaused = (!self.physics.arcade.isPaused);
+				// self.overlayBackground.visible = false;
+				// self.overlayText.visible = false;
+				self.displayOverlay('resumeGame');
 
 				self.stopTheCamera = false;
 			}
 		});
 
+		// create an invisible wall for coins explanation
+		var coinsWall = this.coinsWall = this.add.sprite(this.world.width, 0);
+		this.physics.arcade.enable(coinsWall);
+		coinsWall.body.collideWorldBounds = true;
+		coinsWall.width = 10;
+		coinsWall.height = this.world.height;
+		coinsWall.tint = '0xFF0000';
+
+		// create an invisible wall for special boxes explanation
+		var specialBoxesWall = this.specialBoxesWall = this.add.sprite(this.world.width, 0);
+		this.physics.arcade.enable(specialBoxesWall);
+		specialBoxesWall.body.collideWorldBounds = true;
+		specialBoxesWall.width = 10;
+		specialBoxesWall.height = this.world.height;
+		specialBoxesWall.tint = '0xFF0000';
+
 		// create an invisible wall at the end of the level to know when the player reaches the end
-		console.log('world width: ' + this.world.width);
 		var endGameWall = this.endGameWall = this.add.sprite(this.world.width, 0);
 		this.physics.arcade.enable(endGameWall);
 		endGameWall.body.collideWorldBounds = true;
 		endGameWall.width = 10;
 		endGameWall.height = this.world.height;
+		endGameWall.tint = '0xFF0000';
 
 		// define duck and its properties
 		var duck = this.duck = this.add.sprite(80, world.centerY+50, 'duck');
@@ -267,8 +299,15 @@ module.exports = {
 
 		groundLayer.resizeWorld();
 
-		// update position of invisible wall after world resizing
+		// update position of coins invisible wall after world resizing
+		coinsWall.x = this.world.width * 0.09;
+
+		// update position of special boxes invisible wall after world resizing
+		specialBoxesWall.x = this.world.width * 0.22;
+
+		// update position of end game invisible wall after world resizing
 		endGameWall.x = this.world.width * 0.97;
+
 
 		var cursors = this.cursors = this.input.keyboard.createCursorKeys();
 
@@ -286,12 +325,6 @@ module.exports = {
 
   update: function () {
 
-		// console.log('\n----------------------------');
-		// console.log('pressure: ' + this.pressure);
-		// console.log('maxInhale: ' + this.game.global.currentUserCalibration.min);
-		// console.log('maxExhale: ' + this.game.global.currentUserCalibration.max);
-		// console.log('----------------------------\n');
-
   	var self = this;
 
   	/*
@@ -307,11 +340,11 @@ module.exports = {
 			this.displayOverlay('gameOver');
 
 		} else if(this.stopTheCamera) {
-			this.paused = true;
-			this.physics.arcade.isPaused = true;
-			this.music.pause();
-
-			// this.overlayBackground.visible = true;
+			// this.paused = true;
+			// this.physics.arcade.isPaused = true;
+			// if(this.music !== null && this.music.isPlaying){
+			// 	this.music.pause();
+			// }
 			this.displayOverlay('pause');
 		} else {
 			// make the background scroll
@@ -324,9 +357,11 @@ module.exports = {
 		*
 		* */
 
-		this.physics.arcade.collide(this.duck, [this.scenarioLayer, this.foregroundLayer, this.underwaterLayer, this.enemies], this.duckCollision, this.duckProcessCallback, this);
+		this.physics.arcade.collide(this.duck, [this.scenarioLayer, this.underwaterLayer, this.enemies], this.duckCollision, this.duckProcessCallback, this);
 		this.physics.arcade.overlap(this.duck, this.specialBoxesLayer, this.hitSpecialBoxes, null, this);
 		this.physics.arcade.overlap(this.duck, this.endGameWall, this.endGame, null, this);
+		this.physics.arcade.overlap(this.duck, this.specialBoxesWall, this.showInstructionsBoxes, null, this);
+		this.physics.arcade.overlap(this.duck, this.coinsWall, this.showInstructionsCoins, null, this);
 
 		// overlap with water
 		// easier to check if duck is under a specific Y, instead of using overlap
@@ -579,99 +614,47 @@ module.exports = {
 	displayOverlay: function(gameState){
 		this.overlayBackground.visible = true;
 		this.overlayText.visible = true;
+		this.stopEverything();
 
+		switch (gameState) {
+			case 'pause':
+				this.overlayText.setText('Game paused, click the pause button to resume.');
+				break;
+			case 'gameover':
+			case 'gameEnd':
+				this.overlayText.setText('Well done! Play again?');
+				this.playGameBtn.visible = true;
+				this.practiceAgainBtn.visible = true;
+				break;
+			case 'coins':
+				this.overlayText.setText('Coins are what give you the final score, you should\ntry to collect as many as possible!');
+				this.overlayText.visible = true;
+				this.resumeGameBtn.visible = true;
+				break;
+			case 'boxes':
+				this.overlayText.setText('When you hit these boxes, you have 50% chance\nto get a heart back or double the coins value for 5 seconds!');
+				this.overlayText.visible = true;
+				this.resumeGameBtn.visible = true;
+				break;
+			case 'resumeGame':
+				if(this.music !== null){
+					this.music.resume();
+				}
+				this.paused = false;
+				this.physics.arcade.isPaused = (!this.physics.arcade.isPaused);
+				this.overlayBackground.visible = false;
+				this.overlayText.visible = false;
+				this.resumeGameBtn.visible = false;
+				break;
+			default:
+				console.log('You are not supposed to be here...');
+		}
   	// gamestate can have values "pause", "gameOver", "gameEnd"
 		if(gameState === 'pause'){
-			this.overlayText.setText('Game paused, click the pause button to resume.');
+
 		} else if(gameState === 'gameOver' || gameState === 'gameEnd'){
-			// this.overlayText.inputEnabled = true;
-			this.overlayText.setText('Well done! Play again?');
-			this.okBtn.visible = true;
-			this.backToMenuBtn.visible = true;
-
-			this.saveScoreOnDb();
 
 		} else {
-			console.log('You are not supposed to be here...');
-		}
-	},
-
-	getRankingFromDb: function () {
-		var self = this;
-
-		console.log('Inside the getRankingFromDb function');
-
-		if(!this.rankingRetrieved){
-			// make sure this request is done only once
-			self.rankingRetrieved = true;
-
-			// connect to API to retrieve all users and order them to display the ranking
-			var xhr  = new XMLHttpRequest();
-			xhr.open('GET', 'https://duchennegame.herokuapp.com/api/users', true);
-			xhr.onload = function () {
-				var users = JSON.parse(xhr.responseText);
-
-				if (xhr.readyState == 4 && xhr.status == "200") {
-					console.log('Correctly retrieved data of users for ranking');
-					users = users.sort(function(a,b) {return b.high_score - a.high_score;});
-					var userAlreadyDisplayed = false;
-
-					// display the ranking, username and high_score
-					for(var i = 0; i < users.length; i++){
-						// display the first 5 high ranked users
-						if(i <= 4){
-							if(users[i].id === self.game.global.currentUser.id){
-								userAlreadyDisplayed = true;
-
-								self.add.text(self.camera.x + 300, self.camera.height * 0.3 + 50 * i+1, i+1, self.game.global.currentPlayerRankingStyle).anchor.setTo(0.5);
-								self.add.text(self.camera.x + 350, self.camera.height * 0.3 + 50 * i+1, users[i].name, self.game.global.currentPlayerRankingStyle).anchor.setTo(0.5);
-								self.add.text(self.camera.x + 450, self.camera.height * 0.3 + 50 * i+1, users[i].high_score, self.game.global.currentPlayerRankingStyle).anchor.setTo(0.5);
-							} else {
-								self.add.text(self.camera.x + 300, self.camera.height * 0.3 + 50 * i + 1, i + 1, self.game.global.otherPlayersRankingStyle).anchor.setTo(0.5);
-								self.add.text(self.camera.x + 350, self.camera.height * 0.3 + 50 * i + 1, users[i].name, self.game.global.otherPlayersRankingStyle).anchor.setTo(0.5);
-								self.add.text(self.camera.x + 450, self.camera.height * 0.3 + 50 * i + 1, users[i].high_score, self.game.global.otherPlayersRankingStyle).anchor.setTo(0.5);
-							}
-						} else {
-							if(users[i].id === self.game.global.currentUser.id && !userAlreadyDisplayed){
-								self.add.text(self.camera.x + 300, self.camera.height * 0.6, i+1, self.game.global.currentPlayerRankingStyle).anchor.setTo(0.5);
-								self.add.text(self.camera.x + 350, self.camera.height * 0.6, users[i].name, self.game.global.currentPlayerRankingStyle).anchor.setTo(0.5);
-								self.add.text(self.camera.x + 450, self.camera.height * 0.6, users[i].high_score, self.game.global.currentPlayerRankingStyle).anchor.setTo(0.5);
-							}
-						}
-					}
-				} else {
-					console.error(users);
-				}
-			};
-			xhr.send(null);
-		}
-	},
-
-	saveScoreOnDb: function () {
-		var self = this;
-
-		if(!this.scoreUpdated && this.score > this.game.global.currentUser.high_score){
-			// do this just once
-			this.scoreUpdated = true;
-
-			// save current score on Db
-			var xhttp = new XMLHttpRequest();
-			xhttp.open("PUT", "https://duchennegame.herokuapp.com/api/users/" + this.game.global.currentUser.id, true);
-			xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-			var input = JSON.stringify({
-				'high_score': self.score
-			});
-			xhttp.send(input);
-
-			xhttp.onreadystatechange = function() {//Call a function when the state changes.
-				if(xhttp.readyState == XMLHttpRequest.DONE && xhttp.status == 200) {
-					// Once the user has been inserted, call the function that gets all users
-					console.log('Score saved, now calling the ranking function');
-					self.getRankingFromDb();
-				}
-			};
-		} else {
-			self.getRankingFromDb();
 		}
 	},
 
@@ -681,7 +664,22 @@ module.exports = {
 		this.paused = true;
 
 		// stop the music, perhaps play another sound
-		this.music.stop();
+		if(this.music !== null && this.music.isPlaying){
+			this.music.pause();
+		}
+	},
+
+	showInstructionsCoins: function(player, wall){
+		// check whether it collided with the coins or specialBoxes wall
+		wall.destroy();
+		this.displayOverlay('coins');
+	},
+
+	showInstructionsBoxes: function(player, wall){
+		// check whether it collided with the coins or specialBoxes wall
+		wall.destroy();
+		this.displayOverlay('boxes');
+		// if()
 	},
 
 	endGame: function () {
