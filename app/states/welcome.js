@@ -28,18 +28,18 @@ module.exports = {
 
 		var title = this.add.text(this.game.global.titlePlacement.x, this.game.global.titlePlacement.y, 'Welcome', this.game.global.titleStyle);
 		title.anchor.set(0.5);
-
 		title.setText('Welcome, ' + this.game.global.currentUser.name + '!');
 
 		// add text with explanation of the game
-		var gameInstructions = this.gameInstruction = this.add.text(this.world.centerX, this.world.height * 0.4, "Here goes some explanation on how the game works!", {
+		var gameInstructions = this.gameInstruction = this.add.text(this.camera.width * 0.5, this.camera.height * 0.4, "Here goes some explanation on how the game works!", {
 			fill: "#FFF",
 			font: '20px Arial'
 		});
 		gameInstructions.anchor.set(0.5);
+		console.log('gameInstructions: ', gameInstructions);
 
 		// gear icon for settings
-		var settings = this.settings = this.add.image(this.world.width - 90, 50, 'gear');
+		var settings = this.settings = this.add.image(this.camera.width - 90, 50, 'gear');
 		settings.scale.setTo(0.6, 0.6);
 		settings.tint = this.game.global.primaryColorTint;
 		settings.inputEnabled = true;
@@ -51,7 +51,7 @@ module.exports = {
 		}, this);
 
 		// leaderboard icon for rankings
-		var leaderboard = this.leaderboard = this.add.image(this.world.width - 160, 50, 'leaderboard');
+		var leaderboard = this.leaderboard = this.add.image(this.camera.width - 160, 50, 'leaderboard');
 		leaderboard.scale.setTo(0.6, 0.6);
 		leaderboard.tint = this.game.global.primaryColorTint;
 		leaderboard.inputEnabled = true;
@@ -63,7 +63,7 @@ module.exports = {
 		}, this);
 
 		// start button
-		var startBtn = this.startBtn= this.add.sprite(this.world.centerX, this.world.height * 0.85, 'button', 'blue_button04.png');
+		var startBtn = this.startBtn= this.add.sprite(this.camera.width * 0.5, this.camera.height * 0.85, 'button', 'blue_button04.png');
 		startBtn.anchor.set(0.5,0.5);
 		startBtn.inputEnabled = true;
 		startBtn.input.useHandCursor = true;

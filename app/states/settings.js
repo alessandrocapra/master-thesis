@@ -21,14 +21,14 @@ module.exports = {
 
 
 		// Input device label
-		var deviceLabel = this.add.text(this.world.centerX*0.25, this.world.height * 0.6, 'Input device', {
+		var deviceLabel = this.add.text(this.camera.width*0.125, this.camera.height * 0.6, 'Input device', {
 			fill: 'white',
 			font: '20px Arial'
 		});
 		deviceLabel.anchor.set(0.5);
 
 		// keyboard/touch button
-		var keyTouchBtn = this.keyTouchBtn= this.add.sprite(this.world.width*0.45, this.world.height * 0.6, 'button', 'blue_button04.png');
+		var keyTouchBtn = this.keyTouchBtn= this.add.sprite(this.camera.width*0.45, this.camera.height * 0.6, 'button', 'blue_button04.png');
 		keyTouchBtn.anchor.set(0.5,0.5);
 		keyTouchBtn.alpha = 0.6;
 		keyTouchBtn.inputEnabled = true;
@@ -46,7 +46,7 @@ module.exports = {
 		}, this);
 
 		// breathing button
-		var breathingBtn = this.breathingBtn= this.add.sprite(this.world.width*0.75, this.world.height * 0.6, 'button', 'blue_button04.png');
+		var breathingBtn = this.breathingBtn= this.add.sprite(this.camera.width*0.75, this.camera.height * 0.6, 'button', 'blue_button04.png');
 		breathingBtn.anchor.set(0.5,0.5);
 		breathingBtn.alpha = 0.6;
 		breathingBtn.inputEnabled = true;
@@ -64,7 +64,7 @@ module.exports = {
 		}, this);
 
 		// calibration button
-		var calibrationBtn = this.calibrationBtn= this.add.sprite(this.world.width*0.75, this.world.height * 0.7, 'button', 'blue_button04.png');
+		var calibrationBtn = this.calibrationBtn= this.add.sprite(this.camera.width*0.75, this.camera.height * 0.7, 'button', 'blue_button04.png');
 		calibrationBtn.anchor.set(0.5,0.5);
 		calibrationBtn.inputEnabled = true;
 		calibrationBtn.input.useHandCursor = true;
