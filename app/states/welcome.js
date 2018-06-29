@@ -26,15 +26,15 @@ module.exports = {
 			xhr.send(null);
 		}
 
+		// add background
+		var bg= this.add.sprite(0,0, 'background_menu');
+
 		var title = this.add.text(this.game.global.titlePlacement.x, this.game.global.titlePlacement.y, 'Welcome', this.game.global.titleStyle);
 		title.anchor.set(0.5);
 		title.setText('Welcome, ' + this.game.global.currentUser.name + '!');
 
 		// add text with explanation of the game
-		var gameInstructions = this.gameInstruction = this.add.text(this.camera.width * 0.5, this.camera.height * 0.4, "Here goes some explanation on how the game works!", {
-			fill: "#FFF",
-			font: '20px Arial'
-		});
+		var gameInstructions = this.gameInstruction = this.add.text(this.camera.width * 0.5, this.camera.height * 0.4, "Here goes some explanation on how the game works!", this.game.global.bodyStyle);
 		gameInstructions.anchor.set(0.5);
 		console.log('gameInstructions: ', gameInstructions);
 

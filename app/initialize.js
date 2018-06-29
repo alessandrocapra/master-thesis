@@ -33,22 +33,28 @@ game.global = {
   },
   titleStyle: {
 		fill: 'white',
-		font: '60px Arial'
+		font: '60px Patua One'
+	},
+
+	// normal text styling
+	bodyStyle: {
+		fill: "#FFF",
+		font: '20px Open Sans'
 	},
 
 	// button label styling
 	buttonLabelStyle : {
-		font: "20px Arial",
+		font: "20px Open Sans",
 		align: "center"
   },
 
 	// ranking styling
 	otherPlayersRankingStyle :{
-		font: '22px Arial',
+		font: '22px Open Sans',
   	fill: 'white',
 	},
 	currentPlayerRankingStyle : {
-		font: '22px Arial',
+		font: '22px Open Sans',
 		fill: "#2cb2ed",
 		fontWeight: 'bold'
 	}

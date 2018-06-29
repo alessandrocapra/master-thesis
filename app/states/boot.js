@@ -1,6 +1,8 @@
 module.exports = {
 
   init: function () {
+  	var self = this;
+
     this.input.maxPointers = 1;
     this.game.renderer.renderSession.roundPixels = true;
     this.tweens.frameBased = true;
@@ -15,6 +17,21 @@ module.exports = {
 
 		// importing plugin to handle input boxes
 		this.add.plugin(PhaserInput.Plugin);
+
+		// load Google Fonts
+		WebFontConfig = {
+
+			//  'active' means all requested fonts have finished loading
+			//  We set a 1 second delay before calling 'createText'.
+			//  For some reason if we don't the browser cannot render the text the first time it's created.
+			// active: function() { self.time.events.add(Phaser.Timer.SECOND, null, self); },
+
+			//  The Google Fonts we want to load (specify as many as you like in the array)
+			google: {
+				families: ['Open Sans', 'Patua One']
+			}
+
+		};
   },
 
   preload: function () {
@@ -25,6 +42,9 @@ module.exports = {
 		this.scale.pageAlignVertically = true;
 		this.forceSingleUpdate = true;
 
+		//  Load the Google WebFont Loader script
+		this.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
+
 		// load UI elements
 		this.load.atlasJSONHash('button', 'assets/sprites/button.png', 'assets/sprites/button.json');
 		this.load.image('gear', 'assets/sprites/gear.png');
@@ -34,6 +54,7 @@ module.exports = {
 		// load general assets
     this.load.setPreloadSprite(this.bar);
     this.load.image('background', 'assets/sprites/bg_desert.png');
+    this.load.image('background_menu', 'assets/sprites/forest_bg.png');
     this.load.spritesheet('duck', 'assets/sprites/chick.png', 16, 18);
 		this.load.spritesheet('coin', 'assets/sprites/coin.png', 32, 32);
 		this.load.image('heartFull', 'assets/sprites/hud_heartFull.png');

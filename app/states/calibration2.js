@@ -67,13 +67,12 @@ module.exports = {
 		this.minCircle = this.add.graphics(0, 0);
 
 		// Done button
-		var doneBtn = this.keyTouchBtn= this.add.sprite(this.world.width*0.45, this.world.height * 0.8, 'button', 'blue_button04.png');
+		var doneBtn = this.keyTouchBtn= this.add.sprite(this.camera.width*0.5, this.camera.height * 0.8, 'button', 'blue_button04.png');
 		doneBtn.anchor.set(0.5,0.5);
-		doneBtn.alpha = 0.6;
 		doneBtn.inputEnabled = true;
 		doneBtn.input.useHandCursor = true;
 
-		var doneText = this.add.text(0,0,'Start', this.game.global.buttonLabelStyle);
+		var doneText = this.add.text(0,0,'Done!', this.game.global.buttonLabelStyle);
 		doneText.anchor.set(0.5,0.5);
 
 		doneBtn.addChild(doneText);
