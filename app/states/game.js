@@ -325,7 +325,7 @@ module.exports = {
 		* */
 
 		this.physics.arcade.collide(this.duck, [this.scenarioLayer, this.foregroundLayer, this.underwaterLayer, this.enemies], this.duckCollision, this.duckProcessCallback, this);
-		this.physics.arcade.overlap(this.duck, this.specialBoxesLayer, this.hitSpecialBoxes, null, this);
+		this.physics.arcade.collide(this.duck, this.specialBoxesLayer, this.hitSpecialBoxes, null, this);
 		this.physics.arcade.overlap(this.duck, this.endGameWall, this.endGame, null, this);
 
 		// overlap with water

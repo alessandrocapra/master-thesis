@@ -13,9 +13,17 @@ module.exports = {
 		this.game.global.currentUserCalibration.min = 0;
 		this.game.global.currentUserCalibration.max = 0;
 
-		this.socket = io();
+		/*
+		*
+		* To correctly use SocketIO, it needs to be initialized differently in local vs production environments.
+		*
+		* */
+
+		// production
 		// this.socket = io.connect(window.location.hostname, { secure: true, reconnect: true, rejectUnauthorized : false } );
-		// this.socket = io.connect();
+
+		//development
+		this.socket = io.connect('http://localhost:5000');
 
 		this.socket.on("connect", function () {
 			console.log("client (game) connected to server");

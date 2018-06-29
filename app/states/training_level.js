@@ -24,10 +24,10 @@ module.exports = {
 		* */
 
 		// production
-		this.socket = io.connect(window.location.hostname, { secure: true, reconnect: true, rejectUnauthorized : false } );
+		// this.socket = io.connect(window.location.hostname, { secure: true, reconnect: true, rejectUnauthorized : false } );
 
 		//development
-		// this.socket = io.connect('http://localhost:5000');
+		this.socket = io.connect('http://localhost:5000');
 
 		this.socket.on("connect", function () {
 			console.log("client (game) connected to server");
@@ -300,10 +300,10 @@ module.exports = {
 		groundLayer.resizeWorld();
 
 		// update position of coins invisible wall after world resizing
-		coinsWall.x = this.world.width * 0.09;
+		coinsWall.x = this.world.width * 0.08;
 
 		// update position of special boxes invisible wall after world resizing
-		specialBoxesWall.x = this.world.width * 0.22;
+		specialBoxesWall.x = this.world.width * 0.14;
 
 		// update position of end game invisible wall after world resizing
 		endGameWall.x = this.world.width * 0.97;
@@ -358,7 +358,7 @@ module.exports = {
 		* */
 
 		this.physics.arcade.collide(this.duck, [this.scenarioLayer, this.underwaterLayer, this.enemies], this.duckCollision, this.duckProcessCallback, this);
-		this.physics.arcade.overlap(this.duck, this.specialBoxesLayer, this.hitSpecialBoxes, null, this);
+		this.physics.arcade.collide(this.duck, this.specialBoxesLayer, this.hitSpecialBoxes, null, this);
 		this.physics.arcade.overlap(this.duck, this.endGameWall, this.endGame, null, this);
 		this.physics.arcade.overlap(this.duck, this.specialBoxesWall, this.showInstructionsBoxes, null, this);
 		this.physics.arcade.overlap(this.duck, this.coinsWall, this.showInstructionsCoins, null, this);
