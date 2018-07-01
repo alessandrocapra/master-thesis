@@ -306,6 +306,13 @@ module.exports = {
 		this.camera.follow(duck);
 		this.camera.deadzone = new Phaser.Rectangle(0, 0, 100, 400);
 
+		// import breathing level bar
+		this.breathingBar = this.add.image(50, world.centerY, 'bar');
+		this.breathingBar.anchor.set(0.5);
+		this.breathingBar.angle = 90;
+		this.breathingBar.scale.set(0.2);
+		this.breathingBar.fixedToCamera = true;
+
 		groundLayer.resizeWorld();
 
 		// update position of coins invisible wall after world resizing
@@ -335,6 +342,9 @@ module.exports = {
   update: function () {
 
   	var self = this;
+
+  	// update breathing bar
+		this.breathingBar.height = this.pressure * 100 / 1490;
 
   	/*
   	*

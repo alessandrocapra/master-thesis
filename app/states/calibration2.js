@@ -20,36 +20,36 @@ module.exports = {
 		* */
 
 		// production
-		this.socket = io.connect(window.location.hostname, { secure: true, reconnect: true, rejectUnauthorized : false } );
+		// this.socket = io.connect(window.location.hostname, { secure: true, reconnect: true, rejectUnauthorized : false } );
 
 		//development
-		// this.socket = io.connect('http://localhost:5000');
+		this.socket = io.connect('http://localhost:5000');
 
 		this.socket.on("connect", function () {
 			console.log("client (game) connected to server");
+		});
 
-			// receives the raw pressure number
-			self.socket.on('pc', function(data){
-				self.pressure = parseFloat(data.p);
-				// console.log("pressure received: " + parseFloat(pressure));
+		// receives the raw pressure number
+		this.socket.on('pc', function(data){
+			self.pressure = parseFloat(data.p);
+			console.log("pressure received: " + parseFloat(pressure));
 
-				// take 50 measurements to have an idea of the average value received
-				if(self.pressureCount < self.numMeasurements){
-					console.log('self.averagePressure prima: ' + self.averagePressure);
-					self.averagePressure += self.pressure;
-					console.log('self.averagePressure dopo: ' + self.averagePressure);
-					self.pressureCount++;
-				}
+			// take 50 measurements to have an idea of the average value received
+			if(self.pressureCount < self.numMeasurements){
+				console.log('self.averagePressure prima: ' + self.averagePressure);
+				self.averagePressure += self.pressure;
+				console.log('self.averagePressure dopo: ' + self.averagePressure);
+				self.pressureCount++;
+			}
 
-				if(self.pressureCount === self.numMeasurements){
-					self.averagePressure /= self.pressureCount;
-					console.log('self.averagePressure divisione: ' + self.averagePressure);
-					// this allows to enter this code only once
-					self.pressureCount++;
-				}
+			if(self.pressureCount === self.numMeasurements){
+				self.averagePressure /= self.pressureCount;
+				console.log('self.averagePressure divisione: ' + self.averagePressure);
+				// this allows to enter this code only once
+				self.pressureCount++;
+			}
 
-				self.updatedCircleDiameter = Phaser.Math.mapLinear(self.pressure, -2000, 1500, 30, 250);
-			});
+			self.updatedCircleDiameter = Phaser.Math.mapLinear(self.pressure, -2000, 1500, 30, 250);
 		});
 
 		var title = this.add.text(this.game.global.titlePlacement.x, this.game.global.titlePlacement.y, 'Calibration', this.game.global.titleStyle);

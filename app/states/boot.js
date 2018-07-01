@@ -50,6 +50,7 @@ module.exports = {
 		this.load.image('gear', 'assets/sprites/gear.png');
 		this.load.image('leaderboard', 'assets/sprites/leaderboardsComplex.png');
 		this.load.image('arrowBack', 'assets/sprites/arrowLeft.png');
+		this.load.image('bar', 'assets/sprites/bar.png');
 
 		// load general assets
     this.load.setPreloadSprite(this.bar);
