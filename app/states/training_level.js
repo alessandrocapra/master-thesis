@@ -308,7 +308,7 @@ module.exports = {
 
 		// import breathing level bar
 		this.breathingBar = this.add.image(50, world.centerY, 'bar');
-		// this.breathingBar.anchor.set(0.5);
+		this.breathingBar.anchor.set(0.5,1);
 		this.breathingBar.angle = 90;
 		this.breathingBar.scale.set(0.2);
 		this.breathingBar.fixedToCamera = true;
@@ -346,7 +346,7 @@ module.exports = {
   	var self = this;
 
   	// update breathing bar
-		if(this.pressure > 0){
+		if(this.pressure < 0){
 			if(this.barHasBeenFlipped){
 				this.breathingBar.angle = 90;
 				this.barHasBeenFlipped = false;
