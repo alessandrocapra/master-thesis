@@ -2,6 +2,14 @@ module.exports = {
 
   create: function () {
 
+  	var self = this;
+
+		// development: start level easily
+		this.restartLevel = this.input.keyboard.addKey(Phaser.Keyboard.S);
+		this.restartLevel.onDown.add(function () {
+			self.state.start('training_level');
+		}, this);
+
   	// add background
 		var bg= this.add.sprite(0,0, 'background_menu');
 

@@ -20,16 +20,16 @@ module.exports = {
 		* */
 
 		// production
-		this.socket = io.connect(window.location.hostname, { secure: true, reconnect: true, rejectUnauthorized : false } );
+		// this.socket = io.connect(window.location.hostname, { secure: true, reconnect: true, rejectUnauthorized : false } );
 
 		//development
-		// this.socket = io.connect('http://localhost:5000');
+		this.socket = io();
 
 		this.socket.on("connect", function () {
 			console.log("client (game) connected to server");
 
 			// receives the raw pressure number
-			self.socket.on('p', function(data){
+			self.socket.on('pc', function(data){
 				self.pressure = parseFloat(data.p);
 				// console.log("pressure received: " + parseFloat(pressure));
 

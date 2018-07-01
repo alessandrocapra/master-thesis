@@ -42,7 +42,7 @@ module.exports = {
 			console.log("client (game) connected to server");
 
 			// receives the raw pressure number
-			self.socket.on('p', function(data){
+			self.socket.on('pc', function(data){
 				self.pressure = parseFloat(data.p);
 				// console.log('pressure: ' + self.pressure);
 			});
