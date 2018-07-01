@@ -36,7 +36,7 @@ module.exports = {
 		this.socket = io.connect(window.location.hostname, { secure: true, reconnect: true, rejectUnauthorized : false } );
 
 		//development
-		// this.socket = io.connect('http://localhost:5000');
+		// this.socket = io.connect(window.location.hostname);
 
 		this.socket.on("connect", function () {
 			console.log("client (game) connected to server");
