@@ -313,6 +313,8 @@ module.exports = {
 		this.breathingBar.scale.set(0.2);
 		this.breathingBar.fixedToCamera = true;
 
+		this.barHasBeenFlipped = false;
+
 		groundLayer.resizeWorld();
 
 		// update position of coins invisible wall after world resizing
@@ -344,7 +346,18 @@ module.exports = {
   	var self = this;
 
   	// update breathing bar
-		this.breathingBar.height = this.pressure * 100 / 1490;
+		if(this.pressure > 0){
+			if(this.barHasBeenFlipped){
+				this.breathingBar.angle = 180;
+				this.barHasBeenFlipped = false;
+			}
+			this.breathingBar.width = this.pressure * 100 / 1490;
+		} else {
+			this.breathingBar.angle = 180;
+			this.barHasBeenFlipped = true;
+			this.breathingBar.width = Math.abs(this.pressure * 100 / -1800);
+		}
+
 
   	/*
   	*
