@@ -3,28 +3,30 @@ module.exports = {
   create: function () {
   	var self = this;
 
-  	// get the current user only if the global vars are empty
-		if(Object.keys(this.game.global.currentUser).length === 0){
-			// connect to API to retrieve last calibration of current user
-			var xhr  = new XMLHttpRequest();
-			xhr.open('GET', 'https://duchennegame.herokuapp.com/api/users/' + this.game.global.currentUser.id, true);
-			xhr.onload = function () {
-				var user = JSON.parse(xhr.responseText);
-				if (xhr.readyState == 4 && xhr.status == "200") {
-					// check if calibrations exists for this user
-					if(user.calibrations.length){
-						// the api returns the last calibration always as the first element of the array
-						self.game.global.currentUserCalibration.min = user.calibrations[0].max_inhale;
-						self.game.global.currentUserCalibration.max = user.calibrations[0].max_exhale;
-					} else {
-						console.log('You should do a calibration to use the breathing');
-					}
+  	console.log('currentUser: ', this.game.global.currentUser);
+
+  	// get the current user calibrations
+
+		// connect to API to retrieve last calibration of current user
+		var xhr  = new XMLHttpRequest();
+		xhr.open('GET', 'https://duchennegame.herokuapp.com/api/users/' + this.game.global.currentUser.id, true);
+		xhr.onload = function () {
+			var user = JSON.parse(xhr.responseText);
+			if (xhr.readyState == 4 && xhr.status == "200") {
+				// check if calibrations exists for this user
+				console.log('taking calibration data of this user: ', user);
+				if(user.calibrations.length){
+					// the api returns the last calibration always as the first element of the array
+					self.game.global.currentUserCalibration.min = user.calibrations[0].max_inhale;
+					self.game.global.currentUserCalibration.max = user.calibrations[0].max_exhale;
 				} else {
-					console.error(user);
+					alert('Do the calibration maan!');
 				}
-			};
-			xhr.send(null);
-		}
+			} else {
+				console.error(user);
+			}
+		};
+		xhr.send(null);
 
 		// add background
 		var bg= this.add.sprite(0,0, 'background_menu');
