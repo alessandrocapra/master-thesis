@@ -348,12 +348,12 @@ module.exports = {
   	// update breathing bar
 		if(this.pressure > 0){
 			if(this.barHasBeenFlipped){
-				this.breathingBar.angle = 180;
+				this.breathingBar.angle = 90;
 				this.barHasBeenFlipped = false;
 			}
 			this.breathingBar.width = this.pressure * 100 / 1490;
 		} else {
-			this.breathingBar.angle = 180;
+			this.breathingBar.angle = 270;
 			this.barHasBeenFlipped = true;
 			this.breathingBar.width = Math.abs(this.pressure * 100 / -1800);
 		}
