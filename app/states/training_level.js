@@ -307,13 +307,13 @@ module.exports = {
 		this.camera.deadzone = new Phaser.Rectangle(0, 0, 100, 400);
 
 		// import breathing level bar
-		this.breathingBar = this.add.image(50, world.centerY, 'bar');
-		this.breathingBar.anchor.set(0,0.5);
-		this.breathingBar.angle = 90;
-		this.breathingBar.scale.set(0.2);
-		this.breathingBar.fixedToCamera = true;
-
-		this.barHasBeenFlipped = false;
+		// this.breathingBar = this.add.image(50, world.centerY, 'bar');
+		// this.breathingBar.anchor.set(0,0.5);
+		// this.breathingBar.angle = 90;
+		// this.breathingBar.scale.set(0.2);
+		// this.breathingBar.fixedToCamera = true;
+		//
+		// this.barHasBeenFlipped = false;
 
 		groundLayer.resizeWorld();
 
@@ -346,17 +346,17 @@ module.exports = {
   	var self = this;
 
   	// update breathing bar
-		if(this.pressure < 0){
-			if(this.barHasBeenFlipped){
-				this.breathingBar.angle = 90;
-				this.barHasBeenFlipped = false;
-			}
-			this.breathingBar.width = this.pressure * 100 / 1490;
-		} else {
-			this.breathingBar.angle = 270;
-			this.barHasBeenFlipped = true;
-			this.breathingBar.width = Math.abs(this.pressure * 100 / -1800);
-		}
+		// if(this.pressure < 0){
+			// if(this.barHasBeenFlipped){
+			// 	this.breathingBar.angle = 90;
+			// 	this.barHasBeenFlipped = false;
+			// }
+			// this.breathingBar.width = this.pressure * 100 / 1490;
+		// } else {
+			// this.breathingBar.angle = 270;
+			// this.barHasBeenFlipped = true;
+			// this.breathingBar.width = Math.abs(this.pressure * 100 / -1800);
+		// }
 
 
   	/*
