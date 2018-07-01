@@ -17,6 +17,15 @@ module.exports = {
 		this.rankingRetrieved = false;
 		this.scoreUpdated = false;
 
+		// development: restart level easily
+		this.restartLevel = this.input.keyboard.addKey(Phaser.Keyboard.R);
+		this.restartLevel.onDown.add(function () {
+			if(self.music !== null && self.music.isPlaying){
+				self.music.stop();
+			}
+			self.state.restart();
+		}, this);
+
 		/*
 		*
 		* To correctly use SocketIO, it needs to be initialized differently in local vs production environments.
@@ -41,7 +50,7 @@ module.exports = {
 
 		// delay the music start
 		this.time.events.add(Phaser.Timer.SECOND * 7.8, function(){
-			self.music = self.sound.play('song');
+			self.music = self.sound.play('beethoven');
 		}, this);
 
 		this.score = 0;
@@ -282,7 +291,7 @@ module.exports = {
 		endGameWall.tint = '0xFF0000';
 
 		// define duck and its properties
-		var duck = this.duck = this.add.sprite(80, world.centerY+50, 'duck');
+		var duck = this.duck = this.add.sprite(80, world.centerY+60, 'duck');
 		duck.anchor.setTo(0.5, 0.5);
 		this.physics.arcade.enable(duck);
 		duck.body.collideWorldBounds = true;
@@ -360,8 +369,8 @@ module.exports = {
 		this.physics.arcade.collide(this.duck, [this.scenarioLayer, this.underwaterLayer, this.enemies], this.duckCollision, this.duckProcessCallback, this);
 		this.physics.arcade.collide(this.duck, this.specialBoxesLayer, this.hitSpecialBoxes, null, this);
 		this.physics.arcade.overlap(this.duck, this.endGameWall, this.endGame, null, this);
-		this.physics.arcade.overlap(this.duck, this.specialBoxesWall, this.showInstructionsBoxes, null, this);
-		this.physics.arcade.overlap(this.duck, this.coinsWall, this.showInstructionsCoins, null, this);
+		// this.physics.arcade.overlap(this.duck, this.specialBoxesWall, this.showInstructionsBoxes, null, this);
+		// this.physics.arcade.overlap(this.duck, this.coinsWall, this.showInstructionsCoins, null, this);
 
 		// overlap with water
 		// easier to check if duck is under a specific Y, instead of using overlap
@@ -387,16 +396,16 @@ module.exports = {
 		this.duck.body.velocity.x = this.speed*60;
 
 		// Underwater gravity (boyancy)
-		if( this.duck.body.y > this.world.centerY + 50){
-			this.physics.arcade.gravity.y = -800;
+		if( this.duck.body.y > this.world.centerY + 60){
+			this.physics.arcade.gravity.y = -1200;
 
 			// This 'gap' prevents the infinite bobbing
-		}else if( this.duck.body.y < this.world.centerY + 20 && this.duck.body.y >= this.world.centerY + 25 ){
-			this.physics.arcade.gravity.thisy = 0;
+		}else if( this.duck.body.y < this.world.centerY + 25 && this.duck.body.y >= this.world.centerY + 20 ){
+			this.physics.arcade.gravity.y = 0;
 
 			// Above water gravity
 		}else if( this.duck.body.y < this.world.centerY + 20 ){
-			this.physics.arcade.gravity.y = 1000;
+			this.physics.arcade.gravity.y = 1400;
 
 			// Surface tension
 			// As the player passes through this area, the drag is more the faster they are going
@@ -413,30 +422,24 @@ module.exports = {
 			const drag = (( Math.abs(this.duck.body.velocity.y) * 200 ) / 400) + 50;
 
 			// Don't do this if they are trying to swim down
-			if( !this.cursors.down.isDown )
-				this.duck.body.drag.set(0, drag);
+			// if( !this.cursors.down.isDown )
+			// 	this.duck.body.drag.set(0, drag);
 		}
 
 		// controlling with breath
 		if(this.pressure < this.game.global.currentUserCalibration.min * this.game.global.pressureEffort){
-			if(this.duck.body.y > this.world.centerY - 35 && this.duck.body.y < this.world.height - 70)
-				this.duck.body.velocity.y = 600;
+			this.jump();
 		}
 
 		if(this.pressure > this.game.global.currentUserCalibration.max * this.game.global.pressureEffort){
-			console.log('Inside controlling up with breath');
-			console.log('---- therefore ' + this.pressure + ' > ' + this.game.global.currentUserCalibration.max * 0.2);
-			if(this.duck.body.y <= this.world.centerY + 50 && this.duck.body.y > 100) {
-				console.log('-------- inside the -600 thingy');
-				this.duck.body.velocity.y = -600;
-			}
+			this.dive();
 		}
 
 		// This bit gives the player a little boost if they press and hold the cursor key rather than just tap
 		if( this.cursors.up.isDown || this.pressure > this.game.global.currentUserCalibration.max * this.game.global.pressureEffort){
-			this.duck.body.acceleration.y = -600;
+			this.duck.body.acceleration.y = -1000;
 		}else if( this.cursors.down.isDown || this.pressure < this.game.global.currentUserCalibration.min * this.game.global.pressureEffort){
-			this.duck.body.acceleration.y = 600;
+			this.duck.body.acceleration.y = 800;
 		}else{
 			this.duck.body.acceleration.y = 0;
 		}
@@ -499,13 +502,13 @@ module.exports = {
 
 	jump: function(){
 		if(this.duck.body.y > this.world.centerY - 35 && this.duck.body.y < this.world.height - 70 ) {
-			this.duck.body.velocity.y = 600;
+			this.duck.body.velocity.y = 325;
 		}
 	},
 
 	dive: function(){
-		if( this.duck.body.y <= this.world.centerY + 50 && this.duck.body.y > 100 ) {
-			this.duck.body.velocity.y = -600;
+		if( this.duck.body.y <= this.world.centerY + 60 && this.duck.body.y > 100 ) {
+			this.duck.body.velocity.y = -325;
 		}
 	},
 

@@ -78,6 +78,7 @@ module.exports = {
 
 		// load song
 		this.load.audio('song', ['assets/audio/song.mp3', 'assets/audio/song.ogg']);
+		this.load.audio('beethoven', 'assets/audio/beethoven_cut.mp3');
   },
 
   create: function () {
