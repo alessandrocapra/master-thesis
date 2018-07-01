@@ -3,7 +3,7 @@ module.exports = {
   create: function () {
   	var self = this;
 
-  	console.log('currentUser: ', this.game.global.currentUser);
+  	console.log('currentUser calibrations: ', this.game.global.currentUserCalibration);
 
   	// get the current user calibrations
 
