@@ -18,6 +18,9 @@ const env = process.env.NODE_ENV || 'development';
 app.locals.ENV = env;
 app.locals.ENV_DEVELOPMENT = env == 'development';
 
+// enable ssl redirect
+app.use(sslRedirect());
+
 // view engine setup
 
 app.engine('handlebars', exphbs({
@@ -35,9 +38,6 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
-// enable ssl redirect
-app.use(sslRedirect());
 
 app.use('/', routes);
 app.use('/users', users);
