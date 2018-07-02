@@ -20,7 +20,7 @@ game.global = {
   	min: 0,
 		max: 0
 	},
-	pressureEffort: 0.8,
+	pressureEffort: null,
 
 	// general styling
 	primaryColorHex: "#2cb2ed",
@@ -40,6 +40,12 @@ game.global = {
 	bodyStyle: {
 		fill: "#FFF",
 		font: '20px Open Sans'
+	},
+
+	bodyStyleError: {
+		fill: "#F00",
+		font: '20px Open Sans',
+		fontWeight: 'bold'
 	},
 
 	// button label styling

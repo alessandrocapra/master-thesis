@@ -3,6 +3,8 @@ module.exports = {
   create: function () {
   	var self = this;
 
+  	console.log('pressureEffort var: ' + this.game.global.pressureEffort + typeof this.game.global.pressureEffort);
+
   	console.log('currentUser calibrations: ', this.game.global.currentUserCalibration);
 
   	// get the current user calibrations

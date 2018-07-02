@@ -87,7 +87,7 @@ module.exports = {
 
 		doneBtn.events.onInputDown.add(function () {
 			self.saveDataToDb();
-			self.goToWelcomeState();
+			self.goToPreviousState();
 		}, this);
 
   },
@@ -151,8 +151,8 @@ module.exports = {
 
 	},
 
-	goToWelcomeState: function () {
-		this.state.start('welcome');
+	goToPreviousState: function () {
+		this.state.start('settings');
 	},
 
 	updateSensorStatus: function () {

@@ -47,7 +47,7 @@ module.exports = {
 		});
 
 		// Error message to display if no matching users were found after login
-		var errorMessage = this.add.text(this.world.centerX, this.world.height * 0.9, 'Name and/or password not correct, try again!', {fill: "#ff3647"});
+		var errorMessage = this.add.text(this.world.centerX, this.world.height * 0.9, 'Name and/or password not correct, try again!', this.game.global.bodyStyleError);
 		errorMessage.anchor.set(0.5);
 		errorMessage.visible = false;
 
