@@ -11,7 +11,7 @@ module.exports = {
 		this.music = null;
 
 		// vars for controlling the game through breathing
-		this.pressure = 0;
+		this.pressure = null;
 
 		// var to control whether the ranking has been already retrieved
 		this.rankingRetrieved = false;
@@ -171,6 +171,12 @@ module.exports = {
 		});
 		// fix to camera
 		this.hearts.fixedToCamera = true;
+
+		// graphic to show whether the breathing device is connected or not
+		this.breathingSensorCircle = this.add.graphics(0,0);
+		this.breathingSensorCircle.beginFill(0xFF0000, 1);
+		this.breathingSensorCircle.drawCircle(this.camera.width - 100, 40 , 25);
+		this.breathingSensorCircle.fixedToCamera = true;
 
 		// load overlay screen and hide it
 		this.overlayBackground = this.add.sprite(0, 0, 'overlay');
@@ -712,6 +718,21 @@ module.exports = {
   	console.log('collision with the endWall!');
   	this.stopEverything();
 		this.displayOverlay('gameEnd');
+	},
+
+	updateSensorStatus: function () {
+		// check whether pressure data is received and updates the interface accordingly
+		if(this.pressure !== null){
+			// update the circle color to green
+			this.breathingSensorCircle.clear();
+			this.breathingSensorCircle.beginFill(0x00FF00, 1);
+			this.breathingSensorCircle.drawCircle(this.camera.width - 100, 40 , 25);
+		} else {
+			// update the circle color to red, since it's not connected anymore
+			this.breathingSensorCircle.clear();
+			this.breathingSensorCircle.beginFill(0xFF0000, 1);
+			this.breathingSensorCircle.drawCircle(this.camera.width - 100, 40 , 25);
+		}
 	}
 
 };

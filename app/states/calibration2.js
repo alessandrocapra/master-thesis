@@ -3,7 +3,7 @@ module.exports = {
   create: function () {
 
   	var self = this;
-  	var pressure = this.pressure;
+  	var pressure = this.pressure = null;
   	this.averagePressure = 0;
   	this.pressureCount = 0;
   	this.numMeasurements = 50;
@@ -66,6 +66,14 @@ module.exports = {
 		this.maxCircle = this.add.graphics(0, 0);
 		this.minCircle = this.add.graphics(0, 0);
 
+		// graphic to show whether the breathing device is connected or not
+		this.breathingSensorCircle = this.add.graphics(0,0);
+		this.breathingSensorCircle.beginFill(0xFF0000, 1);
+		this.breathingSensorCircle.drawCircle(this.camera.width - 300, 40 , 25);
+
+		this.breathingSensorText = this.add.text(this.camera.width - 170, 42, 'Device not connected', this.game.global.bodyStyle);
+		this.breathingSensorText.anchor.set(0.5);
+
 		// Done button
 		var doneBtn = this.keyTouchBtn= this.add.sprite(this.camera.width*0.5, this.camera.height * 0.8, 'button', 'blue_button04.png');
 		doneBtn.anchor.set(0.5,0.5);
@@ -86,6 +94,8 @@ module.exports = {
 	
 	update: function () {
   	var self = this;
+
+  	this.updateSensorStatus();
 
   	// check if average measure has already been taken
 		if(this.pressureCount >= this.numMeasurements){
@@ -143,5 +153,24 @@ module.exports = {
 
 	goToWelcomeState: function () {
 		this.state.start('welcome');
+	},
+
+	updateSensorStatus: function () {
+		// check whether pressure data is received and updates the interface accordingly
+		if(this.pressure !== null){
+			// update the circle color to green
+			this.breathingSensorCircle.clear();
+			this.breathingSensorCircle.beginFill(0x00FF00, 1);
+			this.breathingSensorCircle.drawCircle(this.camera.width - 300, 40 , 25);
+			// update the text
+			this.breathingSensorText.setText('Device is connected!');
+		} else {
+			// update the circle color to red, since it's not connected anymore
+			this.breathingSensorCircle.clear();
+			this.breathingSensorCircle.beginFill(0xFF0000, 1);
+			this.breathingSensorCircle.drawCircle(this.camera.width - 300, 40 , 25);
+			// update the text
+			this.breathingSensorText.setText('Device not connected!');
+		}
 	}
 };
