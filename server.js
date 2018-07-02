@@ -1,4 +1,5 @@
 const express = require('express');
+var sslRedirect = require('heroku-ssl-redirect');
 const path = require('path');
 const favicon = require('serve-favicon');
 const logger = require('morgan');
@@ -34,6 +35,9 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// enable ssl redirect
+app.use(sslRedirect());
 
 app.use('/', routes);
 app.use('/users', users);
