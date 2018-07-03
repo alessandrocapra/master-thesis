@@ -319,7 +319,7 @@ module.exports = {
 		this.camera.deadzone = new Phaser.Rectangle(0, 0, 100, 400);
 
 		// import breathing level bar
-		this.breathingBar = this.add.image(50, world.centerY, 'bar');
+		this.breathingBar = this.add.sprite(50, world.centerY, 'bar');
 		this.breathingBar.anchor.set(0,0.5);
 		this.breathingBar.angle = 90;
 		this.breathingBar.scale.set(0.2);
@@ -368,6 +368,7 @@ module.exports = {
 			this.breathingBar.width = this.pressure * 100 / 1490;
 			this.breathingBar.tint(0xFF0000);
 		} else {
+			this.breathingBar.tint(0xFFFFFF);
 			this.breathingBar.angle = 270;
 			this.barHasBeenFlipped = true;
 			this.breathingBar.width = Math.abs(this.pressure * 100 / -1800);
