@@ -24,7 +24,7 @@ game.global = {
 
 	// general styling
 	primaryColorHex: "#2cb2ed",
-	primaryColorTint: "0x2cb2ed",
+	primaryColorTint: 0x2cb2ed,
 
   // title styling and placement
   titlePlacement: {
