@@ -730,8 +730,8 @@ module.exports = {
 	},
 
 	updateBreathingBar: function () {
-		// remove previous tint
-		this.breathingBar.tint = this.game.global.primaryColorTint;
+		// default bar is gray
+		this.breathingBar.tint = 0xF1F1F1;
 
 		// update breathing bar
 		if(this.pressure > 0){
