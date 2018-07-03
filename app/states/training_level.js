@@ -284,7 +284,6 @@ module.exports = {
 		coinsWall.body.collideWorldBounds = true;
 		coinsWall.width = 10;
 		coinsWall.height = this.world.height;
-		coinsWall.tint = '0xFF0000';
 
 		// create an invisible wall for special boxes explanation
 		var specialBoxesWall = this.specialBoxesWall = this.add.sprite(this.world.width, 0);
@@ -292,7 +291,6 @@ module.exports = {
 		specialBoxesWall.body.collideWorldBounds = true;
 		specialBoxesWall.width = 10;
 		specialBoxesWall.height = this.world.height;
-		specialBoxesWall.tint = '0xFF0000';
 
 		// create an invisible wall at the end of the level to know when the player reaches the end
 		var endGameWall = this.endGameWall = this.add.sprite(this.world.width, 0);
@@ -300,7 +298,6 @@ module.exports = {
 		endGameWall.body.collideWorldBounds = true;
 		endGameWall.width = 10;
 		endGameWall.height = this.world.height;
-		endGameWall.tint = '0xFF0000';
 
 		// define duck and its properties
 		var duck = this.duck = this.add.sprite(80, world.centerY+60, 'duck');
@@ -753,7 +750,7 @@ module.exports = {
 			this.barHasBeenFlipped = true;
 			this.breathingBar.width = Math.abs(this.pressure * 100 / -1800);
 			// if above the threshold to perform an action, change color
-			if(this.pressure > this.game.global.currentUserCalibration.max * this.game.global.pressureEffort){
+			if(this.pressure < this.game.global.currentUserCalibration.min * this.game.global.pressureEffort){
 				this.breathingBar.tint = 0xFF0000;
 			}
 		}
