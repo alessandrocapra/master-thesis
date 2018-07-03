@@ -743,7 +743,7 @@ module.exports = {
 
 			// if above the threshold to perform an action, change color
 			if(this.pressure > this.game.global.currentUserCalibration.max * this.game.global.pressureEffort){
-				this.breathingBar.tint = 0xFF0000;
+				this.breathingBar.tint = 0x00FF00;
 			}
 		} else {
 			this.breathingBar.angle = 90;
