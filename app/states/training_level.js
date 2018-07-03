@@ -731,7 +731,7 @@ module.exports = {
 
 	updateBreathingBar: function () {
 		// default bar is gray
-		this.breathingBar.tint = 0xF1F1F1;
+		this.breathingBar.tint = 0xCCCCCC;
 
 		// update breathing bar
 		if(this.pressure > 0){
