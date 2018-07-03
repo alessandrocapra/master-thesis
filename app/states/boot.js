@@ -79,7 +79,7 @@ module.exports = {
 
 		// load song
 		this.load.audio('song', ['assets/audio/song.mp3', 'assets/audio/song.ogg']);
-		this.load.audio('beethoven', 'assets/audio/beethoven_crossfaded.mp3');
+		this.load.audio('beethoven', 'assets/audio/beethoven_crossfade_v4.mp3');
   },
 
   create: function () {
