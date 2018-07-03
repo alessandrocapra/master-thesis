@@ -366,9 +366,9 @@ module.exports = {
 				this.barHasBeenFlipped = false;
 			}
 			this.breathingBar.width = this.pressure * 100 / 1490;
-			this.breathingBar.tint('0xFF0000');
+			this.breathingBar.tint = 0xFF0000;
 		} else {
-			this.breathingBar.tint('0xFFFFFF');
+			this.breathingBar.tint = 0xFFFFFF;
 			this.breathingBar.angle = 270;
 			this.barHasBeenFlipped = true;
 			this.breathingBar.width = Math.abs(this.pressure * 100 / -1800);
