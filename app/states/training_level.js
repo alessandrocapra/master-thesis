@@ -358,21 +358,7 @@ module.exports = {
   	var self = this;
 
 		this.updateSensorStatus();
-
-  	// update breathing bar
-		if(this.pressure > 0){
-			if(this.barHasBeenFlipped){
-				this.breathingBar.angle = 270;
-				this.barHasBeenFlipped = false;
-			}
-			this.breathingBar.width = this.pressure * 100 / 1490;
-			this.breathingBar.tint = 0xFF0000;
-		} else {
-			this.breathingBar.tint = 0x2cb2ed;
-			this.breathingBar.angle = 90;
-			this.barHasBeenFlipped = true;
-			this.breathingBar.width = Math.abs(this.pressure * 100 / -1800);
-		}
+		this.updateBreathingBar();
 
 
   	/*
@@ -743,6 +729,33 @@ module.exports = {
 			this.breathingSensorCircle.clear();
 			this.breathingSensorCircle.beginFill(0xFF0000, 1);
 			this.breathingSensorCircle.drawCircle(this.camera.width - 100, 40 , 25);
+		}
+	},
+
+	updateBreathingBar: function () {
+		// remove previous tint
+		this.breathingBar.tint = 0xFFFFFF;
+
+		// update breathing bar
+		if(this.pressure > 0){
+			if(this.barHasBeenFlipped){
+				this.breathingBar.angle = 270;
+				this.barHasBeenFlipped = false;
+			}
+			this.breathingBar.width = this.pressure * 100 / 1490;
+
+			// if above the threshold to perform an action, change color
+			if(this.pressure > this.game.global.currentUserCalibration.max * this.game.global.pressureEffort){
+				this.breathingBar.tint = 0xFF0000;
+			}
+		} else {
+			this.breathingBar.angle = 90;
+			this.barHasBeenFlipped = true;
+			this.breathingBar.width = Math.abs(this.pressure * 100 / -1800);
+			// if above the threshold to perform an action, change color
+			if(this.pressure > this.game.global.currentUserCalibration.max * this.game.global.pressureEffort){
+				this.breathingBar.tint = 0xFF0000;
+			}
 		}
 	}
 
