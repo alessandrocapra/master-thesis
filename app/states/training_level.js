@@ -360,7 +360,7 @@ module.exports = {
 		this.updateSensorStatus();
 
   	// update breathing bar
-		if(this.pressure > 0){
+		if(this.pressure < 0){
 			if(this.barHasBeenFlipped){
 				this.breathingBar.angle = 90;
 				this.barHasBeenFlipped = false;
