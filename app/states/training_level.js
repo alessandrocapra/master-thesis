@@ -351,6 +351,8 @@ module.exports = {
 
   	var self = this;
 
+		this.updateSensorStatus();
+
   	// update breathing bar
 		// if(this.pressure < 0){
 			// if(this.barHasBeenFlipped){
@@ -722,6 +724,7 @@ module.exports = {
 
 	updateSensorStatus: function () {
 		// check whether pressure data is received and updates the interface accordingly
+		console.log('inside updateSensorStatus, this.pressure is ' + this.pressure);
 		if(this.pressure !== null){
 			// update the circle color to green
 			this.breathingSensorCircle.clear();
