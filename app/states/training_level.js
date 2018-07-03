@@ -360,16 +360,16 @@ module.exports = {
 		this.updateSensorStatus();
 
   	// update breathing bar
-		if(this.pressure < 0){
+		if(this.pressure > 0){
 			if(this.barHasBeenFlipped){
-				this.breathingBar.angle = 90;
+				this.breathingBar.angle = 270;
 				this.barHasBeenFlipped = false;
 			}
 			this.breathingBar.width = this.pressure * 100 / 1490;
 			this.breathingBar.tint = 0xFF0000;
 		} else {
-			this.breathingBar.tint = 0xFFFFFF;
-			this.breathingBar.angle = 270;
+			this.breathingBar.tint = 0x2cb2ed;
+			this.breathingBar.angle = 90;
 			this.barHasBeenFlipped = true;
 			this.breathingBar.width = Math.abs(this.pressure * 100 / -1800);
 		}
