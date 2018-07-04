@@ -94,6 +94,8 @@ module.exports = {
 		this.enemies.callAll('animations.play', 'animations', 'fly');
 		this.enemies.callAll('animations.add', 'animations', 'dead', [1], 10, true);
 		this.enemies.setAll('body.allowGravity', false);
+		this.enemies.setAll('checkWorldBounds', true);
+		this.enemies.setAll('outOfBoundsKill', true);
 
 		// make enemies pulse to rhythm
 		this.enemies.forEach(function (bee) {
@@ -110,8 +112,11 @@ module.exports = {
 		this.coins.callAll('animations.play', 'animations', 'spin');
 		this.coins.setAll('body.allowGravity', false);
 
-		this.arrows = this.add.group();
 		// import arrows
+		this.arrows = this.add.group();
+		this.arrows.setAll('outOfBoundsKill', true);
+		this.arrows.setAll('checkWorldBounds', true);
+
 		this.map.createFromObjects('Arrows', 166, 'arrowUp', 0, true, false, this.arrows);
 		this.map.createFromObjects('Arrows', 167, 'arrowDown', 0, true, false, this.arrows);
 
@@ -272,13 +277,7 @@ module.exports = {
 			if(!self.stopTheCamera){
 				self.stopTheCamera = true;
 			} else {
-				// self.music.resume();
-				// self.paused = false;
-				// self.physics.arcade.isPaused = (!self.physics.arcade.isPaused);
-				// self.overlayBackground.visible = false;
-				// self.overlayText.visible = false;
 				self.displayOverlay('resumeGame');
-
 				self.stopTheCamera = false;
 			}
 		});
@@ -326,13 +325,21 @@ module.exports = {
 		this.breathingBar.angle = 90;
 		this.breathingBar.scale.set(0.2);
 		this.breathingBar.fixedToCamera = true;
-
 		this.barHasBeenFlipped = false;
+
+		// "almost there" message
+		var almostThereText = this.add.text(80, world.centerY * 0.4, 'Almost there! :)');
+		almostThereText.anchor.set(0.5);
+
+		var duck2 = this.duck2 = this.add.sprite(80, world.centerY * 0.5, 'duck');
+		duck2.anchor.set(0.5);
+		duck2.scale.set(3);
+		this.duckBounceTween(duck2);
 
 		groundLayer.resizeWorld();
 
 		// update position of coins invisible wall after world resizing
-		coinsWall.x = this.world.width * 0.08;
+		coinsWall.x = this.world.width * 0.05;
 
 		// update position of special boxes invisible wall after world resizing
 		specialBoxesWall.x = this.world.width * 0.14;
@@ -340,6 +347,9 @@ module.exports = {
 		// update position of end game invisible wall after world resizing
 		endGameWall.x = this.world.width * 0.97;
 
+		// almost there message position update
+		almostThereText.x = this.world.width * 0.69;
+		duck2.x = this.world.width * 0.69;
 
 		var cursors = this.cursors = this.input.keyboard.createCursorKeys();
 
@@ -362,7 +372,6 @@ module.exports = {
 		this.updateSensorStatus();
 		this.updateBreathingBar();
 
-
   	/*
   	*
   	* MOVEMENT OF ELEMENTS
@@ -370,17 +379,8 @@ module.exports = {
   	* */
 
 		if(this.gameOver){
-			this.stopEverything();
-
-			// display message for game over
 			this.displayOverlay('gameOver');
-
 		} else if(this.stopTheCamera) {
-			// this.paused = true;
-			// this.physics.arcade.isPaused = true;
-			// if(this.music !== null && this.music.isPlaying){
-			// 	this.music.pause();
-			// }
 			this.displayOverlay('pause');
 		} else {
 			// make the background scroll
@@ -405,7 +405,6 @@ module.exports = {
 
 		// overlap with coins
 		this.physics.arcade.overlap(this.duck, this.coins, this.collectCoin, null, this);
-
 
 		/*
 		*
@@ -651,6 +650,10 @@ module.exports = {
 				this.overlayText.setText('Game paused, click the pause button to resume.');
 				break;
 			case 'gameover':
+				this.overlayText.setText('Great job! Play again?');
+				this.playGameBtn.visible = true;
+				this.practiceAgainBtn.visible = true;
+				break;
 			case 'gameEnd':
 				this.overlayText.setText('Well done! Play again?');
 				this.playGameBtn.visible = true;
@@ -678,13 +681,6 @@ module.exports = {
 				break;
 			default:
 				console.log('You are not supposed to be here...');
-		}
-  	// gamestate can have values "pause", "gameOver", "gameEnd"
-		if(gameState === 'pause'){
-
-		} else if(gameState === 'gameOver' || gameState === 'gameEnd'){
-
-		} else {
 		}
 	},
 
@@ -759,6 +755,18 @@ module.exports = {
 				this.breathingBar.tint = 0x00FF00;
 			}
 		}
+	},
+
+	duckBounceTween: function () {
+		var self = this;
+		this.duck2.y = this.camera.height * 0.5 + + 60;
+
+		var bounceTween = this.add.tween(this.duck2);
+		bounceTween.to({ y: this.camera.height * 0.25 - 40}, 1500 + Math.random() * 1500, Phaser.Easing.Bounce.In);
+		bounceTween.onComplete.add(function(){
+			self.duckBounceTween();
+		}, this);
+		bounceTween.start();
 	}
 
 };
