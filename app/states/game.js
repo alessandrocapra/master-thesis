@@ -301,33 +301,10 @@ module.exports = {
 
   update: function () {
 
-		// console.log('\n----------------------------');
-		// console.log('pressure: ' + this.pressure);
-		// console.log('maxInhale: ' + this.game.global.currentUserCalibration.min);
-		// console.log('maxExhale: ' + this.game.global.currentUserCalibration.max);
-		// console.log('----------------------------\n');
-
   	var self = this;
 
-  	/*
-  	*
-  	* MOVEMENT OF ELEMENTS
-  	*
-  	* */
-
 		if(this.gameOver){
-			this.stopEverything();
-
-			// display message for game over
 			this.displayOverlay('gameOver');
-
-		} else if(this.stopTheCamera) {
-			this.paused = true;
-			this.physics.arcade.isPaused = true;
-			this.music.pause();
-
-			// this.overlayBackground.visible = true;
-			this.displayOverlay('pause');
 		} else {
 			// make the background scroll
 			this.background.tilePosition.x -= this.speed;
@@ -339,7 +316,7 @@ module.exports = {
 		*
 		* */
 
-		this.physics.arcade.collide(this.duck, [this.scenarioLayer, this.foregroundLayer, this.underwaterLayer, this.enemies], this.duckCollision, this.duckProcessCallback, this);
+		this.physics.arcade.collide(this.duck, [this.scenarioLayer, this.underwaterLayer, this.enemies], this.duckCollision, this.duckProcessCallback, this);
 		this.physics.arcade.collide(this.duck, this.specialBoxesLayer, this.hitSpecialBoxes, null, this);
 		this.physics.arcade.overlap(this.duck, this.endGameWall, this.endGame, null, this);
 
@@ -364,19 +341,19 @@ module.exports = {
 			this.dive();
 		}
 
-		this.duck.body.velocity.x = this.speed*60;
+		this.duck.body.velocity.x = this.speed * 60;
 
 		// Underwater gravity (boyancy)
-		if( this.duck.body.y > this.world.centerY + 50){
-			this.physics.arcade.gravity.y = -800;
+		if( this.duck.body.y > this.world.centerY + 60){
+			this.physics.arcade.gravity.y = -1200;
 
 			// This 'gap' prevents the infinite bobbing
-		}else if( this.duck.body.y < this.world.centerY + 20 && this.duck.body.y >= this.world.centerY + 25 ){
+		}else if( this.duck.body.y < this.world.centerY + 25 && this.duck.body.y >= this.world.centerY + 20 ){
 			this.physics.arcade.gravity.thisy = 0;
 
 			// Above water gravity
 		}else if( this.duck.body.y < this.world.centerY + 20 ){
-			this.physics.arcade.gravity.y = 1000;
+			this.physics.arcade.gravity.y = 1400;
 
 			// Surface tension
 			// As the player passes through this area, the drag is more the faster they are going
@@ -393,41 +370,35 @@ module.exports = {
 			const drag = (( Math.abs(this.duck.body.velocity.y) * 200 ) / 400) + 50;
 
 			// Don't do this if they are trying to swim down
-			if( !this.cursors.down.isDown )
-				this.duck.body.drag.set(0, drag);
+			// if( !this.cursors.down.isDown )
+			// 	this.duck.body.drag.set(0, drag);
 		}
 
 		// controlling with breath
 		if(this.pressure < this.game.global.currentUserCalibration.min * this.game.global.pressureEffort){
-			if(this.duck.body.y > this.world.centerY - 35 && this.duck.body.y < this.world.height - 70)
-				this.duck.body.velocity.y = 600;
+			this.jump();
 		}
 
 		if(this.pressure > this.game.global.currentUserCalibration.max * this.game.global.pressureEffort){
-			console.log('Inside controlling up with breath');
-			console.log('---- therefore ' + this.pressure + ' > ' + this.game.global.currentUserCalibration.max * 0.2);
-			if(this.duck.body.y <= this.world.centerY + 50 && this.duck.body.y > 100) {
-				console.log('-------- inside the -600 thingy');
-				this.duck.body.velocity.y = -600;
-			}
+			this.dive();
 		}
 
 		// This bit gives the player a little boost if they press and hold the cursor key rather than just tap
 		if( this.cursors.up.isDown || this.pressure > this.game.global.currentUserCalibration.max * this.game.global.pressureEffort){
-			this.duck.body.acceleration.y = -600;
+			this.duck.body.acceleration.y = -1000;
 		}else if( this.cursors.down.isDown || this.pressure < this.game.global.currentUserCalibration.min * this.game.global.pressureEffort){
-			this.duck.body.acceleration.y = 600;
+			this.duck.body.acceleration.y = 800;
 		}else{
 			this.duck.body.acceleration.y = 0;
 		}
   },
 
-  restart: function () {
-    this.state.restart();
-  },
+  // restart: function () {
+  //   this.state.restart();
+  // },
 
   quit: function () {
-    this.state.start('menu');
+    this.state.start('welcome');
   },
 
 	duckProcessCallback: function(player, tile){
@@ -444,7 +415,6 @@ module.exports = {
   		// spin and fall
 			object.animations.play('dead', 10, true);
 			object.body.allowGravity = true;
-
 		}
 
 		// do not count collisions on top/bottom of platforms as damaging for health
@@ -479,18 +449,17 @@ module.exports = {
 
 	jump: function(){
 		if(this.duck.body.y > this.world.centerY - 35 && this.duck.body.y < this.world.height - 70 ) {
-			this.duck.body.velocity.y = 600;
+			this.duck.body.velocity.y = 325;
 		}
 	},
 
 	dive: function(){
-		if( this.duck.body.y <= this.world.centerY + 50 && this.duck.body.y > 100 ) {
-			this.duck.body.velocity.y = -600;
+		if( this.duck.body.y <= this.world.centerY + 60 && this.duck.body.y > 100 ) {
+			this.duck.body.velocity.y = -325;
 		}
 	},
 
 	resetPlayer: function (){
-		// this.duck.alpha = 1;
 		this.duck.tint = 0xFFFFFF;
 		this.enableCollision = true;
 	},
@@ -498,13 +467,13 @@ module.exports = {
 	collectCoin: function (player, coin) {
 		this.score += this.coinValue;
 		this.scoreText.setText('score: ' + this.score);
-  	coin.kill();
+  	coin.destroy();
 	},
 
 	hitSpecialBoxes: function(player, box){
 		/*
 		*
-		* Randomly, the boxes could mean:
+		* 50% chance that the boxes could mean either:
 		* - player gets additional heart
 		* - for the next 5 seconds, all coins give double amount of points
 		*
@@ -512,8 +481,8 @@ module.exports = {
 
 		var self = this;
 
-		// remove the element from the screen
-		this.map.removeTile(box.x, box.y, this.specialBoxesLayer);
+		// remove the element from the screen and destroy it
+		this.map.removeTile(box.x, box.y, this.specialBoxesLayer).destroy();
 
 		var choice = this.rnd.between(0,100);
 		if(choice > 50){
@@ -551,7 +520,7 @@ module.exports = {
 				self.add.tween(coin.scale).to( { x: 1.5, y: 1.5}, 500, Phaser.Easing.Quadratic.InOut, true);
 			});
 
-			// destroy it after 3 seconds
+			// destroy it after 5 seconds
 			this.time.events.add(Phaser.Timer.SECOND * 5, function(){
 				this.coins.forEach(function(coin){
 					self.add.tween(coin.scale).to( { x: 1, y: 1 }, 500, Phaser.Easing.Quadratic.InOut, true);
@@ -575,19 +544,8 @@ module.exports = {
 
 	switchAlphaInstructions: function(arrayElements){
 		// if alpha is 0, switch it on. If it's one, do the tween in a for loop for the array
-
 		for(var i = 0; i < arrayElements.length; i++){
-
 			this.add.tween(arrayElements[i]).to( { alpha: 0 }, 500, "Linear", true);
-			// if(arrayElements[i].alpha === 0){
-			// 	arrayElements[i].alpha = 1;
-			// } else {
-			// 	arrayElements[i].alpha = 0;
-			// 	this.add.tween(arrayElements[i]).to( { alpha: 0 }, 500, "Linear", true);
-			// 	tween.onComplete.add(function(){
-			// 		arrayElements[i].kill();
-			// 	}, this)
-			// }
 		}
 	},
 
@@ -620,7 +578,6 @@ module.exports = {
 				this.physics.arcade.isPaused = (!this.physics.arcade.isPaused);
 				this.overlayBackground.visible = false;
 				this.overlayText.visible = false;
-				// this.resumeGameBtn.visible = false;
 				break;
 			default:
 				console.log('You are not supposed to be here...');
@@ -719,12 +676,11 @@ module.exports = {
 
 	endGame: function () {
   	console.log('collision with the endWall!');
-  	this.stopEverything();
 		this.displayOverlay('gameEnd');
 	},
 
 	updateSensorStatus: function () {
-		// check whether pressure data is received and updates the interface accordingly
+		// checks whether pressure data is received and updates the interface accordingly
 		if(this.pressure !== null){
 			// update the circle color to green
 			this.breathingSensorCircle.clear();
@@ -735,6 +691,33 @@ module.exports = {
 			this.breathingSensorCircle.clear();
 			this.breathingSensorCircle.beginFill(0xFF0000, 1);
 			this.breathingSensorCircle.drawCircle(this.camera.width - 100, 40 , 25);
+		}
+	},
+
+	updateBreathingBar: function () {
+		// default bar is gray
+		this.breathingBar.tint = 0xCCCCCC;
+
+		// update breathing bar
+		if(this.pressure > 0){
+			if(this.barHasBeenFlipped){
+				this.breathingBar.angle = 270;
+				this.barHasBeenFlipped = false;
+			}
+			this.breathingBar.width = this.pressure * 100 / 1490;
+
+			// if above the threshold to perform an action, change color
+			if(this.pressure > this.game.global.currentUserCalibration.max * this.game.global.pressureEffort){
+				this.breathingBar.tint = 0x00FF00;
+			}
+		} else {
+			this.breathingBar.angle = 90;
+			this.barHasBeenFlipped = true;
+			this.breathingBar.width = Math.abs(this.pressure * 100 / -1800);
+			// if above the threshold to perform an action, change color
+			if(this.pressure < this.game.global.currentUserCalibration.min * this.game.global.pressureEffort){
+				this.breathingBar.tint = 0x00FF00;
+			}
 		}
 	},
 
