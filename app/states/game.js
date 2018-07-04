@@ -303,6 +303,9 @@ module.exports = {
 
   	var self = this;
 
+		this.updateSensorStatus();
+		this.updateBreathingBar();
+
 		if(this.gameOver){
 			this.displayOverlay('gameOver');
 		} else {
