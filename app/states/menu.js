@@ -7,7 +7,7 @@ module.exports = {
 		// development: start level easily
 		this.restartLevel = this.input.keyboard.addKey(Phaser.Keyboard.S);
 		this.restartLevel.onDown.add(function () {
-			self.state.start('training_level');
+			self.state.start('game');
 		}, this);
 
   	// add background
@@ -57,11 +57,6 @@ module.exports = {
 
 		signupBtn.addChild(signupText);
 		signupBtn.events.onInputDown.add(this.signupPage.bind(this), this);
-
-    // this.input.onTap.add(this.startGame.bind(this));
-
-    // add login and sign in buttons
-		// this.state.start('login');
   },
 
   startGame: function () {

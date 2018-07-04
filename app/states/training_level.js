@@ -17,14 +17,14 @@ module.exports = {
 		this.rankingRetrieved = false;
 		this.scoreUpdated = false;
 
-		// development: restart level easily
-		this.restartLevel = this.input.keyboard.addKey(Phaser.Keyboard.R);
-		this.restartLevel.onDown.add(function () {
-			if(self.music !== null && self.music.isPlaying){
-				self.music.stop();
-			}
-			self.state.restart();
-		}, this);
+		// // development: restart level easily
+		// this.restartLevel = this.input.keyboard.addKey(Phaser.Keyboard.R);
+		// this.restartLevel.onDown.add(function () {
+		// 	if(self.music !== null && self.music.isPlaying){
+		// 		self.music.stop();
+		// 	}
+		// 	self.state.restart();
+		// }, this);
 
 		/*
 		*

@@ -7,9 +7,11 @@ module.exports = {
   	var self = this;
     // set the velocity to which the level moves
 		var speed = this.speed = 3;
+		// music
+		this.music = null;
 
 		// vars for controlling the game through breathing
-		this.pressure = 0;
+		this.pressure = null;
 
 		// var to control whether the ranking has been already retrieved
 		this.rankingRetrieved = false;
@@ -39,7 +41,7 @@ module.exports = {
 
 		// delay the music start
 		this.time.events.add(Phaser.Timer.SECOND * 7.8, function(){
-			self.music = self.sound.play('song');
+			self.music = self.sound.play('beethoven');
 		}, this);
 
 		this.score = 0;
@@ -56,23 +58,20 @@ module.exports = {
 		background.fixedToCamera = true;
 
     // tileset creation
-		this.map = this.game.add.tilemap('tilemap');
+		this.map = this.game.add.tilemap('tilemap_training');
 		this.map.addTilesetImage('tiles_spritesheet', 'tiles');
 		this.map.addTilesetImage('Enemy', 'bee_tiles');
 
 		// Import the tileset layers
 		var scenarioLayer = this.scenarioLayer = this.map.createLayer('Scenario');
-		var foregroundLayer = this.foregroundLayer = this.map.createLayer('Foreground');
 		var groundLayer = this.groundLayer = this.map.createLayer('Ground');
 		var underwaterLayer = this.underwaterLayer = this.map.createLayer('Underwater');
 		underwaterLayer.alpha = 0.7;
 		var specialBoxesLayer = this.specialBoxesLayer = this.map.createLayer('SpecialBoxes');
 
-		this.map.setCollisionBetween(1, 200, true, 'Scenario');
-		this.map.setCollisionBetween(1, 200, true, 'Foreground');
-		this.map.setCollisionBetween(1, 200, true, 'Underwater');
-		this.map.setCollisionBetween(1, 200, true, 'SpecialBoxes');
-		// this.map.setCollisionBetween(1, 200, true, 'Ground');
+		this.map.setCollisionBetween(1, 133, true, 'Scenario');
+		this.map.setCollisionBetween(1, 153, true, 'Underwater');
+		this.map.setCollisionBetween(1, 25, true, 'SpecialBoxes');
 
 		// Import enemies as objects
 		this.enemies = this.add.group();
