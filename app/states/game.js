@@ -566,7 +566,7 @@ module.exports = {
 				this.overlayText.setText('Game paused, click the pause button to resume.');
 				break;
 			case 'gameOver':
-				this.saveScoreOnDb();
+				this.saveScoreOnDb().then(function(){this.getRankingFromDb();});
 				this.overlayText.setText('Great job! Play again?');
 				this.playAgainBtn.visible = true;
 				this.backToMenuBtn.visible = true;
@@ -609,7 +609,7 @@ module.exports = {
 
 		if(!this.rankingRetrieved){
 			// make sure this request is done only once
-			self.rankingRetrieved = true;
+			this.rankingRetrieved = true;
 
 			// connect to API to retrieve all users and order them to display the ranking
 			var xhr  = new XMLHttpRequest();
@@ -656,33 +656,46 @@ module.exports = {
 	saveScoreOnDb: function () {
 		var self = this;
 
-		if(!this.scoreUpdated && this.score > this.game.global.currentUser.high_score){
+		if(!this.scoreUpdated && (this.score > this.game.global.currentUser.high_score)){
 			// do this just once
 			this.scoreUpdated = true;
 
-			// save current score on Db
-			var xhttp = new XMLHttpRequest();
-			xhttp.open("PUT", "https://duchennegame.herokuapp.com/api/users/" + this.game.global.currentUser.id, true);
-			xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-			var input = JSON.stringify({
-				'high_score': self.score
-			});
-			xhttp.send(input);
+			return new Promise(function (resolve, reject) {
+				// save current score on Db
+				var xhttp = new XMLHttpRequest();
+				xhttp.open("PUT", "https://duchennegame.herokuapp.com/api/users/" + this.game.global.currentUser.id, true);
+				xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+				var input = JSON.stringify({
+					'high_score': self.score
+				});
+				xhttp.send(input);
 
-			xhttp.onreadystatechange = function() {//Call a function when the state changes.
-				if(xhttp.readyState == XMLHttpRequest.DONE && xhttp.status == 200) {
-					// Once the user has been inserted, call the function that gets all users
-					console.log('Score saved, now calling the ranking function');
-					self.getRankingFromDb();
-				}
-			};
+				xhttp.onreadystatechange = function () {//Call a function when the state changes.
+					if (xhttp.readyState == XMLHttpRequest.DONE && xhttp.status == 200) {
+						// Once the user has been inserted, call the function that gets all users
+						resolve(xhttp.response);
+						// self.getRankingFromDb();
+					} else {
+						reject({
+							status: this.status,
+							statusText: xhttp.statusText
+						});
+					}
+				};
+
+				xhttp.onerror = function () {
+					reject({
+						status: this.status,
+						statusText: xhttp.statusText
+					});
+				};
+			});
 		} else {
 			self.getRankingFromDb();
 		}
 	},
 
 	endGame: function () {
-  	console.log('collision with the endWall!');
 		this.displayOverlay('gameEnd');
 	},
 
