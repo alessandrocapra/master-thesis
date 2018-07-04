@@ -572,7 +572,7 @@ module.exports = {
 				this.backToMenuBtn.visible = true;
 				break;
 			case 'gameEnd':
-				this.saveScoreOnDb();
+				this.saveScoreOnDb().then(function(){this.getRankingFromDb();});
 				this.overlayText.setText('Well done! Play again?');
 				this.playAgainBtn.visible = true;
 				this.backToMenuBtn.visible = true;
