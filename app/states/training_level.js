@@ -651,6 +651,9 @@ module.exports = {
 				break;
 			case 'gameOver':
 				this.setText('Great job! Play again?');
+				this.playGameBtn.visible = true;
+				this.practiceAgainBtn.visible = true;
+				break;
 			case 'gameEnd':
 				this.overlayText.setText('Well done! Play again?');
 				this.playGameBtn.visible = true;
