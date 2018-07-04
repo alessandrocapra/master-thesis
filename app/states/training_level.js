@@ -650,7 +650,7 @@ module.exports = {
 				this.overlayText.setText('Game paused, click the pause button to resume.');
 				break;
 			case 'gameOver':
-				this.setText('Great job! Play again?');
+				this.overlayText.setText('Great job! Play again?');
 				this.playGameBtn.visible = true;
 				this.practiceAgainBtn.visible = true;
 				break;
