@@ -111,7 +111,7 @@ module.exports = {
 		this.scoreText.fixedToCamera = true;
 
 		// info text for special boxes
-		this.infoText = this.add.text(this.world.centerX, this.world.height*0.3, 'Special boxes');
+		this.infoText = this.add.text(this.camera.width * 0.5, this.camera.height*0.3, 'Special boxes');
 		this.infoText.anchor.setTo(0.5, 0.5);
 		this.infoText.visible = false;
 		// fix to camera
@@ -534,6 +534,10 @@ module.exports = {
 	},
 
 	showAndRemoveText: function (text, message) {
+
+		//update coordinates for the text to current camera position
+		text.x = this.camera.width * 0.5;
+		text.y = this.camera.height * 0.3;
 
   	//display info text
 		text.setText(message);
