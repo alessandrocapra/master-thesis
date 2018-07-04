@@ -663,7 +663,7 @@ module.exports = {
 			return new Promise(function (resolve, reject) {
 				// save current score on Db
 				var xhttp = new XMLHttpRequest();
-				xhttp.open("PUT", "https://duchennegame.herokuapp.com/api/users/" + this.game.global.currentUser.id, true);
+				xhttp.open("PUT", "https://duchennegame.herokuapp.com/api/users/" + self.game.global.currentUser.id, true);
 				xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 				var input = JSON.stringify({
 					'high_score': self.score
