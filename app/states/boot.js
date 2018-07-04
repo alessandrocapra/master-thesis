@@ -65,15 +65,18 @@ module.exports = {
 		// this.load.image('arrowUp', 'assets/sprites/arrow.png');
 		this.load.image('mouth', 'assets/sprites/mouth.png');
 		this.load.image('nose', 'assets/sprites/nose.png');
+		this.load.image('arrowUp', 'assets/sprites/arrowUp.png');
+		this.load.image('arrowDown', 'assets/sprites/arrowDown.png');
 
 		// loading bee animation
 		this.load.spritesheet('bee', 'assets/sprites/bee.png', 56, 48);
 
     // loading tileset
 		// this.load.tilemap('tilemap', 'assets/tilemaps/level2.json', null, Phaser.Tilemap.TILED_JSON);
-		this.load.tilemap('tilemap', 'assets/tilemaps/fast_exhalations_dolphin.json', null, Phaser.Tilemap.TILED_JSON);
+		// this.load.tilemap('tilemap', 'assets/tilemaps/fast_exhalations_dolphin.json', null, Phaser.Tilemap.TILED_JSON);
 		this.load.tilemap('tilemap_training', 'assets/tilemaps/training_level.json', null, Phaser.Tilemap.TILED_JSON);
 		this.load.image('tiles', 'assets/tilemaps/tiles_spritesheet.png');
+		this.load.image('arrows_tiles', 'assets/sprites/arrowSpreadsheet.png');
 		this.load.image('bee_tiles', 'assets/sprites/bee.png');
 
 

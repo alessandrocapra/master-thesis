@@ -70,6 +70,7 @@ module.exports = {
 		this.map = this.game.add.tilemap('tilemap_training');
 		this.map.addTilesetImage('tiles_spritesheet', 'tiles');
 		this.map.addTilesetImage('Enemy', 'bee_tiles');
+		this.map.addTilesetImage('Arrows', 'arrows_tiles');
 
 		// Import the tileset layers
 		var scenarioLayer = this.scenarioLayer = this.map.createLayer('Scenario');
@@ -81,7 +82,6 @@ module.exports = {
 		this.map.setCollisionBetween(1, 200, true, 'Scenario');
 		this.map.setCollisionBetween(1, 200, true, 'Underwater');
 		this.map.setCollisionBetween(1, 200, true, 'SpecialBoxes');
-		// this.map.setCollisionBetween(1, 200, true, 'Ground');
 
 		// Import enemies as objects
 		this.enemies = this.add.group();
@@ -109,6 +109,11 @@ module.exports = {
 		this.coins.callAll('animations.add', 'animations', 'spin', [0, 1, 2, 3, 4, 5], 10, true);
 		this.coins.callAll('animations.play', 'animations', 'spin');
 		this.coins.setAll('body.allowGravity', false);
+
+		this.arrows = this.add.group();
+		// import arrows
+		this.map.createFromObjects('Arrows', 166, 'arrowUp', 0, true, false, this.arrows);
+		this.map.createFromObjects('Arrows', 167, 'arrowDown', 0, true, false, this.arrows);
 
 		// Score text
 		this.style = { font: "bold 24px Arial", fill: "#000"};
