@@ -9,6 +9,8 @@ module.exports = {
 		var speed = this.speed = 3;
 		// music
 		this.music = null;
+		// game is stopped or not
+		this.gameIsStopped = false;
 
 		// vars for controlling the game through breathing
 		this.pressure = null;
@@ -121,8 +123,7 @@ module.exports = {
 		this.map.createFromObjects('Arrows', 167, 'arrowDown', 0, true, false, this.arrows);
 
 		// Score text
-		this.style = { font: "bold 24px Arial", fill: "#000"};
-		this.scoreText = this.add.text(400, 40, "score: 0", this.style);
+		this.scoreText = this.add.text(400, 40, "score: 0", this.game.global.scoreTextStyle);
 		this.scoreText.anchor.setTo(0.5, 0.5);
 		// fix to camera
 		this.scoreText.fixedToCamera = true;
@@ -147,8 +148,6 @@ module.exports = {
 		var nose = this.nose = this.add.sprite(this.camera.width*0.4, this.world.height*0.52, 'nose');
 		nose.scale.setTo(0.1,0.1);
 		nose.anchor.setTo(0.5,0.5);
-		// flip it horizontally
-		// arrowDown.scale.y *= -1;
 		nose.fixedToCamera = true;
 
 		// add text for the arrows explanation
@@ -164,7 +163,6 @@ module.exports = {
 
 		// destroy the icons and text after 5 seconds
 		this.time.events.add(Phaser.Timer.SECOND * 5, function(){
-			// debugger;
 			// tween to make instructions nicely disappear
 			this.switchAlphaInstructions([this.mouth, this.nose, this.mouthText, this.noseText]);
 		}, this);
@@ -188,46 +186,36 @@ module.exports = {
 		this.breathingSensorCircle.drawCircle(this.camera.width - 100, 40 , 25);
 		this.breathingSensorCircle.fixedToCamera = true;
 
-		// circles for max and min breathing of calibration
-		this.maxCircle = this.add.graphics(0, 0);
-		this.maxCircle.lineStyle()
-		this.minCircle = this.add.graphics(0, 0);
-
-
 		// load overlay screen and hide it
 		this.overlayBackground = this.add.sprite(0, 0, 'overlay');
 		this.overlayBackground.x = this.camera.width * 0.5;
 		this.overlayBackground.y = this.camera.height * 0.5;
 		this.overlayBackground.anchor.set(0.5, 0.5);
+		this.overlayBackground.fixedToCamera = true;
+		this.overlayBackground.visible = false;
 
 		this.overlayText = this.add.text(this.camera.width * 0.5, this.camera.height * 0.45, 'Text goes here' , { align: "center", font: "bold 28px Arial", fill: "#fff"});
 		this.overlayText.anchor.set(0.5, 0.5);
-
-		// add the text as child of the background container
-		// this.overlayBackground.addChild(this.overlayText);
 		this.overlayText.fixedToCamera = true;
-
-		this.overlayBackground.fixedToCamera = true;
-		this.overlayBackground.visible = false;
 		this.overlayText.visible = false;
 
 		// button to resume the game after instructions
-		this.resumeGameBtn = this.add.sprite(this.camera.width * 0.5, this.camera.height * 0.6, 'button','blue_button04.png');
-		this.resumeGameBtn.anchor.set(0.5);
-		this.resumeGameBtn.inputEnabled = true;
-		this.resumeGameBtn.input.useHandCursor = true;
-		this.resumeGameBtn.visible = false;
+		// this.resumeGameBtn = this.add.sprite(this.camera.width * 0.5, this.camera.height * 0.6, 'button','blue_button04.png');
+		// this.resumeGameBtn.anchor.set(0.5);
+		// this.resumeGameBtn.inputEnabled = true;
+		// this.resumeGameBtn.input.useHandCursor = true;
+		// this.resumeGameBtn.visible = false;
+		//
+		// this.okBtnText = this.add.text(0,0,'Resume Game', this.game.global.buttonLabelStyle);
+		// this.okBtnText.anchor.set(0.5);
+		// this.resumeGameBtn.addChild(this.okBtnText);
+		// this.resumeGameBtn.fixedToCamera = true;
+		//
+		// this.resumeGameBtn.events.onInputUp.add(function(){
+		// 	self.displayOverlay('resumeGame');
+		// });
 
-		this.okBtnText = this.add.text(0,0,'Resume Game', this.game.global.buttonLabelStyle);
-		this.okBtnText.anchor.set(0.5);
-		this.resumeGameBtn.addChild(this.okBtnText);
-		this.resumeGameBtn.fixedToCamera = true;
-
-		this.resumeGameBtn.events.onInputUp.add(function(){
-			self.displayOverlay('resumeGame');
-		});
-
-		// OK button for restarting the game
+		// Button to go to the main game
 		this.playGameBtn = this.add.sprite(this.camera.width * 0.65, this.camera.height * 0.6, 'button','blue_button04.png');
 		this.playGameBtn.anchor.set(0.5);
 		// this.overlayBackground.addChild(this.playGameBtn);
@@ -235,16 +223,16 @@ module.exports = {
 		this.playGameBtn.input.useHandCursor = true;
 		this.playGameBtn.visible = false;
 
-		this.okBtnText = this.add.text(0,0,'Play Game', this.game.global.buttonLabelStyle);
-		this.okBtnText.anchor.set(0.5);
-		this.playGameBtn.addChild(this.okBtnText);
+		this.playGameText = this.add.text(0,0,'Play Game', this.game.global.buttonLabelStyle);
+		this.playGameText.anchor.set(0.5);
+		this.playGameBtn.addChild(this.playGameText);
 		this.playGameBtn.fixedToCamera = true;
 
 		this.playGameBtn.events.onInputUp.add(function(){
 			self.state.start('game');
 		});
 
-		// Menu button to go back to welcome after the game ended / player lost
+		// Button to go back to restart the practice level
 		this.practiceAgainBtn = this.add.sprite(this.camera.width * 0.35, this.camera.height * 0.6, 'button','blue_button04.png');
 		this.practiceAgainBtn.anchor.set(0.5);
 		// this.overlayBackground.addChild(this.playGameBtn);
@@ -272,29 +260,29 @@ module.exports = {
 		this.pauseButton.fixedToCamera = true;
 
 		this.pauseButton.events.onInputUp.add(function () {
-			// When the pause button is pressed, we pause the game
-			// stop camera
-			if(!self.stopTheCamera){
-				self.stopTheCamera = true;
+			// if game is not stopped, stop it. Otherwise, resume it
+			if(!self.gameIsStopped){
+				self.displayOverlay('pause');
+				self.gameIsStopped = true;
 			} else {
 				self.displayOverlay('resumeGame');
-				self.stopTheCamera = false;
+				self.gameIsStopped = false;
 			}
 		});
 
 		// create an invisible wall for coins explanation
-		var coinsWall = this.coinsWall = this.add.sprite(this.world.width, 0);
-		this.physics.arcade.enable(coinsWall);
-		coinsWall.body.collideWorldBounds = true;
-		coinsWall.width = 10;
-		coinsWall.height = this.world.height;
+		// var coinsWall = this.coinsWall = this.add.sprite(this.world.width, 0);
+		// this.physics.arcade.enable(coinsWall);
+		// coinsWall.body.collideWorldBounds = true;
+		// coinsWall.width = 10;
+		// coinsWall.height = this.world.height;
 
 		// create an invisible wall for special boxes explanation
-		var specialBoxesWall = this.specialBoxesWall = this.add.sprite(this.world.width, 0);
-		this.physics.arcade.enable(specialBoxesWall);
-		specialBoxesWall.body.collideWorldBounds = true;
-		specialBoxesWall.width = 10;
-		specialBoxesWall.height = this.world.height;
+		// var specialBoxesWall = this.specialBoxesWall = this.add.sprite(this.world.width, 0);
+		// this.physics.arcade.enable(specialBoxesWall);
+		// specialBoxesWall.body.collideWorldBounds = true;
+		// specialBoxesWall.width = 10;
+		// specialBoxesWall.height = this.world.height;
 
 		// create an invisible wall at the end of the level to know when the player reaches the end
 		var endGameWall = this.endGameWall = this.add.sprite(this.world.width, 0);
@@ -327,7 +315,7 @@ module.exports = {
 		this.breathingBar.fixedToCamera = true;
 		this.barHasBeenFlipped = false;
 
-		// "almost there" message
+		// "almost there" message and duck
 		var almostThereText = this.add.text(80, world.centerY * 0.4, 'Almost there! :)');
 		almostThereText.anchor.set(0.5);
 
@@ -339,10 +327,10 @@ module.exports = {
 		groundLayer.resizeWorld();
 
 		// update position of coins invisible wall after world resizing
-		coinsWall.x = this.world.width * 0.05;
+		// coinsWall.x = this.world.width * 0.05;
 
 		// update position of special boxes invisible wall after world resizing
-		specialBoxesWall.x = this.world.width * 0.14;
+		// specialBoxesWall.x = this.world.width * 0.14;
 
 		// update position of end game invisible wall after world resizing
 		endGameWall.x = this.world.width * 0.97;
@@ -380,8 +368,6 @@ module.exports = {
 
 		if(this.gameOver){
 			this.displayOverlay('gameOver');
-		} else if(this.stopTheCamera) {
-			this.displayOverlay('pause');
 		} else {
 			// make the background scroll
 			this.background.tilePosition.x -= this.speed;
@@ -659,16 +645,6 @@ module.exports = {
 				this.playGameBtn.visible = true;
 				this.practiceAgainBtn.visible = true;
 				break;
-			case 'coins':
-				this.overlayText.setText('Coins are what give you the final score, you should\ntry to collect as many as possible!');
-				this.overlayText.visible = true;
-				this.resumeGameBtn.visible = true;
-				break;
-			case 'boxes':
-				this.overlayText.setText('When you hit these boxes, you have 50% chance\nto get a heart back or double the coins value for 5 seconds!');
-				this.overlayText.visible = true;
-				this.resumeGameBtn.visible = true;
-				break;
 			case 'resumeGame':
 				if(this.music !== null){
 					this.music.resume();
@@ -677,7 +653,7 @@ module.exports = {
 				this.physics.arcade.isPaused = (!this.physics.arcade.isPaused);
 				this.overlayBackground.visible = false;
 				this.overlayText.visible = false;
-				this.resumeGameBtn.visible = false;
+				// this.resumeGameBtn.visible = false;
 				break;
 			default:
 				console.log('You are not supposed to be here...');

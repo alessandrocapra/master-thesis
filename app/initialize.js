@@ -54,6 +54,12 @@ game.global = {
 		align: "center"
   },
 
+	// score text styling
+	scoreTextStyle: {
+  	font: "bold 24px Arial",
+		fill: "#000"
+	},
+
 	// ranking styling
 	otherPlayersRankingStyle :{
 		font: '22px Open Sans',

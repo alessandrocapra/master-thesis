@@ -9,6 +9,8 @@ module.exports = {
 		var speed = this.speed = 3;
 		// music
 		this.music = null;
+		// game stopped var
+		this.gameIsStopped = false;
 
 		// vars for controlling the game through breathing
 		this.pressure = null;
@@ -84,6 +86,8 @@ module.exports = {
 		this.enemies.callAll('animations.play', 'animations', 'fly');
 		this.enemies.callAll('animations.add', 'animations', 'dead', [1], 10, true);
 		this.enemies.setAll('body.allowGravity', false);
+		this.enemies.setAll('checkWorldBounds', true);
+		this.enemies.setAll('outOfBoundsKill', true);
 
 		// make enemies pulse to rhythm
 		this.enemies.forEach(function (bee) {
@@ -101,8 +105,7 @@ module.exports = {
 		this.coins.setAll('body.allowGravity', false);
 
 		// Score text
-		this.style = { font: "bold 24px Arial", fill: "#000"};
-		this.scoreText = this.add.text(400, 40, "score: 0", this.style);
+		this.scoreText = this.add.text(400, 40, "score: 0", this.game.global.scoreTextStyle);
 		this.scoreText.anchor.setTo(0.5, 0.5);
 		// fix to camera
 		this.scoreText.fixedToCamera = true;
@@ -127,8 +130,6 @@ module.exports = {
 		var nose = this.nose = this.add.sprite(this.camera.width*0.4, this.world.height*0.52, 'nose');
 		nose.scale.setTo(0.1,0.1);
 		nose.anchor.setTo(0.5,0.5);
-		// flip it horizontally
-		// arrowDown.scale.y *= -1;
 		nose.fixedToCamera = true;
 
 		// add text for the arrows explanation
@@ -144,7 +145,6 @@ module.exports = {
 
 		// destroy the icons and text after 5 seconds
 		this.time.events.add(Phaser.Timer.SECOND * 5, function(){
-			// debugger;
 			// tween to make instructions nicely disappear
 			this.switchAlphaInstructions([this.mouth, this.nose, this.mouthText, this.noseText]);
 		}, this);
@@ -173,42 +173,36 @@ module.exports = {
 		this.overlayBackground.x = this.camera.width * 0.5;
 		this.overlayBackground.y = this.camera.height * 0.5;
 		this.overlayBackground.anchor.set(0.5, 0.5);
+		this.overlayBackground.fixedToCamera = true;
+		this.overlayBackground.visible = false;
 
 		this.overlayText = this.add.text(this.camera.width * 0.5, 100, 'Text goes here' , { align: "center", font: "bold 28px Arial", fill: "#fff"});
 		this.overlayText.anchor.set(0.5, 0.5);
-
-		// add the text as child of the background container
-		// this.overlayBackground.addChild(this.overlayText);
 		this.overlayText.fixedToCamera = true;
-
-		this.overlayBackground.fixedToCamera = true;
-		this.overlayBackground.visible = false;
 		this.overlayText.visible = false;
 
-		// OK button for restarting the game
-		this.okBtn = this.add.sprite(this.camera.width * 0.65, this.camera.height * 0.85, 'button','blue_button04.png');
-		this.okBtn.anchor.set(0.5);
-		// this.overlayBackground.addChild(this.okBtn);
-		this.okBtn.inputEnabled = true;
-		this.okBtn.input.useHandCursor = true;
-		this.okBtn.visible = false;
+		// Button to restart the game
+		this.playAgainBtn = this.add.sprite(this.camera.width * 0.65, this.camera.height * 0.85, 'button','blue_button04.png');
+		this.playAgainBtn.anchor.set(0.5);
+		this.playAgainBtn.inputEnabled = true;
+		this.playAgainBtn.input.useHandCursor = true;
+		this.playAgainBtn.visible = false;
 
-		this.okBtnText = this.add.text(0,0,'Ja', this.game.global.buttonLabelStyle);
+		this.okBtnText = this.add.text(0,0,'Play again', this.game.global.buttonLabelStyle);
 		this.okBtnText.anchor.set(0.5);
-		this.okBtn.addChild(this.okBtnText);
-		this.okBtn.fixedToCamera = true;
+		this.playAgainBtn.addChild(this.okBtnText);
+		this.playAgainBtn.fixedToCamera = true;
 
-		this.okBtn.events.onInputUp.add(function(){
+		this.playAgainBtn.events.onInputUp.add(function(){
 			// setting instructions back to visible
 			self.switchAlphaInstructions([self.mouth, self.nose, self.mouthText, self.noseText]);
-
 			self.state.restart();
 		});
 
 		// Menu button to go back to welcome after the game ended / player lost
 		this.backToMenuBtn = this.add.sprite(this.camera.width * 0.35, this.camera.height * 0.85, 'button','blue_button04.png');
 		this.backToMenuBtn.anchor.set(0.5);
-		// this.overlayBackground.addChild(this.okBtn);
+		// this.overlayBackground.addChild(this.playAgainBtn);
 		this.backToMenuBtn.inputEnabled = true;
 		this.backToMenuBtn.input.useHandCursor = true;
 		this.backToMenuBtn.visible = false;
@@ -231,18 +225,13 @@ module.exports = {
 		this.pauseButton.fixedToCamera = true;
 
 		this.pauseButton.events.onInputUp.add(function () {
-			// When the pause button is pressed, we pause the game
-
-			// stop camera
-			if(!self.stopTheCamera){
-				self.stopTheCamera = true;
+			// if game is not stopped, stop it. Otherwise, resume it
+			if(!self.gameIsStopped){
+				self.displayOverlay('pause');
+				self.gameIsStopped = true;
 			} else {
-				self.music.resume();
-				self.paused = false;
-				self.physics.arcade.isPaused = (!self.physics.arcade.isPaused);
-				self.overlayBackground.visible = false;
-
-				self.stopTheCamera = false;
+				self.displayOverlay('resumeGame');
+				self.gameIsStopped = false;
 			}
 		});
 
@@ -255,7 +244,7 @@ module.exports = {
 		endGameWall.height = this.world.height;
 
 		// define duck and its properties
-		var duck = this.duck = this.add.sprite(80, world.centerY+50, 'duck');
+		var duck = this.duck = this.add.sprite(80, world.centerY+60, 'duck');
 		duck.anchor.setTo(0.5, 0.5);
 		this.physics.arcade.enable(duck);
 		duck.body.collideWorldBounds = true;
@@ -270,10 +259,31 @@ module.exports = {
 		this.camera.follow(duck);
 		this.camera.deadzone = new Phaser.Rectangle(0, 0, 100, 400);
 
+		// import breathing level bar
+		this.breathingBar = this.add.sprite(50, world.centerY, 'bar');
+		this.breathingBar.anchor.set(0,0.5);
+		this.breathingBar.angle = 90;
+		this.breathingBar.scale.set(0.2);
+		this.breathingBar.fixedToCamera = true;
+		this.barHasBeenFlipped = false;
+
+		// "almost there" message and duck
+		var almostThereText = this.add.text(80, world.centerY * 0.4, 'Almost there! :)');
+		almostThereText.anchor.set(0.5);
+
+		var duck2 = this.duck2 = this.add.sprite(80, world.centerY * 0.5, 'duck');
+		duck2.anchor.set(0.5);
+		duck2.scale.set(3);
+		this.duckBounceTween(duck2);
+
 		groundLayer.resizeWorld();
 
 		// update position of invisible wall after world resizing
 		endGameWall.x = this.world.width * 0.97;
+
+		// almost there message position update
+		almostThereText.x = this.world.width * 0.69;
+		duck2.x = this.world.width * 0.69;
 
 		var cursors = this.cursors = this.input.keyboard.createCursorKeys();
 
@@ -584,20 +594,47 @@ module.exports = {
 	displayOverlay: function(gameState){
 		this.overlayBackground.visible = true;
 		this.overlayText.visible = true;
+		this.stopEverything();
 
-  	// gamestate can have values "pause", "gameOver", "gameEnd"
-		if(gameState === 'pause'){
-			this.overlayText.setText('Game paused, click the pause button to resume.');
-		} else if(gameState === 'gameOver' || gameState === 'gameEnd'){
-			// this.overlayText.inputEnabled = true;
-			this.overlayText.setText('Well done! Play again?');
-			this.okBtn.visible = true;
-			this.backToMenuBtn.visible = true;
+		switch (gameState) {
+			case 'pause':
+				this.overlayText.setText('Game paused, click the pause button to resume.');
+				break;
+			case 'gameOver':
+				this.saveScoreOnDb();
+				this.overlayText.setText('Great job! Play again?');
+				this.playAgainBtn.visible = true;
+				this.backToMenuBtn.visible = true;
+				break;
+			case 'gameEnd':
+				this.saveScoreOnDb();
+				this.overlayText.setText('Well done! Play again?');
+				this.playAgainBtn.visible = true;
+				this.backToMenuBtn.visible = true;
+				break;
+			case 'resumeGame':
+				if(this.music !== null){
+					this.music.resume();
+				}
+				this.paused = false;
+				this.physics.arcade.isPaused = (!this.physics.arcade.isPaused);
+				this.overlayBackground.visible = false;
+				this.overlayText.visible = false;
+				// this.resumeGameBtn.visible = false;
+				break;
+			default:
+				console.log('You are not supposed to be here...');
+		}
+	},
 
-			this.saveScoreOnDb();
+	stopEverything: function(){
+		// stop the whole scene
+		this.physics.arcade.isPaused = true;
+		this.paused = true;
 
-		} else {
-			console.log('You are not supposed to be here...');
+		// stop the music, perhaps play another sound
+		if(this.music !== null && this.music.isPlaying){
+			this.music.pause();
 		}
 	},
 
@@ -680,15 +717,6 @@ module.exports = {
 		}
 	},
 
-	stopEverything: function(){
-		// stop the whole scene
-		this.physics.arcade.isPaused = true;
-		this.paused = true;
-
-		// stop the music, perhaps play another sound
-		this.music.stop();
-	},
-
 	endGame: function () {
   	console.log('collision with the endWall!');
   	this.stopEverything();
@@ -708,6 +736,18 @@ module.exports = {
 			this.breathingSensorCircle.beginFill(0xFF0000, 1);
 			this.breathingSensorCircle.drawCircle(this.camera.width - 100, 40 , 25);
 		}
+	},
+
+	duckBounceTween: function () {
+		var self = this;
+		this.duck2.y = this.camera.height * 0.5 + + 60;
+
+		var bounceTween = this.add.tween(this.duck2);
+		bounceTween.to({ y: this.camera.height * 0.25 - 40}, 1500 + Math.random() * 1500, Phaser.Easing.Bounce.In);
+		bounceTween.onComplete.add(function(){
+			self.duckBounceTween();
+		}, this);
+		bounceTween.start();
 	}
 
 };
