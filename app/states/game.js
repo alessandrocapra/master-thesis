@@ -183,6 +183,24 @@ module.exports = {
 		this.overlayText.fixedToCamera = true;
 		this.overlayText.visible = false;
 
+		// Button to go to the main menu while game is paused
+		this.backToMenuPauseBtn = this.add.sprite(this.camera.width * 0.5, this.camera.height * 0.65, 'button','blue_button04.png');
+		this.backToMenuPauseBtn.anchor.set(0.5);
+		// this.overlayBackground.addChild(this.playAgainBtn);
+		this.backToMenuPauseBtn.inputEnabled = true;
+		this.backToMenuPauseBtn.input.useHandCursor = true;
+		this.backToMenuPauseBtn.visible = false;
+
+		this.backToMenuPauseText = this.add.text(0,0,'Back to main menu', this.game.global.buttonLabelStyle);
+		this.backToMenuPauseText.anchor.set(0.5);
+		this.backToMenuPauseBtn.addChild(this.backToMenuPauseText);
+		this.backToMenuPauseBtn.fixedToCamera = true;
+
+		this.backToMenuPauseBtn.events.onInputUp.add(function(){
+			self.stopEverything();
+			self.state.start('welcome');
+		});
+
 		// Button to restart the game
 		this.playAgainBtn = this.add.sprite(this.camera.width * 0.65, this.camera.height * 0.85, 'button','blue_button04.png');
 		this.playAgainBtn.anchor.set(0.5);
@@ -559,6 +577,7 @@ module.exports = {
 		switch (gameState) {
 			case 'pause':
 				this.overlayText.setText('Game paused, click the pause button to resume.');
+				this.backToMenuPauseBtn.visible = true;
 				break;
 			case 'gameOver':
 				this.overlayText.setText('Great job! Play again?');
@@ -580,6 +599,7 @@ module.exports = {
 				this.physics.arcade.isPaused = (!this.physics.arcade.isPaused);
 				this.overlayBackground.visible = false;
 				this.overlayText.visible = false;
+				this.backToMenuPauseBtn.visible = false;
 				break;
 			default:
 				console.log('You are not supposed to be here...');

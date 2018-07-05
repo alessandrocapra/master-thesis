@@ -217,6 +217,24 @@ module.exports = {
 		this.overlayText.fixedToCamera = true;
 		this.overlayText.visible = false;
 
+		// Button to go to the main menu while game is paused
+		this.backToMenuBtn = this.add.sprite(this.camera.width * 0.5, this.camera.height * 0.65, 'button','blue_button04.png');
+		this.backToMenuBtn.anchor.set(0.5);
+		// this.overlayBackground.addChild(this.playAgainBtn);
+		this.backToMenuBtn.inputEnabled = true;
+		this.backToMenuBtn.input.useHandCursor = true;
+		this.backToMenuBtn.visible = false;
+
+		this.backToMenuText = this.add.text(0,0,'Back to main menu', this.game.global.buttonLabelStyle);
+		this.backToMenuText.anchor.set(0.5);
+		this.backToMenuBtn.addChild(this.backToMenuText);
+		this.backToMenuBtn.fixedToCamera = true;
+
+		this.backToMenuBtn.events.onInputUp.add(function(){
+			self.stopEverything();
+			self.state.start('welcome');
+		});
+
 		// Button to go to the main game
 		this.playGameBtn = this.add.sprite(this.camera.width * 0.65, this.camera.height * 0.6, 'button','blue_button04.png');
 		this.playGameBtn.anchor.set(0.5);
@@ -241,9 +259,9 @@ module.exports = {
 		this.practiceAgainBtn.input.useHandCursor = true;
 		this.practiceAgainBtn.visible = false;
 
-		this.backToMenuText = this.add.text(0,0,'Practice again', this.game.global.buttonLabelStyle);
-		this.backToMenuText.anchor.set(0.5);
-		this.practiceAgainBtn.addChild(this.backToMenuText);
+		this.practiceAgainText = this.add.text(0,0,'Practice again', this.game.global.buttonLabelStyle);
+		this.practiceAgainText.anchor.set(0.5);
+		this.practiceAgainBtn.addChild(this.practiceAgainText);
 		this.practiceAgainBtn.fixedToCamera = true;
 
 		this.practiceAgainBtn.events.onInputUp.add(function(){
@@ -592,6 +610,7 @@ module.exports = {
 		switch (gameState) {
 			case 'pause':
 				this.overlayText.setText('Game paused, click the pause button to resume.');
+				this.backToMenuBtn.visible = true;
 				break;
 			case 'gameOver':
 				this.overlayText.setText('Great job! Play again?');
@@ -611,6 +630,7 @@ module.exports = {
 				this.physics.arcade.isPaused = (!this.physics.arcade.isPaused);
 				this.overlayBackground.visible = false;
 				this.overlayText.visible = false;
+				this.backToMenuBtn.visible = false;
 				break;
 			default:
 				console.log('You are not supposed to be here...');
