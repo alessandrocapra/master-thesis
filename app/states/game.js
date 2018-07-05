@@ -569,13 +569,13 @@ module.exports = {
 				this.overlayText.setText('Great job! Play again?');
 				this.playAgainBtn.visible = true;
 				this.backToMenuBtn.visible = true;
-				return this.saveScoreOnDb().then(function(){this.getRankingFromDb();});
+				this.saveScoreOnDb().then(function(){this.getRankingFromDb();});
 				break;
 			case 'gameEnd':
 				this.overlayText.setText('Well done! Play again?');
 				this.playAgainBtn.visible = true;
 				this.backToMenuBtn.visible = true;
-				return this.saveScoreOnDb().then(function(){this.getRankingFromDb();});
+				this.saveScoreOnDb().then(function(){this.getRankingFromDb();});
 				break;
 			case 'resumeGame':
 				if(this.music !== null){

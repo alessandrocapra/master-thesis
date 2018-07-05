@@ -157,7 +157,6 @@ module.exports = {
 		var regexInteger = /^[0-9]+$/;
 
 		if(regexInteger.test(this.thresholdInput.value) && (this.thresholdInput.value < 100 || this.thresholdInput.value > 5) && this.game.global.inputDevice === 'breath'){
-			console.log('Valid input, saving it in global var');
 			// setting the global var to a value between 0 and 1 (e.g. 80 / 100 = 0.8)
 			this.game.global.pressureEffort = parseInt(this.thresholdInput.value) / 100;
 			this.state.start('welcome');
