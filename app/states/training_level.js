@@ -34,21 +34,23 @@ module.exports = {
 		*
 		* */
 
-		// production
-		this.socket = io.connect(window.location.hostname, { secure: true, reconnect: true, rejectUnauthorized : false } );
+		if(this.game.global.inputDevice === 'breath'){
+			// production
+			this.socket = io.connect(window.location.hostname, { secure: true, reconnect: true, rejectUnauthorized : false } );
 
-		//development
-		// this.socket = io.connect(window.location.hostname);
+			//development
+			// this.socket = io.connect(window.location.hostname);
 
-		this.socket.on("connect", function () {
-			console.log("client (game) connected to server");
+			this.socket.on("connect", function () {
+				console.log("client (game) connected to server");
 
-			// receives the raw pressure number
-			self.socket.on('pc', function(data){
-				self.pressure = parseFloat(data.p);
-				// console.log('pressure: ' + self.pressure);
+				// receives the raw pressure number
+				self.socket.on('pc', function(data){
+					self.pressure = parseFloat(data.p);
+					// console.log('pressure: ' + self.pressure);
+				});
 			});
-		});
+		}
 
 		// delay the music start
 		this.time.events.add(Phaser.Timer.SECOND * 7.8, function(){
@@ -253,20 +255,6 @@ module.exports = {
 				self.gameIsStopped = false;
 			}
 		});
-
-		// create an invisible wall for coins explanation
-		// var coinsWall = this.coinsWall = this.add.sprite(this.world.width, 0);
-		// this.physics.arcade.enable(coinsWall);
-		// coinsWall.body.collideWorldBounds = true;
-		// coinsWall.width = 10;
-		// coinsWall.height = this.world.height;
-
-		// create an invisible wall for special boxes explanation
-		// var specialBoxesWall = this.specialBoxesWall = this.add.sprite(this.world.width, 0);
-		// this.physics.arcade.enable(specialBoxesWall);
-		// specialBoxesWall.body.collideWorldBounds = true;
-		// specialBoxesWall.width = 10;
-		// specialBoxesWall.height = this.world.height;
 
 		// create an invisible wall at the end of the level to know when the player reaches the end
 		var endGameWall = this.endGameWall = this.add.sprite(this.world.width, 0);
@@ -631,7 +619,6 @@ module.exports = {
 
 	updateSensorStatus: function () {
 		// check whether pressure data is received and updates the interface accordingly
-		console.log('inside updateSensorStatus, this.pressure is ' + this.pressure);
 		if(this.pressure !== null){
 			// update the circle color to green
 			this.breathingSensorCircle.clear();

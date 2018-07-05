@@ -25,21 +25,23 @@ module.exports = {
 		*
 		* */
 
-		// production
-		this.socket = io.connect(window.location.hostname, { secure: true, reconnect: true, rejectUnauthorized : false } );
+		if(this.game.global.inputDevice === 'breath'){
+			// production
+			this.socket = io.connect(window.location.hostname, { secure: true, reconnect: true, rejectUnauthorized : false } );
 
-		//development
-		// this.socket = io.connect(window.location.hostname);
+			//development
+			// this.socket = io.connect(window.location.hostname);
 
-		this.socket.on("connect", function () {
-			console.log("client (game) connected to server");
+			this.socket.on("connect", function () {
+				console.log("client (game) connected to server");
 
-			// receives the raw pressure number
-			self.socket.on('pc', function(data){
-				self.pressure = parseFloat(data.p);
-				// console.log('pressure: ' + self.pressure);
+				// receives the raw pressure number
+				self.socket.on('pc', function(data){
+					self.pressure = parseFloat(data.p);
+					// console.log('pressure: ' + self.pressure);
+				});
 			});
-		});
+		}
 
 		// delay the music start
 		this.time.events.add(Phaser.Timer.SECOND * 7.8, function(){
@@ -236,7 +238,6 @@ module.exports = {
 		});
 
 		// create an invisible wall at the end of the level to know when the player reaches the end
-		console.log('world width: ' + this.world.width);
 		var endGameWall = this.endGameWall = this.add.sprite(this.world.width, 0);
 		this.physics.arcade.enable(endGameWall);
 		endGameWall.body.collideWorldBounds = true;
@@ -259,13 +260,15 @@ module.exports = {
 		this.camera.follow(duck);
 		this.camera.deadzone = new Phaser.Rectangle(0, 0, 100, 400);
 
-		// import breathing level bar
-		this.breathingBar = this.add.sprite(50, world.centerY, 'bar');
-		this.breathingBar.anchor.set(0,0.5);
-		this.breathingBar.angle = 90;
-		this.breathingBar.scale.set(0.2);
-		this.breathingBar.fixedToCamera = true;
-		this.barHasBeenFlipped = false;
+		if(this.game.global.inputDevice === 'breath'){
+			// import breathing level bar
+			this.breathingBar = this.add.sprite(50, world.centerY, 'bar');
+			this.breathingBar.anchor.set(0,0.5);
+			this.breathingBar.angle = 90;
+			this.breathingBar.scale.set(0.2);
+			this.breathingBar.fixedToCamera = true;
+			this.barHasBeenFlipped = false;
+		}
 
 		// "almost there" message and duck
 		var almostThereText = this.add.text(80, world.centerY * 0.4, 'Almost there! :)');
@@ -285,26 +288,37 @@ module.exports = {
 		almostThereText.x = this.world.width * 0.69;
 		duck2.x = this.world.width * 0.69;
 
-		var cursors = this.cursors = this.input.keyboard.createCursorKeys();
+		if(this.game.global.inputDevice === 'keyboard_touch'){
+			var cursors = this.cursors = this.input.keyboard.createCursorKeys();
 
-		// controlling with up and down keys
-		cursors.down.onDown.add(function() {
-			self.jump()
-		});
-		cursors.up.onDown.add(function() {
-			self.dive();
-		});
+			// controlling with up and down keys
+			cursors.down.onDown.add(function() {
+				self.jump()
+			});
+			cursors.up.onDown.add(function() {
+				self.dive();
+			});
 
-		// swipe controls
-		this.swipe = this.game.input.activePointer;
+			// swipe controls
+			this.swipe = this.game.input.activePointer;
+		}
   },
 
   update: function () {
 
   	var self = this;
 
-		this.updateSensorStatus();
-		this.updateBreathingBar();
+		// duck moves forward, while the camera follows it
+		this.duck.body.velocity.x = this.speed * 60;
+
+		// function that controls the behavior around the surface of the duck
+		this.floatingWaterPhysics();
+
+		// update breathing visual feedback only when the breath option in settings is selected
+		if(this.game.global.inputDevice === 'breath'){
+			this.updateSensorStatus();
+			this.updateBreathingBar();
+		}
 
 		if(this.gameOver){
 			this.displayOverlay('gameOver');
@@ -337,63 +351,44 @@ module.exports = {
 		*
 		* */
 
-		// swiping
-		if (this.swipe.isDown && (this.swipe.positionDown.y > this.swipe.position.y)) {
-			this.jump();
-		} else if(this.swipe.isDown && (this.swipe.positionDown.y < this.swipe.position.y)){
-			this.dive();
+		// differentiate between keyboard and breath input
+		if(this.game.global.inputDevice === 'keyboard_touch'){
+			// swiping
+			if (this.swipe.isDown && (this.swipe.positionDown.y > this.swipe.position.y)) {
+				this.jump();
+			} else if(this.swipe.isDown && (this.swipe.positionDown.y < this.swipe.position.y)){
+				this.dive();
+			}
+
+			// This bit gives the player a little boost if they press and hold the cursor key rather than just tap
+			if( this.cursors.up.isDown){
+				this.duck.body.acceleration.y = -1000;
+			}else if(this.cursors.down.isDown){
+				this.duck.body.acceleration.y = 800;
+			}else{
+				this.duck.body.acceleration.y = 0;
+			}
+		} else if(this.game.global.inputDevice === 'breath'){
+			// controlling with breath
+			if(this.pressure < this.game.global.currentUserCalibration.min * this.game.global.pressureEffort){
+				this.jump();
+			}
+			if(this.pressure > this.game.global.currentUserCalibration.max * this.game.global.pressureEffort){
+				this.dive();
+			}
+
+			// This bit gives the player a little boost if they press and hold the cursor key rather than just tap
+			if(this.pressure > this.game.global.currentUserCalibration.max * this.game.global.pressureEffort){
+				this.duck.body.acceleration.y = -1000;
+			}else if(this.pressure < this.game.global.currentUserCalibration.min * this.game.global.pressureEffort){
+				this.duck.body.acceleration.y = 800;
+			}else{
+				this.duck.body.acceleration.y = 0;
+			}
+		} else {
+			alert('Error in setting the input device, reload and check game settings!');
 		}
 
-		this.duck.body.velocity.x = this.speed * 60;
-
-		// Underwater gravity (boyancy)
-		if( this.duck.body.y > this.world.centerY + 60){
-			this.physics.arcade.gravity.y = -1200;
-
-			// This 'gap' prevents the infinite bobbing
-		}else if( this.duck.body.y < this.world.centerY + 25 && this.duck.body.y >= this.world.centerY + 20 ){
-			this.physics.arcade.gravity.thisy = 0;
-
-			// Above water gravity
-		}else if( this.duck.body.y < this.world.centerY + 20 ){
-			this.physics.arcade.gravity.y = 1400;
-
-			// Surface tension
-			// As the player passes through this area, the drag is more the faster they are going
-			// This is the key to slowing the player down and preventing them from popping
-			// out of the water, then back in, over and over.
-		}else{
-
-			// Have a slight amount of gravity so that if they end up resting in this area
-			// they will gradually rise to the surface
-			this.physics.arcade.gravity.y = -120;
-
-			// Caludlate the drag using the velocity
-			// Faster the velocity, higher the drag
-			const drag = (( Math.abs(this.duck.body.velocity.y) * 200 ) / 400) + 50;
-
-			// Don't do this if they are trying to swim down
-			// if( !this.cursors.down.isDown )
-			// 	this.duck.body.drag.set(0, drag);
-		}
-
-		// controlling with breath
-		if(this.pressure < this.game.global.currentUserCalibration.min * this.game.global.pressureEffort){
-			this.jump();
-		}
-
-		if(this.pressure > this.game.global.currentUserCalibration.max * this.game.global.pressureEffort){
-			this.dive();
-		}
-
-		// This bit gives the player a little boost if they press and hold the cursor key rather than just tap
-		if( this.cursors.up.isDown || this.pressure > this.game.global.currentUserCalibration.max * this.game.global.pressureEffort){
-			this.duck.body.acceleration.y = -1000;
-		}else if( this.cursors.down.isDown || this.pressure < this.game.global.currentUserCalibration.min * this.game.global.pressureEffort){
-			this.duck.body.acceleration.y = 800;
-		}else{
-			this.duck.body.acceleration.y = 0;
-		}
   },
 
   // restart: function () {
@@ -751,6 +746,39 @@ module.exports = {
 			self.duckBounceTween();
 		}, this);
 		bounceTween.start();
+	},
+
+	floatingWaterPhysics: function () {
+		// Underwater gravity (boyancy)
+		if( this.duck.body.y > this.world.centerY + 60){
+			this.physics.arcade.gravity.y = -1200;
+
+			// This 'gap' prevents the infinite bobbing
+		}else if( this.duck.body.y < this.world.centerY + 25 && this.duck.body.y >= this.world.centerY + 20 ){
+			this.physics.arcade.gravity.y = 0;
+
+			// Above water gravity
+		}else if( this.duck.body.y < this.world.centerY + 20 ){
+			this.physics.arcade.gravity.y = 1400;
+
+			// Surface tension
+			// As the player passes through this area, the drag is more the faster they are going
+			// This is the key to slowing the player down and preventing them from popping
+			// out of the water, then back in, over and over.
+		}else{
+
+			// Have a slight amount of gravity so that if they end up resting in this area
+			// they will gradually rise to the surface
+			this.physics.arcade.gravity.y = -120;
+
+			// Caludlate the drag using the velocity
+			// Faster the velocity, higher the drag
+			const drag = (( Math.abs(this.duck.body.velocity.y) * 200 ) / 400) + 50;
+
+			// Don't do this if they are trying to swim down
+			// if( !this.cursors.down.isDown )
+			// 	this.duck.body.drag.set(0, drag);
+		}
 	}
 
 };
