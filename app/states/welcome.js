@@ -38,7 +38,13 @@ module.exports = {
 		title.setText('Welcome, ' + this.game.global.currentUser.name + '!');
 
 		// add text with explanation of the game
-		var gameInstructions = this.gameInstruction = this.add.text(this.camera.width * 0.5, this.camera.height * 0.4, "Here goes some explanation on how the game works!", this.game.global.bodyStyle);
+		var textExplanation =
+			'In this game, you have to help Duckie Duck to collect as many coins\n' +
+			'as possible! During the game, you will see some special yellow boxes.\n' +
+			'Sometimes they give you back a heart, sometimes they make the coins\n' +
+			'double their value for a limited time.\n\n' +
+			'They say that Duckie Duck also likes music...';
+		var gameInstructions = this.gameInstruction = this.add.text(this.camera.width * 0.5, this.camera.height * 0.55, textExplanation, this.game.global.bodyStyle);
 		gameInstructions.anchor.set(0.5);
 		console.log('gameInstructions: ', gameInstructions);
 
