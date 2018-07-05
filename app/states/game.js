@@ -703,6 +703,7 @@ module.exports = {
 
 				xhttp.send(input);
 			} else {
+				self.getRankingFromDb();
 				resolve(null);
 			}
 		});
