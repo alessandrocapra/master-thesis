@@ -188,6 +188,22 @@ module.exports = {
 		this.breathingSensorCircle.drawCircle(this.camera.width - 100, 40 , 25);
 		this.breathingSensorCircle.fixedToCamera = true;
 
+		// button to skip to final game
+		this.skipTrainingButton = this.add.sprite(this.camera.width * 0.8, this.camera.height * 0.9, 'button','blue_button04.png');
+		this.skipTrainingButton.anchor.set(0.5);
+		this.skipTrainingButton.inputEnabled = true;
+		this.skipTrainingButton.input.useHandCursor = true;
+
+		this.playGameText = this.add.text(0,0,'Go to game', this.game.global.buttonLabelStyle);
+		this.playGameText.anchor.set(0.5);
+		this.skipTrainingButton.addChild(this.playGameText);
+		this.skipTrainingButton.fixedToCamera = true;
+
+		this.skipTrainingButton.events.onInputUp.add(function(){
+			self.stopEverything();
+			self.state.start('game');
+		});
+
 		// load overlay screen and hide it
 		this.overlayBackground = this.add.sprite(0, 0, 'overlay');
 		this.overlayBackground.x = this.camera.width * 0.5;
@@ -204,7 +220,6 @@ module.exports = {
 		// Button to go to the main game
 		this.playGameBtn = this.add.sprite(this.camera.width * 0.65, this.camera.height * 0.6, 'button','blue_button04.png');
 		this.playGameBtn.anchor.set(0.5);
-		// this.overlayBackground.addChild(this.playGameBtn);
 		this.playGameBtn.inputEnabled = true;
 		this.playGameBtn.input.useHandCursor = true;
 		this.playGameBtn.visible = false;
