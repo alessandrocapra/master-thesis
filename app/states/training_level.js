@@ -143,12 +143,12 @@ module.exports = {
 		*
 		* */
 		var mouth = this.mouth = this.add.sprite(this.camera.width*0.4, this.world.height*0.4, 'mouth');
-		mouth.scale.setTo(0.1,0.1);
+		mouth.scale.setTo(0.15,0.15);
 		mouth.anchor.setTo(0.5,0.5);
 		mouth.fixedToCamera = true;
 
 		var nose = this.nose = this.add.sprite(this.camera.width*0.4, this.world.height*0.52, 'nose');
-		nose.scale.setTo(0.1,0.1);
+		nose.scale.setTo(0.15,0.15);
 		nose.anchor.setTo(0.5,0.5);
 		nose.fixedToCamera = true;
 
