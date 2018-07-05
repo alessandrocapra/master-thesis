@@ -570,6 +570,8 @@ module.exports = {
 	},
 
 	displayOverlay: function(gameState){
+  	var self = this;
+
 		this.overlayBackground.visible = true;
 		this.overlayText.visible = true;
 		this.stopEverything();
@@ -583,7 +585,12 @@ module.exports = {
 				this.overlayText.setText('Great job! Play again?');
 				this.playAgainBtn.visible = true;
 				this.backToMenuBtn.visible = true;
-				this.saveScoreOnDb().then(function(){this.getRankingFromDb();});
+				this.saveScoreOnDb().then(function(reply){
+					if(reply !== null){
+						self.getRankingFromDb();
+					}
+					console.log(reply);
+				});
 				break;
 			case 'gameEnd':
 				this.overlayText.setText('Well done! Play again?');
@@ -671,11 +678,11 @@ module.exports = {
 	saveScoreOnDb: function () {
 		var self = this;
 
-		if(!this.scoreUpdated && (this.score > this.game.global.currentUser.high_score)){
-			// do this just once
-			this.scoreUpdated = true;
+		return new Promise(function (resolve, reject) {
+			if (!self.scoreUpdated && (self.score > self.game.global.currentUser.high_score)) {
+				// do this just once
+				self.scoreUpdated = true;
 
-			return new Promise(function (resolve, reject) {
 				// save current score on Db
 				var xhttp = new XMLHttpRequest();
 				xhttp.open("PUT", "https://duchennegame.herokuapp.com/api/users/" + self.game.global.currentUser.id, true);
@@ -683,32 +690,44 @@ module.exports = {
 				var input = JSON.stringify({
 					'high_score': self.score
 				});
-				xhttp.send(input);
 
-				xhttp.onreadystatechange = function () {//Call a function when the state changes.
+				xhttp.onload = function () {
 					if (xhttp.readyState == XMLHttpRequest.DONE && xhttp.status == 200) {
-						// Once the user has been inserted, call the function that gets all users
+						console.log('resolved the savetoDB thingy');
 						resolve(xhttp.response);
-						// self.getRankingFromDb();
-					} else {
-						reject({
-							status: this.status,
-							statusText: xhttp.statusText
-						});
 					}
 				};
-
 				xhttp.onerror = function () {
-					reject({
-						status: this.status,
-						statusText: xhttp.statusText
-					});
+					reject(xhttp.statusText);
 				};
-			});
-		} else {
-			self.getRankingFromDb();
-		}
+
+				xhttp.send(input);
+			} else {
+				resolve(null);
+			}
+		});
+
+		// xhttp.onreadystatechange = function () {//Call a function when the state changes.
+		// 	if (xhttp.readyState == XMLHttpRequest.DONE && xhttp.status == 200) {
+		// 		// Once the user has been inserted, call the function that gets all users
+		// 		resolve(xhttp.response);
+		// 		// self.getRankingFromDb();
+		// 	} else {
+		// 		reject({
+		// 			status: this.status,
+		// 			statusText: xhttp.statusText
+		// 		});
+		// 	}
+		// };
+
+		// xhttp.onerror = function () {
+		// 	reject({
+		// 		status: this.status,
+		// 		statusText: xhttp.statusText
+		// 	});
+		// };
 	},
+
 
 	endGame: function () {
 		this.displayOverlay('gameEnd');
