@@ -22,7 +22,7 @@ module.exports = {
 					self.game.global.currentUserCalibration.min = user.calibrations[0].max_inhale;
 					self.game.global.currentUserCalibration.max = user.calibrations[0].max_exhale;
 				} else {
-					alert('Do the calibration maan!');
+					alert('You have never done a calibration! Please go to the settings page (gear icon).');
 				}
 			} else {
 				console.error(user);
