@@ -320,6 +320,11 @@ module.exports = {
 			// swipe controls
 			this.swipe = this.game.input.activePointer;
 		}
+
+		// add message to show if he beat his/her highscore or not
+		var highScoreBeaten = this.highScoreBeaten = this.add.text(0, 0, 'inform user', this.game.global.bodyStyle);
+		highScoreBeaten.anchor.set(0.5);
+		highScoreBeaten.visible = false;
   },
 
   update: function () {
@@ -644,14 +649,17 @@ module.exports = {
 					users = users.sort(function(a,b) {return b.high_score - a.high_score;});
 					var userAlreadyDisplayed = false;
 
-					// add message to show if he beat his/her highscore or not
-					var highScoreBeaten = self.add.text(self.camera.width * 0.5, self.camera.height * 0.3, 'inform user', self.game.global.bodyStyle);
-					highScoreBeaten.anchor.set(0.5);
+					// make highScoreBeaten text visible and update coordinates
+					self.highScoreBeaten.visible = true;
+					self.highScoreBeaten.x = self.camera.x + self.camera.width * 0.5;
+					self.highScoreBeaten.y = self.camera.height * 0.26;
 
 					if(self.score > self.game.global.currentUser.high_score){
-						highScoreBeaten.setText('You have beaten your own record, congrats! :)');
+						console.log('Scored higher');
+						self.highScoreBeaten.setText('You have beaten your own record, congrats! :)');
 					} else {
-						highScoreBeaten.setText('Nice score! Keep trying to improve it! :)');
+						console.log('Scored Lower');
+						self.highScoreBeaten.setText('Nice score! Keep trying to improve it! :)');
 					}
 
 					// display the ranking, username and high_score
@@ -661,13 +669,13 @@ module.exports = {
 							if(users[i].id === self.game.global.currentUser.id){
 								userAlreadyDisplayed = true;
 
-								self.add.text(self.camera.x + 300, self.camera.height * 0.45 + 50 * i+1, i+1, self.game.global.currentPlayerRankingStyle).anchor.setTo(0.5);
-								self.add.text(self.camera.x + 350, self.camera.height * 0.45 + 50 * i+1, users[i].name, self.game.global.currentPlayerRankingStyle).anchor.setTo(0.5);
-								self.add.text(self.camera.x + 450, self.camera.height * 0.45 + 50 * i+1, users[i].high_score, self.game.global.currentPlayerRankingStyle).anchor.setTo(0.5);
+								self.add.text(self.camera.x + 300, self.camera.height * 0.4 + 50 * i+1, i+1, self.game.global.currentPlayerRankingStyle).anchor.setTo(0.5);
+								self.add.text(self.camera.x + 350, self.camera.height * 0.4 + 50 * i+1, users[i].name, self.game.global.currentPlayerRankingStyle).anchor.setTo(0.5);
+								self.add.text(self.camera.x + 450, self.camera.height * 0.4 + 50 * i+1, users[i].high_score, self.game.global.currentPlayerRankingStyle).anchor.setTo(0.5);
 							} else {
-								self.add.text(self.camera.x + 300, self.camera.height * 0.45 + 50 * i + 1, i + 1, self.game.global.otherPlayersRankingStyle).anchor.setTo(0.5);
-								self.add.text(self.camera.x + 350, self.camera.height * 0.45 + 50 * i + 1, users[i].name, self.game.global.otherPlayersRankingStyle).anchor.setTo(0.5);
-								self.add.text(self.camera.x + 450, self.camera.height * 0.45 + 50 * i + 1, users[i].high_score, self.game.global.otherPlayersRankingStyle).anchor.setTo(0.5);
+								self.add.text(self.camera.x + 300, self.camera.height * 0.4 + 50 * i + 1, i + 1, self.game.global.otherPlayersRankingStyle).anchor.setTo(0.5);
+								self.add.text(self.camera.x + 350, self.camera.height * 0.4 + 50 * i + 1, users[i].name, self.game.global.otherPlayersRankingStyle).anchor.setTo(0.5);
+								self.add.text(self.camera.x + 450, self.camera.height * 0.4 + 50 * i + 1, users[i].high_score, self.game.global.otherPlayersRankingStyle).anchor.setTo(0.5);
 							}
 						} else {
 							if(users[i].id === self.game.global.currentUser.id && !userAlreadyDisplayed){
