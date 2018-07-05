@@ -19,6 +19,21 @@ module.exports = {
 		*
 		* */
 
+		// add background
+		var bg= this.add.sprite(0,0, 'background_menu');
+
+		// arrow back for previous screen
+		var arrowBack = this.arrowBack = this.add.image(50, 50, 'arrowBack');
+		arrowBack.anchor.set(0.5,0.5);
+		arrowBack.scale.setTo(0.6, 0.6);
+		arrowBack.tint = this.game.global.primaryColorTint;
+		arrowBack.inputEnabled = true;
+		arrowBack.input.useHandCursor = true;
+
+		arrowBack.events.onInputDown.add(function () {
+			self.state.start('settings');
+		}, this);
+
 		// production
 		this.socket = io.connect(window.location.hostname, { secure: true, reconnect: true, rejectUnauthorized : false } );
 
