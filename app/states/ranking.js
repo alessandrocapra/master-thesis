@@ -39,7 +39,7 @@ module.exports = {
 
 		// connect to API to retrieve all users and order them to display the ranking
 		var xhr  = new XMLHttpRequest();
-		xhr.open('GET', 'https://duchennegame.herokuapp.com/api/users', true);
+		xhr.open('GET', 'https://duckieduck.herokuapp.com/api/users', true);
 		xhr.onload = function () {
 			var users = JSON.parse(xhr.responseText);
 			console.log("users from db: ", users);

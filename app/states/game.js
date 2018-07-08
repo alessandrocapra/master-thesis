@@ -640,7 +640,7 @@ module.exports = {
 
 			// connect to API to retrieve all users and order them to display the ranking
 			var xhr  = new XMLHttpRequest();
-			xhr.open('GET', 'https://duchennegame.herokuapp.com/api/users', true);
+			xhr.open('GET', 'https://duckieduck.herokuapp.com/api/users', true);
 			xhr.onload = function () {
 				var users = JSON.parse(xhr.responseText);
 
@@ -703,7 +703,7 @@ module.exports = {
 
 				// save current score on Db
 				var xhttp = new XMLHttpRequest();
-				xhttp.open("PUT", "https://duchennegame.herokuapp.com/api/users/" + self.game.global.currentUser.id, true);
+				xhttp.open("PUT", "https://duckieduck.herokuapp.com/api/users/" + self.game.global.currentUser.id, true);
 				xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 				var input = JSON.stringify({
 					'high_score': self.score

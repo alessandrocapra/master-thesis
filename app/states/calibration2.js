@@ -155,7 +155,7 @@ module.exports = {
 	saveDataToDb: function () {
 		// create new calibration data for the current user
 		var xhttp = new XMLHttpRequest();
-		xhttp.open("POST", "https://duchennegame.herokuapp.com/api/calibrations",true);
+		xhttp.open("POST", "https://duckieduck.herokuapp.com/api/calibrations",true);
 		xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 		var input = JSON.stringify({
 			"userId": this.game.global.currentUser.id,

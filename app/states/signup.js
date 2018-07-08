@@ -79,7 +79,7 @@ module.exports = {
 		if(name && password){
 			// create new calibration data for the current user
 			var xhttp = new XMLHttpRequest();
-			xhttp.open("POST", "https://duchennegame.herokuapp.com/api/users",true);
+			xhttp.open("POST", "https://duckieduck.herokuapp.com/api/users",true);
 			xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 			var input = JSON.stringify({
 				"name": name,
@@ -105,45 +105,6 @@ module.exports = {
 				self.errorMessage.visible = false;
 			}, this);
 		}
-	},
-
-	// retrieveNewUser: function (userId) {
-  	// var self = this;
-	//
-	// 	// save user details in the global variables, get user after registration in db
-	// 	var xhr  = new XMLHttpRequest();
-	// 	xhr.open('GET', 'https://duchennegame.herokuapp.com/api/users/' + userId, true);
-	// 	xhr.onload = function () {
-	// 		var user = JSON.parse(xhr.responseText);
-	// 		if (xhr.readyState == 4 && xhr.status == "200") {
-	// 			self.game.global.currentUser = user.name;
-	//
-	// 			users.forEach(function(user){
-	// 				if(user.name === name){
-	// 					// save user details in the global variables
-	// 					self.game.global.currentUser = user;
-	//
-	// 					self.state.start('welcome');
-	// 					userFound = true;
-	// 				}
-	// 			});
-	//
-	// 			// if user has not been found / wrong password, display error message
-	// 			if(!userFound){
-	// 				self.errorMessage.setText('Problem in retrieving the current user');
-	// 				self.errorMessage.visible = true;
-	//
-	// 				// make text become not visible again after few seconds
-	// 				self.time.events.add(Phaser.Timer.SECOND * 3, function () {
-	// 					self.errorMessage.visible = false;
-	// 				}, self);
-	//
-	// 			}
-	// 		} else {
-	// 			console.error(users);
-	// 		}
-	// 	};
-	// 	xhr.send(null);
-	// }
+	}
 
 };

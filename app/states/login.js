@@ -70,7 +70,7 @@ module.exports = {
 
 			// connect to API to retrieve all users and check it the data in the form matches
 			var xhr  = new XMLHttpRequest();
-			xhr.open('GET', 'https://duchennegame.herokuapp.com/api/users', true);
+			xhr.open('GET', 'https://duckieduck.herokuapp.com/api/users', true);
 			xhr.onload = function () {
 				var users = JSON.parse(xhr.responseText);
 				if (xhr.readyState == 4 && xhr.status == "200") {
