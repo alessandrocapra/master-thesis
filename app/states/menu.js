@@ -21,15 +21,15 @@ module.exports = {
 		duck.animations.play('walk');
 
 		// add tween to move the duck a bit around
-		var moveForwardTween = this.add.tween(duck).to( { x: 150 }, 3000, Phaser.Easing.Linear.None);
-		var jumpTween = this.add.tween(duck).to( { x: [200, 350], y:[200, 280] }, 3000, "Sine.easeInOut");
+		// var moveForwardTween = this.add.tween(duck).to( { x: 150 }, 3000, Phaser.Easing.Linear.None);
+		var jumpTween = this.add.tween(duck).to( { x: [200, 400], y:[200, 270] }, 3000, "Sine.easeInOut");
 		// moveForwardTween.start();
 		jumpTween.start();
 
 
-    var title = this.add.text(this.camera.width * 0.5, -200, 'Duck Quest', {
+    var title = this.add.text(this.camera.width * 0.5, -200, 'Duckie Duck\'s Quest', {
       fill: 'white',
-      font: '100px IM Fell English SC'
+      font: '80px IM Fell English SC'
     });
     title.anchor.set(0.5);
 		this.add.tween(title).to( { y: this.camera.height * 0.5 }, 2000, Phaser.Easing.Bounce.Out, true);
