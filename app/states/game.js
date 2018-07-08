@@ -601,7 +601,12 @@ module.exports = {
 				this.overlayText.setText('Well done! Play again?');
 				this.playAgainBtn.visible = true;
 				this.backToMenuBtn.visible = true;
-				this.saveScoreOnDb().then(function(){this.getRankingFromDb();});
+				this.saveScoreOnDb().then(function(reply){
+					if(reply !== null){
+						self.getRankingFromDb();
+					}
+					console.log(reply);
+				});
 				break;
 			case 'resumeGame':
 				if(this.music !== null){
