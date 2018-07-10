@@ -301,6 +301,7 @@ module.exports = {
 
 		// update position of invisible wall after world resizing
 		endGameWall.x = this.world.width * 0.97;
+		// endGameWall.x = this.world.width * 0.15;
 
 		// almost there message position update
 		almostThereText.x = this.world.width * 0.69;
@@ -591,10 +592,8 @@ module.exports = {
 				this.playAgainBtn.visible = true;
 				this.backToMenuBtn.visible = true;
 				this.saveScoreOnDb().then(function(reply){
-					if(reply !== null){
-						self.getRankingFromDb();
-					}
-					console.log(reply);
+					console.log('promise reply: ' + reply);
+					self.getRankingFromDb();
 				});
 				break;
 			case 'gameEnd':
@@ -602,10 +601,8 @@ module.exports = {
 				this.playAgainBtn.visible = true;
 				this.backToMenuBtn.visible = true;
 				this.saveScoreOnDb().then(function(reply){
-					if(reply !== null){
-						self.getRankingFromDb();
-					}
-					console.log(reply);
+					console.log('promise reply: ' + reply);
+					self.getRankingFromDb();
 				});
 				break;
 			case 'resumeGame':
@@ -702,9 +699,11 @@ module.exports = {
 		var self = this;
 
 		return new Promise(function (resolve, reject) {
-			if (!self.scoreUpdated && (self.score > self.game.global.currentUser.high_score)) {
+			if (self.score > self.game.global.currentUser.high_score) {
 				// do this just once
-				self.scoreUpdated = true;
+				// self.scoreUpdated = true;
+
+				console.log('Score higher! Saving value in db');
 
 				// save current score on Db
 				var xhttp = new XMLHttpRequest();
@@ -720,14 +719,16 @@ module.exports = {
 						resolve(xhttp.response);
 					}
 				};
+
 				xhttp.onerror = function () {
 					reject(xhttp.statusText);
 				};
 
 				xhttp.send(input);
 			} else {
-				resolve(null);
+				resolve("showRanking");
 			}
+
 		});
 
 		// xhttp.onreadystatechange = function () {//Call a function when the state changes.
