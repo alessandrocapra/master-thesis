@@ -4,6 +4,9 @@ module.exports = {
 
   	var self = this;
 
+		// add background
+		var bg= this.add.sprite(0,0, 'background_menu');
+
 		var title = this.add.text(this.game.global.titlePlacement.x, this.game.global.titlePlacement.y, 'Signup', this.game.global.titleStyle);
     title.anchor.set(0.5);
     // title.alignIn(this.world, Phaser.CENTER);
